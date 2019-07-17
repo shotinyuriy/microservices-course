@@ -1,0 +1,259 @@
+FORMAT: 1A
+
+# Data Structures
+
+## Product (object)
++ id: '0123456789'
++ name: 'Champions T-Shirt'
++ price: 12.99
++ currency: 'USD'
++ childSKUs: ['0123456789', '0123456780']
++ category: 'clothing'
+
+## SKU (object)
++ id: '0123456789'
++ size: 'M'
++ productId: '0123456789'
+
+# Tax Rule
++ category: 'clothing'
++ tax: 0.12
+
+## State Rules (object)
++ id: '0123456789'
++ state: 'PA'
++ rules: []
+
+## Commerce Item
++ skuId: '0123456789'
++ quantity: 2
+
+## Products Resource [/products]
+
+### List All Products [GET]
++ Response 200 (text/plain)
+
+# GET /taxes/categories
++ Response 200 (application/json)
+{
+  [
+    'clothing',
+    'books',
+    'electronic devices'
+  ]
+}
+
+# GET /taxes/stateRules
++ Response 200 Ok (application/json)
+{
+  [
+    {
+      id: '0123456789',
+      state: 'PA',
+      rules: [
+        'clothing': 0,
+        'books': 0.11,
+        'electronic devices': 0.12
+      ]
+    }
+  ]
+}
+
+# POST /taxes/stateRules (optional we can always hard code all the rules)
+
++ Request
+{
+    state: 'PA',
+    rules: [
+      'clothing': 0,
+      'books': 0.11,
+      'electronic devices': 0.12
+    ]
+}
+# if one or more categories do not exist in the DB return
+{
+  [
+    {
+      errorCode: 'error.rule.category.invalid',
+      value: 'invalidCategory1'
+    },
+    {
+      errorCode: 'error.rule.category.invalid',
+      value: 'invalidCategory2'
+    }
+  ]
+}
+
++ Response 201 (application/json)
+
+
+# POST /taxes/calculation
++ Request (application/json)
+{
+    address: {
+      state: 'PA',
+    },
+    items: [
+      {
+        id: 'ci001',
+        category: 'clothing',
+        price: 12.99
+      },
+      {
+        id: 'ci002',
+        category: 'electronic devices',
+        price: 22.99
+      }
+    ]
+}
+
++ Response 200 (application/json)
+{
+    state: 'PA',
+    items: [
+      {
+        id: 'ci001',
+        category: 'clothing',
+        price: 12.99,
+        taxes: {
+          stateTax: 0
+        }
+      },
+      {
+        id: 'ci001',
+        category: 'clothing',
+        price: 22.99,
+        taxes: {
+          stateTax: 2.76
+        }
+      }
+    ]
+}
+
+# if the category does not exist in the DB return 'error.category.invalid'
+# if the state code does not exist in the DB return 'error.state.notFound'
+# if an item code does is null or empty return 'error.id.empty'
+
++ Response 400 (application/json)
+{
+  [
+    {
+      errorCode: 'error.state.notFound',
+      value: 'invalidState'
+    },
+    {
+      errorCode: 'error.category.invalid',
+      value: 'invalidCategory2'
+    },
+    {
+      errorCode: 'error.id.empty'
+    }
+  ]
+}
+
+
+
+
+
+# GET /products
++ Response 200 (application/json)
+{
+  [
+    {
+      id: '0123456789',
+      name: 'Champions T-Shirt',
+      price: 12.99,
+      currency: 'USD'
+    },
+    {
+      id: '0123456780',
+      name: 'Champions Watches',
+      price: 22.99,
+      currency: 'USD'
+    }
+  ]
+}
+
+# POST /products
++ Request
+{
+  name: 'Harry Potter and Hidden Room',
+  price: 24.99,
+  currency: 'USD',
+  category: 'books',
+  childSkus: []
+}
+
++ Request
+{
+  name: 'Champions Watches',
+  price: 22.99,
+  currency: 'USD',
+  category: 'electronic device',
+  childSkus: [
+    {
+      color: 'white'
+    },
+    {
+      color: 'black'
+    },
+    {
+      color: 'silver'
+    }
+  ]
+}
+
+# if the child skus array is empty then the service must create a default SKU with just a SKU id
++ Response 201
+
++ Reponse 400
+{
+  [
+    {
+      errorCode: 'error.category.invalid',
+      value: 'invalidCategory2'
+    },
+    {
+      errorCode: 'error.category.empty',
+    },
+    {
+      errorCode: 'error.name.empty',
+    },
+    {
+      errorCode: 'error.price.empty',
+    }
+  ]
+}
+
+# GET /products/{productId}
+{
+  id: '01234567890',
+  name: 'Harry Potter and Hidden Room',
+  price: 24.99,
+  currency: 'USD',
+  taxCategory: 'books',
+  childSkus: [
+  ]
+}
+
+
+# PATCH /products/{productId}
+{
+  name: 'Harry Potter and Hidden Room',
+  price: 25.99,
+  currency: 'USD',
+  taxCategory: 'books',
+  childSkus: [
+  ]
+}
+
++ Response 201
+
+# TODO: design API for the shopping cart service
+
+# GET /carts
+# POST /carts
+# POST /carts/{id}/commerceItems
+# DELETE /carts/{id}/commerceItems/{id}
+# POST /carts/{id}/shippingAddress
+# PUT /carts/{id}/shippingAddress

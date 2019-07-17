@@ -1,0 +1,16 @@
+@startuml
+
+component "Taxes Service" as taxes
+database "Taxes DB" as taxes_db
+component "Catalog Service" as catalog
+database "Catalog DB" as catalog_db
+component "Shopping Cart Service" as cart
+database "Sku Prices\nRedis Cache" as sku_prices_redis_cache
+
+cart -down-> taxes : calculate taxes
+cart -down-> catalog : get sku and product details
+
+taxes -down-> taxes_db
+catalog -down-> catalog_db
+
+@enduml
