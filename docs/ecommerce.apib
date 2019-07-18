@@ -37,9 +37,9 @@ FORMAT: 1A
 + Response 200 (application/json)
 {
   [
-    'clothing',
-    'books',
-    'electronic devices'
+    "clothing",
+    "books",
+    "electronic devices"
   ]
 }
 
@@ -48,12 +48,12 @@ FORMAT: 1A
 {
   [
     {
-      id: '0123456789',
-      state: 'PA',
-      rules: [
-        'clothing': 0,
-        'books': 0.11,
-        'electronic devices': 0.12
+      "id": "0123456789",
+      "state": "PA",
+      "rules": [
+        "clothing": 0,
+        "books": 0.11,
+        "electronic devices": 0.12
       ]
     }
   ]
@@ -63,23 +63,23 @@ FORMAT: 1A
 
 + Request
 {
-    state: 'PA',
-    rules: [
-      'clothing': 0,
-      'books': 0.11,
-      'electronic devices': 0.12
+    "state": "PA",
+    "rules": [
+      "clothing": 0,
+      "books": 0.11,
+      "electronic devices": 0.12
     ]
 }
 # if one or more categories do not exist in the DB return
 {
   [
     {
-      errorCode: 'error.rule.category.invalid',
-      value: 'invalidCategory1'
+      errorCode: "error.rule.category.invalid",
+      value: "invalidCategory1"
     },
     {
-      errorCode: 'error.rule.category.invalid',
-      value: 'invalidCategory2'
+      errorCode: "error.rule.category.invalid",
+      value: "invalidCategory2"
     }
   ]
 }
@@ -90,63 +90,63 @@ FORMAT: 1A
 # POST /taxes/calculation
 + Request (application/json)
 {
-    address: {
-      state: 'PA',
+    "address": {
+      "state": "PA",
     },
-    items: [
+    "items": [
       {
-        id: 'ci001',
-        category: 'clothing',
-        price: 12.99
+        "id": "ci001",
+        "category": "clothing",
+        "price": 12.99
       },
       {
-        id: 'ci002',
-        category: 'electronic devices',
-        price: 22.99
+        "id": "ci002",
+        "category": "electronic devices",
+        "price": 22.99
       }
     ]
 }
 
 + Response 200 (application/json)
 {
-    state: 'PA',
-    items: [
+    "state": "PA",
+    "items": [
       {
-        id: 'ci001',
-        category: 'clothing',
-        price: 12.99,
-        taxes: {
-          stateTax: 0
+        "id": "ci001",
+        "category": "clothing",
+        "price": 12.99,
+        "taxes": {
+          "stateTax": 0
         }
       },
       {
-        id: 'ci001',
-        category: 'clothing',
-        price: 22.99,
-        taxes: {
-          stateTax: 2.76
+        "id": "ci001",
+        "category": "clothing",
+        "price": 22.99,
+        "taxes": {
+          "stateTax": 2.76
         }
       }
     ]
 }
 
-# if the category does not exist in the DB return 'error.category.invalid'
-# if the state code does not exist in the DB return 'error.state.notFound'
-# if an item code does is null or empty return 'error.id.empty'
+# if the category does not exist in the DB return "error.category.invalid"
+# if the state code does not exist in the DB return "error.state.notFound"
+# if an item code does is null or empty return "error.id.empty"
 
 + Response 400 (application/json)
 {
   [
     {
-      errorCode: 'error.state.notFound',
-      value: 'invalidState'
+      "errorCode": "error.state.notFound",
+      "value": "invalidState"
     },
     {
-      errorCode: 'error.category.invalid',
-      value: 'invalidCategory2'
+      "errorCode": "error.category.invalid",
+      "value": "invalidCategory2"
     },
     {
-      errorCode: 'error.id.empty'
+      "errorCode": "error.id.empty"
     }
   ]
 }
@@ -160,16 +160,16 @@ FORMAT: 1A
 {
   [
     {
-      id: '0123456789',
-      name: 'Champions T-Shirt',
-      price: 12.99,
-      currency: 'USD'
+      "id": "0123456789",
+      "name": "Champions T-Shirt",
+      "price": 12.99,
+      "currency": "USD"
     },
     {
-      id: '0123456780',
-      name: 'Champions Watches',
-      price: 22.99,
-      currency: 'USD'
+      "id": "0123456780",
+      "name": "Champions Watches",
+      "price": 22.99,
+      "currency": "USD"
     }
   ]
 }
@@ -177,28 +177,28 @@ FORMAT: 1A
 # POST /products
 + Request
 {
-  name: 'Harry Potter and Hidden Room',
-  price: 24.99,
-  currency: 'USD',
-  category: 'books',
-  childSkus: []
+  "name": "Harry Potter and Hidden Room",
+  "price": 24.99,
+  "currency": "USD",
+  "category": "books",
+  "childSkus": []
 }
 
 + Request
 {
-  name: 'Champions Watches',
-  price: 22.99,
-  currency: 'USD',
-  category: 'electronic device',
-  childSkus: [
+  "name": "Champions Watches",
+  "price": 22.99,
+  "currency": "USD",
+  "category": "electronic device",
+  "childSkus": [
     {
-      color: 'white'
+      "color": "white"
     },
     {
-      color: 'black'
+      "color": "black"
     },
     {
-      color: 'silver'
+      "color": "silver"
     }
   ]
 }
@@ -210,40 +210,40 @@ FORMAT: 1A
 {
   [
     {
-      errorCode: 'error.category.invalid',
-      value: 'invalidCategory2'
+      "errorCode": "error.category.invalid",
+      "value": "invalidCategory2"
     },
     {
-      errorCode: 'error.category.empty',
+      "errorCode": "error.category.empty",
     },
     {
-      errorCode: 'error.name.empty',
+      "errorCode": "error.name.empty",
     },
     {
-      errorCode: 'error.price.empty',
+      "errorCode": "error.price.empty",
     }
   ]
 }
 
 # GET /products/{productId}
 {
-  id: '01234567890',
-  name: 'Harry Potter and Hidden Room',
-  price: 24.99,
-  currency: 'USD',
-  taxCategory: 'books',
-  childSkus: [
+  "id": "01234567890",
+  "name": "Harry Potter and Hidden Room",
+  "price": 24.99,
+  "currency": "USD",
+  "taxCategory": "books",
+  "childSkus": [
   ]
 }
 
 
 # PATCH /products/{productId}
 {
-  name: 'Harry Potter and Hidden Room',
-  price: 25.99,
-  currency: 'USD',
-  taxCategory: 'books',
-  childSkus: [
+  "name": "Harry Potter and Hidden Room",
+  "price": 25.99,
+  "currency": "USD",
+  "taxCategory": "books",
+  "childSkus": [
   ]
 }
 
@@ -252,8 +252,68 @@ FORMAT: 1A
 # TODO: design API for the shopping cart service
 
 # GET /carts
++ Response 200
+{
+  "id": "0001",
+  "total": 1
+}
+
 # POST /carts
++ Request
+
++ Response 200
+{
+  "id": "003",
+  "commerceItems": [
+  ],
+  "priceInfo": {
+    "taxes": 0.0,
+    "total": 0.0
+  }
+}
+
 # POST /carts/{id}/commerceItems
++ Reuqest
+{
+  "skuId": "0123456789",
+  "quantity": 1
+}
+
++ Req
+
 # DELETE /carts/{id}/commerceItems/{id}
+
 # POST /carts/{id}/shippingAddress
+
++ Request
+{
+  "shippingAddress": {
+    "country": "",
+    "state": "",
+    "city": "",
+    "line1": "",
+    "line2": "",
+    "postalCode": ""
+  }
+}
+
++ Response 200 (application/json)
+{
+  "id": "003",
+  "commerceItems": [
+  ],
+  "shippingAddress": {
+      "country": "",
+      "state": "",
+      "city": "",
+      "line1": "",
+      "line2": "",
+      "postalCode": ""
+  },
+  "priceInfo": {
+    "taxes": 0.0,
+    "total": 0.0
+  }
+}
+
 # PUT /carts/{id}/shippingAddress
