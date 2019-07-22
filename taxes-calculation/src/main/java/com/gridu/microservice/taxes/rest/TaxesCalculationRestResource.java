@@ -17,9 +17,12 @@ public class TaxesCalculationRestResource {
 	private TaxCategoryService taxCategoryService;
 	
 	@GetMapping(value = "/taxes/categories", produces = "application/json")
-	public List<TaxCategory> getTaxesCategories() {
+	public List<TaxCategory> getTaxCategories() {
 		return getTaxCategoryService().getAll();
 	}
+
+	// TODO: implement GET /taxes/rules
+	// TODO: implement POST /taxes/calculation
 
 	public TaxCategoryService getTaxCategoryService() {
 		return taxCategoryService;
