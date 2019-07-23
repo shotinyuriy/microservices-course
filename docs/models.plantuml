@@ -1,0 +1,20 @@
+@startuml
+
+class TaxCategory {
+    + name
+}
+
+class State {
+    + code
+    + name
+}
+
+class TaxRule {
+    + state
+    + rules
+}
+
+TaxRule -up-> TaxCategory
+TaxRule -up-> State
+
+@enduml
