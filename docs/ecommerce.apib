@@ -28,12 +28,9 @@ FORMAT: 1A
 + skuId: '0123456789'
 + quantity: 2
 
-## Products Resource [/products]
+# Taxes Resource
 
-### List All Products [GET]
-+ Response 200 (text/plain)
-
-# GET /taxes/categories
+# GET /taxes/categories/v1
 + Response 200 (application/json)
 {
   [
@@ -49,7 +46,32 @@ FORMAT: 1A
   ]
 }
 
-# GET /taxes/stateRules
+# GET /taxes/stateRules/v1
++ Response 200 Ok (application/json)
+{
+  [
+    {
+      "id": "0123456789",
+      "state": "PA",
+      "rules": [
+        "clothing": 0,
+        "books": 0.11,
+        "electronic devices": 0.12
+      ]
+    },
+    {
+      "id": "0123456789",
+      "state": "CA",
+      "rules": [
+        "clothing": 0.11,
+        "books": 0.15,
+        "electronic devices": 0.22
+      ]
+    }
+  ]
+}
+
+# GET /taxes/stateRules/v1/{stateCode}
 + Response 200 Ok (application/json)
 {
   [
@@ -64,8 +86,17 @@ FORMAT: 1A
     }
   ]
 }
+# if one state code does not exist in the DB return
+{
+  [
+    {
+      errorCode: "error.state.notFound",
+      value: "notFoundStateCode"
+    }
+  ]
+}
 
-# POST /taxes/stateRules (optional we can always hard code all the rules)
+# POST /taxes/stateRules/v1/PA (optional we can always hard code all the rules)
 
 + Request
 {
@@ -93,7 +124,7 @@ FORMAT: 1A
 + Response 201 (application/json)
 
 
-# POST /taxes/calculation
+# POST /taxes/calculation/v1
 + Request (application/json)
 {
     "address": {
@@ -158,8 +189,10 @@ FORMAT: 1A
 }
 
 
+## Products Resource [/products]
 
-
+### List All Products [GET]
++ Response 200 (text/plain)
 
 # GET /products
 + Response 200 (application/json)
@@ -279,15 +312,14 @@ FORMAT: 1A
 }
 
 # POST /carts/{id}/commerceItems
-+ Reuqest
++ Request
 {
   "skuId": "0123456789",
   "quantity": 1
 }
 
-+ Req
-
 # DELETE /carts/{id}/commerceItems/{id}
++ Response 200 OK
 
 # POST /carts/{id}/shippingAddress
 
