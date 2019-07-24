@@ -1,0 +1,26 @@
+@startuml
+
+component "TaxesCalculation\nRestResource" as TCRR
+component "TaxCategoryService" as TCS
+component "StateService" as SS
+component "StateRuleService" as SRS
+component "TaxCategoryDao" as TCD
+component "StateDao" as SD
+component "StateRuleDao" as SRD
+
+component "DataInitializerService" as DIS
+
+TCRR -d-> TCS
+TCRR -d-> SRS
+
+TCS -d-> TCD
+SRS -d-> SRD
+
+SS -d-> SD
+
+DIS ..> TCS
+DIS ..> SRS
+DIS ..> SS
+
+
+@enduml
