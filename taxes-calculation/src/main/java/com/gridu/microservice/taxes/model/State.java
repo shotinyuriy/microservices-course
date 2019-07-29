@@ -7,7 +7,6 @@ public class State {
 	private String name;
 
 	public State() {
-
 	}
 
 	public State(String code, String name) {

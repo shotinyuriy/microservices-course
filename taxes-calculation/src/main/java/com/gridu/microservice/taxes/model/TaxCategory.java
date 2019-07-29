@@ -6,7 +6,6 @@ public class TaxCategory {
 	private String name;
 
 	public TaxCategory() {
-
 	}
 
 	public TaxCategory(String name) {

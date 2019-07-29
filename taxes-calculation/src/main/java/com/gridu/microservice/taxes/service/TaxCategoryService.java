@@ -1,34 +1,16 @@
 package com.gridu.microservice.taxes.service;
 
-
 import com.gridu.microservice.taxes.dao.TaxCategoryDao;
 import com.gridu.microservice.taxes.model.TaxCategory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class TaxCategoryService {
 
-	private final List<TaxCategory> TAX_CATEGORIES = new ArrayList<>();
-	private AtomicLong id = new AtomicLong(0);
-
-//	public List<TaxCategory> getAll() {
-//		return TAX_CATEGORIES.subList(0, TAX_CATEGORIES.size());
-//	}
-
-//	public TaxCategory saveTaxCategory(TaxCategory taxCategory) {
-//		if (taxCategory.getId() == null) {
-//			taxCategory.setId(id.incrementAndGet());
-//		}
-//		TAX_CATEGORIES.add(taxCategory);
-//		return taxCategory;
-//	}
-	
 	@Autowired
 	private TaxCategoryDao taxCategoryDao;
 
@@ -38,6 +20,10 @@ public class TaxCategoryService {
 
 	public TaxCategory saveTaxCategory(TaxCategory taxCategory) {
 		return getTaxCategoryDao().save(taxCategory);
+	}
+
+	public TaxCategory findById(Long id) {
+		return getTaxCategoryDao().findById(id);
 	}
 
 	public TaxCategoryDao getTaxCategoryDao() {
