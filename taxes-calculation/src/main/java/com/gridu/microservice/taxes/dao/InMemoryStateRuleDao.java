@@ -1,9 +1,9 @@
 package com.gridu.microservice.taxes.dao;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -15,7 +15,7 @@ import com.gridu.microservice.taxes.model.StateRule;
 @Repository
 public class InMemoryStateRuleDao implements StateRuleDao {
 
-	private final Map<Long, StateRule> STATE_RULES = new HashMap<Long, StateRule>();
+	private final Map<Long, StateRule> STATE_RULES = new ConcurrentHashMap<>();
 	private AtomicLong id = new AtomicLong(0);
 
 	@Override
