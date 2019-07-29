@@ -1,0 +1,39 @@
+@startuml
+
+class TaxCategory {
+    + name : String
+}
+
+class State {
+    + code : String
+    + name : String
+}
+
+class TaxRule {
+    + category: TaxCategory
+    + rate: Double
+}
+
+class StateRule {
+    + state: State
+    + rules: TaxRule[]
+}
+
+class TaxItem {
+    + id : String
+    + category: String
+    + price: Double
+}
+
+class TaxCalculation  {
+    + state: String
+    + items: TaxItem[]
+}
+
+TaxRule -up-> "1" TaxCategory
+StateRule -up-> "\n*" TaxRule
+StateRule -up-> "1" State
+TaxItem -right-> "1" TaxCategory
+
+
+@enduml
