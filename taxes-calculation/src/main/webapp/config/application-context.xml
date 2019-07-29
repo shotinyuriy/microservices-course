@@ -13,12 +13,26 @@
 	   http://www.springframework.org/schema/jdbc
      http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
+	<!-- enable auto scanning feature in Spring 
+	The base-package is indicate where are your components stored, 
+	Spring will scan this folder and find out the bean and register it in Spring container.-->
+	 <!-- eg. CustomerService customerService = (CustomerService)context.getBean("customerService"); -->
+	 <!-- @Component – Indicates a auto scan component.
+		  @Repository – Indicates DAO component in the persistence layer.
+		  @Service – Indicates a Service component in the business layer.
+		  @Controller – Indicates a controller component in the presentation layer. -->
 	<context:component-scan base-package="com.gridu.microservice" />
 
 	<!-- Configures the @Controller programming model -->
+	<!-- This tag registers the DefaultAnnotationHandlerMapping and AnnotationMethodHandlerAdapter 
+		 beans that are required for Spring MVC to dispatch requests to @Controllers. -->
+	<!-- To enable usage of annotation such as @RestController and @GetMapping-->
+	<!-- When annotation-driven is enabled, Spring container automatically scans for classes
+	     under the package specified in <context:component-scan  -->
 	<mvc:annotation-driven/>
 
 	<!-- JSON Support, Seems JSON support is working by default -->
+	<!-- http://www.jcombat.com/spring/spring-mvc-beannameviewresolver-example -->
 	<!--<bean name="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver"/>-->
 
 	<!-- Configure bean to convert JSON to POJO and vice versa -->

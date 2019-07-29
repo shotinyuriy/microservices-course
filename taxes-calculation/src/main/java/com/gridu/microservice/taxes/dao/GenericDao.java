@@ -2,7 +2,6 @@ package com.gridu.microservice.taxes.dao;
 
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 public interface GenericDao<K, T> {
 

@@ -1,9 +1,9 @@
 package com.gridu.microservice.taxes.dao;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -15,7 +15,7 @@ import com.gridu.microservice.taxes.model.TaxCategory;
 @Repository
 public class InMemoryTaxCategoryDao implements TaxCategoryDao {
 
-	private final Map<Long, TaxCategory> TAX_CATEGORIES = new HashMap<>();
+	private final Map<Long, TaxCategory> TAX_CATEGORIES = new ConcurrentHashMap<>();
 	private AtomicLong id = new AtomicLong(0);
 
 	@Override
