@@ -14,14 +14,35 @@ import java.util.stream.Collectors;
 @Service
 public class ValidationService {
 
-	public ValidationService() {
+	private ValidatorFactory factory;
 
+	public ValidationService() {
+		initialize();
 	}
 
-	public <T> List<ErrorResponse> validate(T obj, Class<?>... classes) {
-		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+	private void initialize() {
+		if (factory == null) {
+			synchronized (this) {
+				if (factory == null) {
+					factory = Validation.buildDefaultValidatorFactory();
+				}
+			}
+		}
+	}
+
+	/**
+	 * NOTE: probably this method could throw an ConstraintViolationException or our custom validation exception
+	 * List of ErrorResponse is returned for the example simplicity
+	 * @param obj - an object to validate
+	 * @param validationGroups
+	 * @param <T> NOTE: use of generics is not necessary here currently,
+	 *              but it is used to comply with the validate(T, Class...) method signature of Validator
+	 * @return
+	 */
+	public <T> List<ErrorResponse> validate(T obj, Class<?>... validationGroups) {
 		Validator validator = factory.getValidator();
-		Set<ConstraintViolation<T>> constraintViolations = validator.validate(obj, classes);
+
+		Set<ConstraintViolation<T>> constraintViolations = validator.validate(obj, validationGroups);
 
 		return convertToErrorResponses(constraintViolations);
 	}
