@@ -32,7 +32,7 @@ public class TaxesCalculationTestContext {
 	
 	@Test
 	public void test() {
-		
+
 		assertNotNull(dataInitializerService);
 		assertNotNull(stateRuleService);
 		assertNotNull(taxCategoryService);

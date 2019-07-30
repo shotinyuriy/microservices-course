@@ -7,11 +7,15 @@ import com.gridu.microservice.taxes.service.TaxCategoryService;
 import com.gridu.microservice.taxes.view.StateRuleViewModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gridu.microservice.taxes.entity.validator.StateRuleEntityValidator;
+import com.gridu.microservice.taxes.exception.EntityNotFoundException;
+import com.gridu.microservice.taxes.model.StateRule;
 import com.gridu.microservice.taxes.model.TaxCategory;
 import com.gridu.microservice.taxes.rest.transformer.StateRuleTransformer;
 
@@ -28,6 +32,13 @@ public class TaxesCalculationRestResourceV1 {
 	@Autowired
 	private StateRuleTransformer stateRuleTransformer;
 	
+	@Autowired
+	private StateRuleEntityValidator stateRuleValidator; 
+	
+	
+	private StateRuleEntityValidator getStateRuleValidator() {
+		return stateRuleValidator;
+	}
 	
 	private StateRuleTransformer getStateRuleTransformer() {
 		return stateRuleTransformer;
@@ -45,8 +56,14 @@ public class TaxesCalculationRestResourceV1 {
 
 	
 	@GetMapping(value = "/stateRules/v1/{stateCode}", produces = "application/json")
-	public StateRuleViewModel getStateRule(@PathVariable(value="stateCode") String stateCode) {
-		return getStateRuleTransformer().toStateRuleViewModel(getStateRuleService().getStateRule(stateCode));
+	public StateRuleViewModel getStateRule(@PathVariable(value="stateCode") String stateCode) throws EntityNotFoundException {
+		
+		StateRule stateRule = getStateRuleService().getStateRule(stateCode);
+		if(!getStateRuleValidator().isValid(stateRule)) {
+			throw new EntityNotFoundException(stateCode, HttpStatus.NOT_FOUND);
+		}
+
+		return getStateRuleTransformer().toStateRuleViewModel(stateRule);
 	}
 	
 	private StateRuleService getStateRuleService() {

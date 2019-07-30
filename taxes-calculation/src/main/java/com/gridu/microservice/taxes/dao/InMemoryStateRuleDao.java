@@ -49,7 +49,7 @@ public class InMemoryStateRuleDao implements StateRuleDao {
 	@Override
 	public StateRule findByCode(String stateCode) {
 		Predicate<StateRule> stateRuleByCode = p -> p.getState().getCode().equals(stateCode);
-		return STATE_RULES.values().stream().filter(stateRuleByCode).findFirst().orElseGet(null);
+		return STATE_RULES.values().stream().filter(stateRuleByCode).findFirst().orElseGet(() -> null);
 	}
 
 }
