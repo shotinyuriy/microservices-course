@@ -100,13 +100,48 @@ FORMAT: 1A
 
 + Request
 {
-    "state": "PA",
     "rules": [
-      "clothing": 0,
-      "books": 0.11,
-      "electronic devices": 0.12
+      {
+        "name": "clothing",
+        "rule": 0
+      },
+      {
+        "name": "books",
+        "rule": 0.11
+      },
+      {
+        "name": "electronic devices",
+        "rule": 0.12
+      }
     ]
 }
+
+# POST /taxes/stateRules/v1/PA
+{
+    "rules": {
+      "clothing": 0,
+      "books": 0.11
+      "electronic devices": 0.12
+    }
+}
+
+StateRule {
+  id: ?,
+  State: {
+    id: ?,
+    code: "PA"
+  },
+  taxRules: [
+    TaxRule {
+      TaxCategory {
+        id: ?,
+        name: "clothing",
+        rule: 0
+      }
+    }
+  ]
+}
+
 # if one or more categories do not exist in the DB return
 {
   [

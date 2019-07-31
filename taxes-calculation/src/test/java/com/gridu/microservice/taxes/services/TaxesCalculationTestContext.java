@@ -4,10 +4,15 @@ import static org.junit.Assert.*;
 
 import com.gridu.microservice.taxes.dao.TaxCategoryDao;
 import com.gridu.microservice.taxes.model.TaxCategory;
+import com.gridu.microservice.taxes.rest.model.PostStateRuleRequest;
 import com.gridu.microservice.taxes.validation.ErrorResponse;
 import com.gridu.microservice.taxes.validation.GlobalDaoHolder;
+import com.gridu.microservice.taxes.validation.StateValidatorService;
 import com.gridu.microservice.taxes.validation.ValidationService;
+import com.gridu.microservice.taxes.validation.exception.CustomValidationException;
 import com.gridu.microservice.taxes.validation.groups.TaxCategoryShouldExist;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +29,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.validation.groups.Default;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -49,14 +55,26 @@ public class TaxesCalculationTestContext {
 
 	@Autowired
 	private ValidationService validationService;
-	
-	@Test
-	public void test() {
-		
+
+	@Autowired
+	private StateValidatorService stateValidatorService;
+
+	@Before
+	public void setUp() {
+		// ARRANGE
 		assertNotNull(dataInitializerService);
 		assertNotNull(stateRuleService);
 		assertNotNull(taxCategoryService);
 		assertNotNull(stateService);
+		assertNotNull(validationService);
+		assertNotNull(stateValidatorService);
+		assertNotNull(GlobalDaoHolder.getTaxCategoryDao());
+	}
+	
+	@Test
+	public void test() {
+		
+
 
 		
 		assertEquals(3, taxCategoryService.getAll().size());
@@ -93,5 +111,46 @@ public class TaxesCalculationTestContext {
 		// ASSERT
 		assertNotNull(constraintViolations1);
 		assertEquals(0, constraintViolations1.size());
+	}
+
+	@Test
+	public void testTaxCategoryMapValidator() {
+		// ARRANGE
+		PostStateRuleRequest request = new PostStateRuleRequest();
+		request.setRules(new HashMap<>());
+		// add existing categories
+		double i = 0.1;
+		for (TaxCategory taxCategory : taxCategoryService.getAll()) {
+			request.getRules().put(taxCategory.getName(), i);
+			i+= 0.01;
+		}
+		// add not existing categories
+		request.getRules().put("non existing one", i);
+		i+=0.1;
+		request.getRules().put("non existing two", i);
+
+		// ACT
+		List<ErrorResponse> constraintViolations = validationService.validate(request);
+
+		// ASSERT
+		assertNotNull(constraintViolations);
+		assertTrue(constraintViolations.contains(new ErrorResponse("rules.non existing one.invalid", request.getRules())));
+		assertTrue(constraintViolations.contains(new ErrorResponse("rules.non existing two.invalid", request.getRules())));
+	}
+
+	@Test
+	public void testStateValidatorService_ExistingStateCode() throws CustomValidationException {
+		String existingStateCode = stateService.getAll().get(0).getCode();
+
+		stateValidatorService.validateStateCodeExists(existingStateCode);
+
+		// PASSES IF THERE ARE NO EXCEPTIONS
+	}
+
+	@Test(expected = CustomValidationException.class)
+	public void testStateValidatorService_NonExistingStateCode() throws CustomValidationException {
+		String stateCode = "ZZ";
+
+		stateValidatorService.validateStateCodeExists(stateCode);
 	}
 }

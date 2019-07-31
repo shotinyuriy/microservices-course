@@ -11,8 +11,7 @@ import java.util.List;
 public class ExistingTaxCategoryNameValidator implements ConstraintValidator<ExistingTaxCategoryName, String> {
 
 	@Override
-	public void initialize(ExistingTaxCategoryName validTaxRule) {
-
+	public void initialize(ExistingTaxCategoryName existingTaxCategoryName) {
 	}
 
 	@Override
