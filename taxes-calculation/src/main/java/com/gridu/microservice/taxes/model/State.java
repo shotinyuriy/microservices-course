@@ -1,9 +1,14 @@
 package com.gridu.microservice.taxes.model;
 
+import javax.validation.constraints.NotNull;
+
 public class State {
 
 	private Long id;
+	
+	@NotNull
 	private String code;
+	@NotNull
 	private String name;
 
 	public State() {
