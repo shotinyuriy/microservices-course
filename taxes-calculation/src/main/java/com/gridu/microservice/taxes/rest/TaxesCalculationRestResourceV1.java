@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gridu.microservice.taxes.entity.validator.StateEntityValidator;
 import com.gridu.microservice.taxes.entity.validator.StateRuleEntityValidator;
 import com.gridu.microservice.taxes.exception.EntityNotFoundException;
 import com.gridu.microservice.taxes.model.StateRule;
@@ -35,6 +36,12 @@ public class TaxesCalculationRestResourceV1 {
 	@Autowired
 	private StateRuleEntityValidator stateRuleValidator; 
 	
+	@Autowired
+	private StateEntityValidator stateEntityValidator;
+	
+	private StateEntityValidator getStateEntityValidator() {
+		return stateEntityValidator;
+	}
 	
 	private StateRuleEntityValidator getStateRuleValidator() {
 		return stateRuleValidator;
