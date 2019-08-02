@@ -7,6 +7,8 @@ import com.gridu.microservice.taxes.service.TaxCategoryService;
 import com.gridu.microservice.taxes.view.StateRuleViewModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,11 +26,11 @@ public class TaxesCalculationRestResourceV1 {
 
 	@Autowired
 	private StateRuleService stateRuleService;
-	
+
 	@Autowired
 	private StateRuleTransformer stateRuleTransformer;
-	
-	
+
+
 	private StateRuleTransformer getStateRuleTransformer() {
 		return stateRuleTransformer;
 	}
@@ -41,14 +43,23 @@ public class TaxesCalculationRestResourceV1 {
 	@GetMapping(value = "/stateRules/v1", produces = "application/json")
 	public List<StateRuleViewModel> getStateRules() {
 		return getStateRuleTransformer().toStateRuleViewModel(getStateRuleService().getAll());
+
 	}
 
-	
+
 	@GetMapping(value = "/stateRules/v1/{stateCode}", produces = "application/json")
-	public StateRuleViewModel getStateRule(@PathVariable(value="stateCode") String stateCode) {
-		return getStateRuleTransformer().toStateRuleViewModel(getStateRuleService().getStateRule(stateCode));
+	public ResponseEntity<Object> getStateRule(@PathVariable(value = "stateCode") String stateCode) {
+		ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
+		ResponseEntity.badRequest().body(new Object());
+
+		return ResponseEntity.ok(
+			getStateRuleTransformer().toStateRuleViewModel(
+				getStateRuleService().getStateRule(stateCode))
+		);
+
 	}
-	
+
 	private StateRuleService getStateRuleService() {
 		return stateRuleService;
 	}

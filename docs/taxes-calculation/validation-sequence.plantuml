@@ -1,0 +1,41 @@
+@startuml
+title Validation Engine Sequence
+
+participant ValitationService as SVS
+participant ValidatorFactory as VF
+participant Validator as V
+participant "ConstraintValidator<A, O>" as  SV
+participant ConstraintValidatorContext as VC
+
+activate SVS
+SVS -> VF ** : buildValidatorFactory()
+SVS -> VF : getValidator()
+activate VF
+VF -> V **
+VF -> SVS : a Validator instance
+deactivate VF
+SVS -> V : validate(Object[,ValidationGroups])
+activate V
+V -> V : find all validation annotations \n    in the Object
+V -> V : prepare list of ConstraintValidator \n    from validation annotations
+V -> VC ** : new ConstraintValidatorContext()
+
+loop
+V -> SV ** : new ConstraintValidator()
+V -> SV : isValid(Object, ConstraintValidatorContext)
+activate SV
+SV -> VC : addConstraintViolation()
+SV -> V : false
+deactivate SV
+end loop
+
+V -> VC : getConstraintViolations()
+activate VC
+VC -> V : Set<ConstraintViolation>
+deactivate VC
+V -> SVS : Set<ConstraintViolation>
+deactivate V
+destroy VC
+deactivate SVS
+
+@enduml

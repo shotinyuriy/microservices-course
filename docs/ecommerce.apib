@@ -28,6 +28,19 @@ FORMAT: 1A
 + skuId: '0123456789'
 + quantity: 2
 
+## ValidationResult
+## error code has the following structure error.{requestPropertyPath}.{errorType}
+## value - is the field value which has not passed the validation
++ errorCode: 'error.state.notFound'
++ value: 'ZZ'
+
+## There could be an alternative approach
+## ValidationResult
++ propertyPath: 'state'
++ errorType: 'notFound'
++ value: 'ZZ'
+
+
 # Taxes Resource
 
 # GET /taxes/categories/v1
@@ -54,18 +67,36 @@ FORMAT: 1A
       "id": "0123456789",
       "state": "PA",
       "rules": [
-        "clothing": 0,
-        "books": 0.11,
-        "electronic devices": 0.12
+        {
+          "category": "clothing",
+          "rule": 0.0
+        },
+        {
+          "category": "books",
+          "rule": 0.11
+        },
+        {
+          "category": "electronic devices",
+          "rule": 0.12
+        }
       ]
     },
     {
       "id": "0123456789",
       "state": "CA",
       "rules": [
-        "clothing": 0.11,
-        "books": 0.15,
-        "electronic devices": 0.22
+        {
+          "category": "clothing",
+          "rule": 0.11
+        },
+        {
+          "category": "books",
+          "rule": 0.15
+        },
+        {
+          "category": "electronic devices",
+          "rule": 0.22
+        }
       ]
     }
   ]
@@ -79,19 +110,31 @@ FORMAT: 1A
       "id": "0123456789",
       "state": "PA",
       "rules": [
-        "clothing": 0,
-        "books": 0.11,
-        "electronic devices": 0.12
+        {
+          "category": "clothing",
+          "rule": 0.0
+        },
+        {
+          "category": "books",
+          "rule": 0.11
+        },
+        {
+          "category": "electronic devices",
+          "rule": 0.12
+        }
       ]
     }
   ]
 }
+
+
 # if one state code does not exist in the DB return
++ Response 404 Not Found
 {
   [
     {
       errorCode: "error.state.notFound",
-      value: "notFoundStateCode"
+      value: "ZZ"
     }
   ]
 }
@@ -102,29 +145,21 @@ FORMAT: 1A
 {
     "rules": [
       {
-        "name": "clothing",
+        "category": "clothing",
         "rule": 0
       },
       {
-        "name": "books",
+        "category": "books",
         "rule": 0.11
       },
       {
-        "name": "electronic devices",
+        "category": "electronic devices",
         "rule": 0.12
       }
     ]
 }
 
-# POST /taxes/stateRules/v1/PA
-{
-    "rules": {
-      "clothing": 0,
-      "books": 0.11
-      "electronic devices": 0.12
-    }
-}
-
+# Example of a conversion of a Request to the Domain Model
 StateRule {
   id: ?,
   State: {
