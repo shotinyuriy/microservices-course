@@ -1,14 +1,18 @@
 package com.gridu.microservice.taxes.model;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
+
+import com.gridu.microservice.taxes.validation.ValidationErrorType;
 
 public class State {
 
 	private Long id;
 	
-	@NotNull
+	@NotNull(message = ValidationErrorType.MISSING, groups = {Default.class})
 	private String code;
-	@NotNull
+	
+	@NotNull(message = ValidationErrorType.MISSING)
 	private String name;
 
 	public State() {

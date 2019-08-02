@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 /**
- * This class uses a little hack of ApplicationContextAware inteface to be able to provide dao classes
+ * This class uses a little hack of ApplicationContextAware interface to be able to provide dao classes
  * for the different Validator classes
  * so that they can check existence of the entities in the database
  */

@@ -1,8 +1,8 @@
 package com.gridu.microservice.taxes.validation.exception;
 
-import com.gridu.microservice.taxes.validation.ErrorResponse;
-
 import java.util.Set;
+
+import com.gridu.microservice.taxes.exception.handler.ErrorResponse;
 
 public class CustomValidationException extends Exception {
 

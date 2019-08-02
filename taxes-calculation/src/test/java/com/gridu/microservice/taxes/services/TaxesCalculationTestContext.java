@@ -5,9 +5,9 @@ import static org.junit.Assert.*;
 import com.gridu.microservice.taxes.dao.TaxCategoryDao;
 import com.gridu.microservice.taxes.model.TaxCategory;
 import com.gridu.microservice.taxes.rest.model.PostStateRuleRequest;
-import com.gridu.microservice.taxes.validation.ErrorResponse;
 import com.gridu.microservice.taxes.validation.GlobalDaoHolder;
 import com.gridu.microservice.taxes.validation.StateValidatorService;
+import com.gridu.microservice.taxes.validation.ValidationResult;
 import com.gridu.microservice.taxes.validation.ValidationService;
 import com.gridu.microservice.taxes.validation.exception.CustomValidationException;
 import com.gridu.microservice.taxes.validation.groups.TaxCategoryShouldExist;
@@ -86,19 +86,19 @@ public class TaxesCalculationTestContext {
 		taxCategory.setName("nonExisting");
 		// ACT
 		// validate the tax category using a specific validation groups: a Default group + our custom group
-		List<ErrorResponse> constraintViolations = validationService.validate(taxCategory, Default.class, TaxCategoryShouldExist.class);
+		List<ValidationResult> constraintViolations = validationService.validate(taxCategory, Default.class, TaxCategoryShouldExist.class);
 		// ASSERT
 		assertNotNull(constraintViolations);
 		assertEquals(2, constraintViolations.size());
-		assertTrue(constraintViolations.contains(new ErrorResponse("name.invalid", "nonExisting")));
-		assertTrue(constraintViolations.contains(new ErrorResponse("id.missing", null)));
+		assertTrue(constraintViolations.contains(new ValidationResult("name.invalid", "nonExisting")));
+		assertTrue(constraintViolations.contains(new ValidationResult("id.missing", null)));
 
 		// ARRANGE
 		// Validating an Existing TaxCategory
 		TaxCategory taxCategory1 = taxCategoryDao.findById(1L);
 		// ACT
 		// validate the tax category using a specific validation groups: a Default group + our custom group
-		List<ErrorResponse> constraintViolations1 = validationService.validate(taxCategory1, Default.class, TaxCategoryShouldExist.class);
+		List<ValidationResult> constraintViolations1 = validationService.validate(taxCategory1, Default.class, TaxCategoryShouldExist.class);
 		// ASSERT
 		assertNotNull(constraintViolations1);
 		assertEquals(0, constraintViolations1.size());
@@ -121,12 +121,12 @@ public class TaxesCalculationTestContext {
 		request.getRules().put("non existing two", i);
 
 		// ACT
-		List<ErrorResponse> constraintViolations = validationService.validate(request);
+		List<ValidationResult> constraintViolations = validationService.validate(request);
 
 		// ASSERT
 		assertNotNull(constraintViolations);
-		assertTrue(constraintViolations.contains(new ErrorResponse("rules.non existing one.invalid", request.getRules())));
-		assertTrue(constraintViolations.contains(new ErrorResponse("rules.non existing two.invalid", request.getRules())));
+		assertTrue(constraintViolations.contains(new ValidationResult("rules.non existing one.invalid", request.getRules())));
+		assertTrue(constraintViolations.contains(new ValidationResult("rules.non existing two.invalid", request.getRules())));
 	}
 
 	@Test

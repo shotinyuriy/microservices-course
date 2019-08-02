@@ -1,4 +1,4 @@
-package com.gridu.microservice.taxes.validation;
+package com.gridu.microservice.taxes.exception.handler;
 
 public class ErrorResponse {
 

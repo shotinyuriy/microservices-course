@@ -2,20 +2,23 @@ package com.gridu.microservice.taxes.rest;
 
 import java.util.List;
 
+import javax.validation.groups.Default;
+
 import com.gridu.microservice.taxes.service.StateRuleService;
 import com.gridu.microservice.taxes.service.TaxCategoryService;
+import com.gridu.microservice.taxes.validation.ValidationResult;
+import com.gridu.microservice.taxes.validation.ValidationService;
 import com.gridu.microservice.taxes.view.StateRuleViewModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gridu.microservice.taxes.entity.validator.StateEntityValidator;
-import com.gridu.microservice.taxes.entity.validator.StateRuleEntityValidator;
-import com.gridu.microservice.taxes.exception.EntityNotFoundException;
+import com.gridu.microservice.taxes.exception.ConstraintViolationException;
+import com.gridu.microservice.taxes.exception.handler.ErrorResponseConstants;
+import com.gridu.microservice.taxes.exception.ConstraintViolation;
 import com.gridu.microservice.taxes.model.StateRule;
 import com.gridu.microservice.taxes.model.TaxCategory;
 import com.gridu.microservice.taxes.rest.transformer.StateRuleTransformer;
@@ -29,24 +32,17 @@ public class TaxesCalculationRestResourceV1 {
 
 	@Autowired
 	private StateRuleService stateRuleService;
-	
+
 	@Autowired
 	private StateRuleTransformer stateRuleTransformer;
-	
+
 	@Autowired
-	private StateRuleEntityValidator stateRuleValidator; 
-	
-	@Autowired
-	private StateEntityValidator stateEntityValidator;
-	
-	private StateEntityValidator getStateEntityValidator() {
-		return stateEntityValidator;
+	private ValidationService validationService;
+
+	private ValidationService getValidationService() {
+		return validationService;
 	}
-	
-	private StateRuleEntityValidator getStateRuleValidator() {
-		return stateRuleValidator;
-	}
-	
+
 	private StateRuleTransformer getStateRuleTransformer() {
 		return stateRuleTransformer;
 	}
@@ -61,18 +57,38 @@ public class TaxesCalculationRestResourceV1 {
 		return getStateRuleTransformer().toStateRuleViewModel(getStateRuleService().getAll());
 	}
 
-	
 	@GetMapping(value = "/stateRules/v1/{stateCode}", produces = "application/json")
-	public StateRuleViewModel getStateRule(@PathVariable(value="stateCode") String stateCode) throws EntityNotFoundException {
-		
-		StateRule stateRule = getStateRuleService().getStateRule(stateCode);
-		if(!getStateRuleValidator().isValid(stateRule)) {
-			throw new EntityNotFoundException(stateCode, HttpStatus.NOT_FOUND);
-		}
+	public StateRuleViewModel getStateRule(@PathVariable(value = "stateCode") String stateCode) {
 
+		StateRule stateRule = getStateRuleService().getStateRule(stateCode);
+		if (stateRule == null) {
+			ValidationResult validationResult = new ValidationResult(
+					StateRule.ERROR_CODE_PATH + ErrorResponseConstants.NULL, stateCode);
+			throw provideConstraintValidationException(validationResult);
+		} else {
+			List<ValidationResult> validationResults = getValidationService().validate(stateRule, Default.class);
+			if (!validationResults.isEmpty()) {
+				throw provideConstraintValidationException(validationResults.stream().toArray(ValidationResult[]::new));
+			}
+		}
 		return getStateRuleTransformer().toStateRuleViewModel(stateRule);
 	}
-	
+
+	private ConstraintViolationException provideConstraintValidationException(ValidationResult... validationResults) {
+		ConstraintViolationException exception = new ConstraintViolationException("State rule not valid.");
+		for (ValidationResult result : validationResults) {
+			exception.addValidationResult(createViolationByResult(result));
+		}
+		return exception;
+	}
+
+	private ConstraintViolation createViolationByResult(ValidationResult result) {
+		ConstraintViolation constraintViolation = new ConstraintViolation();
+		constraintViolation.setErrorMessage(result.getErrorCode());
+		constraintViolation.setValue(result.getValue());
+		return constraintViolation;
+	}
+
 	private StateRuleService getStateRuleService() {
 		return stateRuleService;
 	}

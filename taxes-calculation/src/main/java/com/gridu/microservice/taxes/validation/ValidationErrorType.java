@@ -4,4 +4,5 @@ public interface ValidationErrorType {
 
 	String MISSING = "missing";
 	String INVALID = "invalid";
+	String EMPTY = "empty";
 }
