@@ -43,6 +43,7 @@ public class TaxesCalculationRestResourceV1 {
 		return validationService;
 	}
 
+
 	private StateRuleTransformer getStateRuleTransformer() {
 		return stateRuleTransformer;
 	}
@@ -55,6 +56,7 @@ public class TaxesCalculationRestResourceV1 {
 	@GetMapping(value = "/stateRules/v1", produces = "application/json")
 	public List<StateRuleViewModel> getStateRules() {
 		return getStateRuleTransformer().toStateRuleViewModel(getStateRuleService().getAll());
+
 	}
 
 	@GetMapping(value = "/stateRules/v1/{stateCode}", produces = "application/json")
@@ -71,6 +73,15 @@ public class TaxesCalculationRestResourceV1 {
 				throw provideConstraintValidationException(validationResults.stream().toArray(ValidationResult[]::new));
 			}
 		}
+		
+//		ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); yuriy changes
+//
+//		ResponseEntity.badRequest().body(new Object());
+//
+//		return ResponseEntity.ok(
+//			getStateRuleTransformer().toStateRuleViewModel(
+//				getStateRuleService().getStateRule(stateCode))
+//		);
 		return getStateRuleTransformer().toStateRuleViewModel(stateRule);
 	}
 
