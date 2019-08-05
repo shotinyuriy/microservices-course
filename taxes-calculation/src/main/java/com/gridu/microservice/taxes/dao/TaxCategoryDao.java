@@ -4,4 +4,5 @@ import com.gridu.microservice.taxes.model.TaxCategory;
 
 public interface TaxCategoryDao extends GenericDao<Long, TaxCategory> {
 	
+	public TaxCategory findByCategory(String category);
 }

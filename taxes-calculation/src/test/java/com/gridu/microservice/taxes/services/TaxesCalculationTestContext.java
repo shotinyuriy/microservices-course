@@ -10,7 +10,8 @@ import com.gridu.microservice.taxes.validation.GlobalDaoHolder;
 import com.gridu.microservice.taxes.validation.StateValidatorService;
 import com.gridu.microservice.taxes.validation.ValidationResult;
 import com.gridu.microservice.taxes.validation.ValidationService;
-import com.gridu.microservice.taxes.validation.groups.TaxCategoryShouldExist;
+import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

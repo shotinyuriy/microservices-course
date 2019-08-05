@@ -11,10 +11,12 @@ import com.gridu.microservice.taxes.service.TaxCategoryService;
 import com.gridu.microservice.taxes.validation.ValidationResult;
 import com.gridu.microservice.taxes.validation.ValidationService;
 import com.gridu.microservice.taxes.validation.group.StateCodeValidationGroup;
+import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
 import com.gridu.microservice.taxes.view.StateRuleViewModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,10 +26,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gridu.microservice.taxes.exception.handler.ErrorResponse;
+import com.gridu.microservice.taxes.model.State;
 import com.gridu.microservice.taxes.model.StateRule;
 import com.gridu.microservice.taxes.model.TaxCategory;
+import com.gridu.microservice.taxes.model.TaxRule;
 import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel;
+import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel.StateRuleModel;
 import com.gridu.microservice.taxes.rest.transformer.StateRuleTransformer;
+import com.gridu.microservice.taxes.rest.transformer.ValidationResultTransformer;
 
 @RestController
 @RequestMapping("/taxes")
@@ -46,46 +52,52 @@ public class TaxesCalculationRestResourceV1 {
 	private TaxCategoryService taxCategoryService;
 
 	@Autowired
+	private ValidationResultTransformer validationResultTransformer;
+
+	@Autowired
 	private ValidationService validationService;
 
+	@PostMapping(value = "/stateRules/v1/{stateCode}", produces = "application/json")
+	public ResponseEntity<?> addNewRule(@PathVariable(value = "stateCode") String stateCode,
+			@RequestBody StateRulesRequestModel rules) {
+
+		StateRule stateRule = provideStateRule(stateCode, rules);
+		List<ValidationResult> validationResults = getValidationService().validate(stateRule, Default.class,
+				StateCodeValidationGroup.class, TaxCategoryShouldExist.class);
+
+		if (validationResults.isEmpty()) {
+			getStateRuleService().saveStateRule(stateRule);
+			return ResponseEntity.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).build();
+		} else {
+			List<ErrorResponse> validationErrorResponse = getValidationResultTransformer()
+					.provideValidationErrorResponse(validationResults);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationErrorResponse);
+		}
+	}
+
 	@GetMapping(value = "/stateRules/v1/{stateCode}", produces = "application/json")
-	public ResponseEntity<Object> getStateRule(@PathVariable(value = "stateCode") String stateCode) {
+	public ResponseEntity<?> getStateRule(@PathVariable(value = "stateCode") String stateCode) {
 
 		StateRule stateRule = getStateRuleService().getStateRule(stateCode);
-		if (stateRule == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		} else {
-			List<ValidationResult> validationResults = getValidationService().validate(stateRule, Default.class,
-					StateCodeValidationGroup.class);
-			if (!validationResults.isEmpty()) {
-				List<ErrorResponse> responseList = provideValidationErrorResponse(validationResults);
-				return ResponseEntity.badRequest().body(responseList);
-			}
+		List<ValidationResult> validationResults = getValidationService().validate(stateRule, Default.class,
+				StateCodeValidationGroup.class);
+		if (!validationResults.isEmpty()) {
+			List<ErrorResponse> responseList = getValidationResultTransformer()
+					.provideValidationErrorResponse(validationResults);
+			return ResponseEntity.badRequest().body(responseList);
 		}
 		return ResponseEntity
 				.ok(getStateRuleTransformer().toStateRuleViewModel(getStateRuleService().getStateRule(stateCode)));
 	}
 
 	@GetMapping(value = "/stateRules/v1", produces = "application/json")
-	public List<StateRuleViewModel> getStateRules() {
-		return getStateRuleTransformer().toStateRuleViewModel(getStateRuleService().getAll());
-
-	}
-
-	@PostMapping(value = "/stateRules/v1/{stateCode}", produces = "application/json")
-	public ResponseEntity<Object> addNewRule(@PathVariable(value = "stateCode") String stateCode,
-			@RequestBody StateRulesRequestModel rules) {
-		// to do
-		return ResponseEntity.ok("Response for post state rules");
-	}
-
-	public StateService getStateService() {
-		return stateService;
+	public ResponseEntity<List<StateRuleViewModel>> getStateRules() {
+		return ResponseEntity.ok(getStateRuleTransformer().toStateRuleViewModel(getStateRuleService().getAll()));
 	}
 
 	@GetMapping(value = "/categories/v1", produces = "application/json")
-	public List<TaxCategory> getTaxCategories() {
-		return getTaxCategoryService().getAll();
+	public  ResponseEntity<List<TaxCategory>> getTaxCategories() {
+		return ResponseEntity.ok().body(getTaxCategoryService().getAll());
 	}
 
 	public void setStateRuleService(StateRuleService stateRuleService) {
@@ -100,7 +112,7 @@ public class TaxesCalculationRestResourceV1 {
 	 * @ExamplePurpose
 	 */
 	@GetMapping(value = "/stateRules/v1/validationFail", produces = "application/json")
-	public ResponseEntity<Object> validation() {
+	public ResponseEntity<?> validation() {
 		/**
 		 * hardcoded in order to get StateRule with invalid State object
 		 * 
@@ -131,21 +143,30 @@ public class TaxesCalculationRestResourceV1 {
 		return stateRuleTransformer;
 	}
 
+	private StateService getStateService() {
+		return stateService;
+	}
+
 	private TaxCategoryService getTaxCategoryService() {
 		return taxCategoryService;
+	}
+
+	private ValidationResultTransformer getValidationResultTransformer() {
+		return validationResultTransformer;
 	}
 
 	private ValidationService getValidationService() {
 		return validationService;
 	}
 
-	private List<ErrorResponse> provideValidationErrorResponse(List<ValidationResult> validationResults) {
-		List<ErrorResponse> responseList = new ArrayList<ErrorResponse>();
-		for (ValidationResult validationResult : validationResults) {
-			ErrorResponse errorResponse = new ErrorResponse(validationResult.getErrorCode(),
-					validationResult.getValue());
-			responseList.add(errorResponse);
+	private StateRule provideStateRule(String stateCode, StateRulesRequestModel rules) {
+		State state = new State(stateCode, null);
+		StateRule stateRule = new StateRule(state);
+		for (StateRuleModel stateRuleModel : rules.getRules()) {
+			TaxCategory taxCategory = new TaxCategory(stateRuleModel.getCategory());
+			stateRule.addTaxRule(new TaxRule(taxCategory, stateRuleModel.getTax()));
 		}
-		return responseList;
+		return stateRule;
 	}
+
 }

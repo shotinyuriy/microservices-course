@@ -1,7 +1,10 @@
 package com.gridu.microservice.taxes.model;
 
+import javax.validation.Valid;
+
 public class TaxRule {
 
+	@Valid
 	private TaxCategory taxCategory;
 	private Double rule;
 

@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.groups.Default;
-
-import com.gridu.microservice.taxes.validation.ValidationErrorType;
 
 public class StateRule {
 	
@@ -18,7 +14,7 @@ public class StateRule {
 	@Valid
 	private State state;
 	
-	@NotEmpty(message = ValidationErrorType.EMPTY, groups = {Default.class})
+	@Valid
 	private List<TaxRule> taxRules = new ArrayList<TaxRule>();;
 
 	public StateRule() {

@@ -13,7 +13,7 @@ public class State {
 	@InvalidStateCode(message = ValidationErrorType.NOT_FOUND, groups = {StateCodeValidationGroup.class})
 	private String code;
 	
-	@NotNull(message = ValidationErrorType.MISSING)
+	//@NotNull(message = ValidationErrorType.MISSING)
 	private String name;
 
 	public State() {
