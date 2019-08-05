@@ -3,13 +3,13 @@ package com.gridu.microservice.taxes.services;
 import static org.junit.Assert.*;
 
 import com.gridu.microservice.taxes.dao.TaxCategoryDao;
+import com.gridu.microservice.taxes.exception.CustomConstraintViolationException;
 import com.gridu.microservice.taxes.model.TaxCategory;
 import com.gridu.microservice.taxes.rest.model.PostStateRuleRequest;
 import com.gridu.microservice.taxes.validation.GlobalDaoHolder;
 import com.gridu.microservice.taxes.validation.StateValidatorService;
 import com.gridu.microservice.taxes.validation.ValidationResult;
 import com.gridu.microservice.taxes.validation.ValidationService;
-import com.gridu.microservice.taxes.validation.exception.CustomValidationException;
 import com.gridu.microservice.taxes.validation.groups.TaxCategoryShouldExist;
 import org.junit.Before;
 import org.junit.Test;
@@ -75,39 +75,41 @@ public class TaxesCalculationTestContext {
 		assertEquals(2, stateRuleService.getAll().size());
 
 	}
-
+	
 	@Test
-	public void testTaxCategoryValidator() {
-
+	public void nonExistingTaxCategoryValidationTest() {
 		// ARRANGE
 		assertNotNull(validationService);
 		assertNotNull(GlobalDaoHolder.getTaxCategoryDao());
 
-		// Validating a Non-existing TaxCategory
 		TaxCategory taxCategory = new TaxCategory();
 		taxCategory.setName("nonExisting");
-		// ACT
-		// validate the tax category using a specific validation groups: a Default group + our custom group
+		
+		// ACT - validate the tax category using a specific validation groups: a Default group + our custom group
 		List<ValidationResult> constraintViolations = validationService.validate(taxCategory, Default.class, TaxCategoryShouldExist.class);
+		
 		// ASSERT
 		assertNotNull(constraintViolations);
 		assertEquals(2, constraintViolations.size());
 		assertTrue(constraintViolations.contains(new ValidationResult("name.invalid", "nonExisting")));
 		assertTrue(constraintViolations.contains(new ValidationResult("id.missing", null)));
+	}
 
+	@Test
+	public void existingTaxCategoryValidationTest() {
 		// ARRANGE
-		// Validating an Existing TaxCategory
 		TaxCategory taxCategory1 = taxCategoryDao.findById(1L);
-		// ACT
-		// validate the tax category using a specific validation groups: a Default group + our custom group
+		
+		// ACT - validate the tax category using a specific validation groups: a Default group + our custom group
 		List<ValidationResult> constraintViolations1 = validationService.validate(taxCategory1, Default.class, TaxCategoryShouldExist.class);
+		
 		// ASSERT
 		assertNotNull(constraintViolations1);
 		assertEquals(0, constraintViolations1.size());
 	}
 
 	@Test
-	public void testTaxCategoryMapValidator() {
+	public void taxCategoryServiceTest_taxCategoryRulesValidation() {
 		// ARRANGE
 		PostStateRuleRequest request = new PostStateRuleRequest();
 		request.setRules(new HashMap<>());
@@ -122,7 +124,7 @@ public class TaxesCalculationTestContext {
 		i+=0.1;
 		request.getRules().put("non existing two", i);
 
-		// ACT
+		// ACT - validating map of rules
 		List<ValidationResult> constraintViolations = validationService.validate(request, TaxCategoryShouldExist.class);
 
 		// ASSERT
@@ -132,7 +134,7 @@ public class TaxesCalculationTestContext {
 	}
 
 	@Test
-	public void testTaxCategoryNameValidator_TypeUse() {
+	public void taxCategoryServiceTest_taxCategotyNameValidation() {
 		// ARRANGE
 		PostStateRuleRequest request = new PostStateRuleRequest();
 		request.setRules(new HashMap<>());
@@ -159,18 +161,14 @@ public class TaxesCalculationTestContext {
 	}
 
 	@Test
-	public void testStateValidatorService_ExistingStateCode() throws CustomValidationException {
+	public void stateServiceTest_validStateCode() {
 		String existingStateCode = stateService.getAll().get(0).getCode();
-
 		stateValidatorService.validateStateCodeExists(existingStateCode);
-
-		// PASSES IF THERE ARE NO EXCEPTIONS
 	}
 
-	@Test(expected = CustomValidationException.class)
-	public void testStateValidatorService_NonExistingStateCode() throws CustomValidationException {
+	@Test(expected = CustomConstraintViolationException.class)
+	public void stateServiceTest_nonExistingStateCode() {
 		String stateCode = "ZZ";
-
 		stateValidatorService.validateStateCodeExists(stateCode);
 	}
 }

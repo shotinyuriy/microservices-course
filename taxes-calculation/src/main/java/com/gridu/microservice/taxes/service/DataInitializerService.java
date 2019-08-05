@@ -5,6 +5,8 @@ import com.gridu.microservice.taxes.model.StateRule;
 import com.gridu.microservice.taxes.model.TaxCategory;
 import com.gridu.microservice.taxes.model.TaxRule;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,6 +58,14 @@ public class DataInitializerService implements InitializingBean {
 		stateRulePa.addTaxRule(new TaxRule(getTaxCategoryService().findById(3l), 0.15));
 		
 		getStateRuleService().saveStateRule(stateRulePa);
+		
+		//BEGIN OF @ExamplePurpose
+		StateRule emptyStateRule = new StateRule();
+		emptyStateRule.setId(5l);
+		emptyStateRule.setState(new State());
+		emptyStateRule.setTaxRules(new ArrayList<TaxRule>());
+		getStateRuleService().saveStateRule(emptyStateRule);
+		//END OF @ExamplePurpose
 	}
 
 	public TaxCategoryService getTaxCategoryService() {

@@ -31,7 +31,7 @@ public class ValidationService {
 
 	/**
 	 * NOTE: probably this method could throw an ConstraintViolationException or our custom validation exception
-	 * List of ErrorResponse is returned for the example simplicity
+	 * List of ValidationResult is returned for the example simplicity
 	 * @param obj - an object to validate
 	 * @param validationGroups
 	 * @param <T> NOTE: use of generics is not necessary here currently,

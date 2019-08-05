@@ -5,6 +5,14 @@ public class ConstraintViolation {
 	private String message; //set snippet
 	private Object value; //set code
 	
+	public ConstraintViolation() {
+		
+	}
+	public ConstraintViolation(String string, String stateCode) {
+		this.message = string;
+		this.value = stateCode;
+	}
+
 	public String getMessage() {
 		return message;
 	} 

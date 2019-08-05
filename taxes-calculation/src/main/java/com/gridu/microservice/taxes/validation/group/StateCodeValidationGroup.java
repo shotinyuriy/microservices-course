@@ -1,5 +1,5 @@
-package com.gridu.microservice.taxes.entity.validator;
+package com.gridu.microservice.taxes.validation.group;
 
-public interface StateCodeChecks {
+public interface StateCodeValidationGroup {
 
 }

@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 
-public class ConstraintViolationException extends RuntimeException {
+public class CustomConstraintViolationException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	private HttpStatus status;
@@ -21,15 +21,19 @@ public class ConstraintViolationException extends RuntimeException {
 
 	private Set<ConstraintViolation> constraintViolations = new HashSet<ConstraintViolation>();
 
-	public ConstraintViolationException(String message) {
+	public CustomConstraintViolationException(String message) {
 		super(message);
 	}
 
-	public ConstraintViolationException(String message, Throwable cause) {
+	public CustomConstraintViolationException(Set<ConstraintViolation> constraintViolations) {
+		this.constraintViolations = constraintViolations;
+	}
+	
+	public CustomConstraintViolationException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public ConstraintViolationException(Throwable cause) {
+	public CustomConstraintViolationException(Throwable cause) {
 		super(cause);
 	}
 

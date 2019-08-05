@@ -3,19 +3,19 @@ package com.gridu.microservice.taxes.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 
 import com.gridu.microservice.taxes.validation.ValidationErrorType;
 
 public class StateRule {
-
-	public static final String ERROR_CODE_PATH = "error.stateRule";
 	
 	private Long id;
-	
-	@NotNull(message = ValidationErrorType.MISSING, groups = {Default.class})
+
+	//annotation ensures that validators in State fields will be called on validating StateRule objects
+	//ie. provides cascading validation
+	@Valid
 	private State state;
 	
 	@NotEmpty(message = ValidationErrorType.EMPTY, groups = {Default.class})
