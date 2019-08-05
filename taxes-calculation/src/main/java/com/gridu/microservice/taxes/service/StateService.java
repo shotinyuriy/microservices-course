@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class StateService {
 
-	@Autowired
+//	@Autowired
 	private StateDao stateDao;
 
 
