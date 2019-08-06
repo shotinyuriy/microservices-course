@@ -1,14 +1,14 @@
 package com.gridu.microservice.taxes.model;
 
 import com.gridu.microservice.taxes.validation.ValidationErrorType;
-import com.gridu.microservice.taxes.validation.annotation.InvalidStateCode;
+import com.gridu.microservice.taxes.validation.annotation.ValidStateCode;
 import com.gridu.microservice.taxes.validation.group.StateCodeValidationGroup;
 
 public class State {
 
 	private Long id;
 	
-	@InvalidStateCode(message = ValidationErrorType.NOT_FOUND, groups = {StateCodeValidationGroup.class})
+	@ValidStateCode(message = ValidationErrorType.NOT_FOUND, groups = {StateCodeValidationGroup.class})
 	private String code;
 	
 	private String name;

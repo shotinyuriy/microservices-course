@@ -1,4 +1,4 @@
-package com.gridu.microservice.taxes.services;
+package com.gridu.microservice.taxes.integration;
 
 import static org.junit.Assert.*;
 
@@ -7,10 +7,11 @@ import com.gridu.microservice.taxes.exception.CustomConstraintViolationException
 import com.gridu.microservice.taxes.model.TaxCategory;
 import com.gridu.microservice.taxes.rest.model.PostStateRuleRequest;
 import com.gridu.microservice.taxes.validation.GlobalDaoHolder;
-import com.gridu.microservice.taxes.validation.StateValidatorService;
 import com.gridu.microservice.taxes.validation.ValidationResult;
 import com.gridu.microservice.taxes.validation.ValidationService;
 import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
+
+import example.com.gridu.microservice.taxes.validation.StateValidatorService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 
 @ContextConfiguration("file:src/main/webapp/config/application-context.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
-public class TaxesCalculationTestContext {
+public class TaxesCalculationTest {
 
 	@Autowired
 	private DataInitializerService dataInitializerService;

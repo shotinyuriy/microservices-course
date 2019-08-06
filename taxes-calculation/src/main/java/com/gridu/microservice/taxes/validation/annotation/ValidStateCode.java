@@ -22,7 +22,7 @@ import java.lang.annotation.Retention;
 @Retention(RUNTIME)
 @Constraint(validatedBy = StateCodeValidator.class)
 @Documented
-public @interface InvalidStateCode {
+public @interface ValidStateCode {
 	String message() default ValidationErrorType.NOT_FOUND;
 	Class<?>[] groups() default {};
 	Class<? extends Payload>[] payload() default {};

@@ -1,14 +1,19 @@
 package com.gridu.microservice.taxes.exception;
 
-public class ConstraintViolation {
+/**
+ * 
+ * Holds information for a single constraint violation
+ *
+ */
+public class CustomConstraintViolationData {
 
-	private String message; //set snippet
-	private Object value; //set code
+	private String message;
+	private Object value;
 	
-	public ConstraintViolation() {
+	public CustomConstraintViolationData() {
 		
 	}
-	public ConstraintViolation(String string, String stateCode) {
+	public CustomConstraintViolationData(String string, String stateCode) {
 		this.message = string;
 		this.value = stateCode;
 	}

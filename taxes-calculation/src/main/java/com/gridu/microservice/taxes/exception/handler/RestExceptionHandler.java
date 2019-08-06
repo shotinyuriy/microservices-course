@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.gridu.microservice.taxes.exception.ConstraintViolation;
+import com.gridu.microservice.taxes.exception.CustomConstraintViolationData;
 import com.gridu.microservice.taxes.exception.CustomConstraintViolationException;
 
 @ControllerAdvice
@@ -18,12 +18,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(CustomConstraintViolationException.class)
 	protected ResponseEntity<Object> handleEntityNotFoundException(CustomConstraintViolationException exception) {
 
-		if (exception.getValidationResults().isEmpty()) {
+		if (exception.getViolationResults().isEmpty()) {
 			return provideResponseEntity(new ErrorResponse(HttpStatus.NOT_FOUND.toString(), exception.getMessage()),
 					HttpStatus.NOT_FOUND);
 		} else {
 			List<ErrorResponse> responseList = new ArrayList<ErrorResponse>();
-			for (ConstraintViolation result : exception.getValidationResults())
+			for (CustomConstraintViolationData result : exception.getViolationResults())
 				responseList.add(new ErrorResponse(result.getMessage(), result.getValue()));
 			return new ResponseEntity<>(responseList, HttpStatus.NOT_FOUND);
 		}

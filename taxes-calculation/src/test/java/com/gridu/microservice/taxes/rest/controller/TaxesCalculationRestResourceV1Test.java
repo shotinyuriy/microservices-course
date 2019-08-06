@@ -50,7 +50,7 @@ public class TaxesCalculationRestResourceV1Test {
 	}
 
 	@Test
-	public void getStateRule_getValid() {
+	public void getStateRule_byValidStateCode() {
 
 		// ARRANGE
 		StateRule stateRule = new StateRule(new State(STATE_CODE_AZ, STATE_NAME_ARIZONA));
@@ -58,6 +58,7 @@ public class TaxesCalculationRestResourceV1Test {
 		stateRule.addTaxRule(new TaxRule(taxCategory, TAX_1));
 
 		Mockito.when(stateRuleServiceMock.getStateRule(STATE_CODE_AZ)).thenReturn(stateRule);
+		
 		Mockito.when(validationServiceMock.validate(stateRule, Default.class))
 				.thenReturn(new ArrayList<ValidationResult>());
 		// ACT
@@ -69,8 +70,26 @@ public class TaxesCalculationRestResourceV1Test {
 		StateRuleViewModel viewModel = (StateRuleViewModel) responseBody;
 		assertEquals(STATE_CODE_AZ, viewModel.getState());
 		assertEquals(TAX_1, viewModel.getRules().get(0).get(TAX_CATEGORY_DEVICES));
-
-
+		Mockito.verify(stateRuleServiceMock, Mockito.times(2)).getStateRule(Mockito.anyString());
+		Mockito.verify(stateRuleServiceMock, Mockito.never()).getAll();
 	}
 
+	@Test
+	public void getStateRule_byInvalidStateCode() {
+		
+	}
+	@Test
+	public void addNewRule_existingStateRule() {
+		
+	}
+	
+	@Test
+	public void addNewRule_unexistingStateRule() {
+		
+	}
+	
+	@Test
+	public void addNewRule_invalidData() {
+		
+	}
 }

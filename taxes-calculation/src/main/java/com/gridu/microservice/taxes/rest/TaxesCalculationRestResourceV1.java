@@ -1,6 +1,5 @@
 package com.gridu.microservice.taxes.rest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.groups.Default;
@@ -63,6 +62,7 @@ public class TaxesCalculationRestResourceV1 {
 
 		if (validationResults.isEmpty()) {
 			getStateRuleService().saveStateRule(stateRule);
+			//TO DO - return /stateRules/v1/{stateCode}
 			return ResponseEntity.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).build();
 		} else {
 			List<ErrorResponse> validationErrorResponse = getValidationResultTransformer()
@@ -100,35 +100,12 @@ public class TaxesCalculationRestResourceV1 {
 		this.stateRuleService = stateRuleService;
 	}
 
-	public void setTaxCategoryService(TaxCategoryService taxCategoryService) {
-		this.taxCategoryService = taxCategoryService;
+	public void setStateRuleTransformer(StateRuleTransformer stateRuleTransformer) {
+		this.stateRuleTransformer = stateRuleTransformer;
 	}
 
-	/**
-	 * @ExamplePurpose
-	 */
-	@GetMapping(value = "/stateRules/v1/validationFail", produces = "application/json")
-	public ResponseEntity<?> validation() {
-		/**
-		 * hardcoded in order to get StateRule with invalid State object
-		 * 
-		 * @see com.gridu.microservice.taxes.service.DataInitializeService#afterPropertiesSet()
-		 */
-		StateRule stateRule = getStateRuleService().getStateRule(5l);
-		List<ValidationResult> validationResults = getValidationService().validate(stateRule, Default.class,
-				StateCodeValidationGroup.class);
-
-		if (!validationResults.isEmpty()) {
-			List<ErrorResponse> responseList = new ArrayList<ErrorResponse>();
-			for (ValidationResult validationResult : validationResults) {
-				ErrorResponse errorResponse = new ErrorResponse(validationResult.getErrorCode(),
-						validationResult.getValue());
-				responseList.add(errorResponse);
-			}
-			return ResponseEntity.badRequest().body(responseList);
-		}
-
-		return ResponseEntity.ok(getStateRuleTransformer().toStateRuleViewModel(stateRule));
+	public void setTaxCategoryService(TaxCategoryService taxCategoryService) {
+		this.taxCategoryService = taxCategoryService;
 	}
 
 	private StateRuleService getStateRuleService() {
@@ -150,7 +127,7 @@ public class TaxesCalculationRestResourceV1 {
 	private ValidationService getValidationService() {
 		return validationService;
 	}
-
+	
 	private StateRule provideStateRule(String stateCode, StateRulesRequestModel rules) {
 		State state = new State(stateCode, null);
 		StateRule stateRule = new StateRule(state);
@@ -159,10 +136,6 @@ public class TaxesCalculationRestResourceV1 {
 			stateRule.addTaxRule(new TaxRule(taxCategory, stateRuleModel.getTax()));
 		}
 		return stateRule;
-	}
-	
-	public void setStateRuleTransformer(StateRuleTransformer stateRuleTransformer) {
-		this.stateRuleTransformer = stateRuleTransformer;
 	}
 
 }

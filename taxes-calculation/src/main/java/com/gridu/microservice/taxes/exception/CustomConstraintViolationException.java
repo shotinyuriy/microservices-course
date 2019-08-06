@@ -9,26 +9,13 @@ import org.springframework.http.HttpStatus;
 public class CustomConstraintViolationException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
+	private Set<CustomConstraintViolationData> constraintViolations = new HashSet<CustomConstraintViolationData>();
 	private HttpStatus status;
-
-	public HttpStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(HttpStatus status) {
-		this.status = status;
-	}
-
-	private Set<ConstraintViolation> constraintViolations = new HashSet<ConstraintViolation>();
 
 	public CustomConstraintViolationException(String message) {
 		super(message);
 	}
 
-	public CustomConstraintViolationException(Set<ConstraintViolation> constraintViolations) {
-		this.constraintViolations = constraintViolations;
-	}
-	
 	public CustomConstraintViolationException(String message, Throwable cause) {
 		super(message, cause);
 	}
@@ -36,19 +23,26 @@ public class CustomConstraintViolationException extends RuntimeException {
 	public CustomConstraintViolationException(Throwable cause) {
 		super(cause);
 	}
+	
+	public void addViolationResult(CustomConstraintViolationData violationResult) {
+		constraintViolations.add(violationResult);
+	}
 
-	public void addValidationResult(List<ConstraintViolation> validationResults) {
-		for (ConstraintViolation validationResult : validationResults) {
-			addValidationResult(validationResult);
+	public void addViolationResults(List<CustomConstraintViolationData> violationResults) {
+		for (CustomConstraintViolationData valiationResult : violationResults) {
+			addViolationResult(valiationResult);
 		}
 	}
 
-	public void addValidationResult(ConstraintViolation validationResult) {
-		constraintViolations.add(validationResult);
+	public HttpStatus getStatus() {
+		return status;
 	}
 
-	public Set<ConstraintViolation> getValidationResults() {
+	public Set<CustomConstraintViolationData> getViolationResults() {
 		return constraintViolations;
 	}
 
+	public void setStatus(HttpStatus status) {
+		this.status = status;
+	}
 }

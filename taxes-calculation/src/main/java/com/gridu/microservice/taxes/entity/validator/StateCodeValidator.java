@@ -5,9 +5,9 @@ import javax.validation.ConstraintValidatorContext;
 
 import com.gridu.microservice.taxes.model.State;
 import com.gridu.microservice.taxes.validation.GlobalDaoHolder;
-import com.gridu.microservice.taxes.validation.annotation.InvalidStateCode;
+import com.gridu.microservice.taxes.validation.annotation.ValidStateCode;
 
-public class StateCodeValidator implements ConstraintValidator<InvalidStateCode, String> {
+public class StateCodeValidator implements ConstraintValidator<ValidStateCode, String> {
 
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
