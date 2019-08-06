@@ -3,6 +3,8 @@ package com.gridu.microservice.taxes.entity.validator;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.springframework.util.StringUtils;
+
 import com.gridu.microservice.taxes.model.State;
 import com.gridu.microservice.taxes.validation.GlobalDaoHolder;
 import com.gridu.microservice.taxes.validation.annotation.ValidStateCode;
@@ -12,7 +14,7 @@ public class StateCodeValidator implements ConstraintValidator<ValidStateCode, S
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
 		State state = GlobalDaoHolder.getStateDao().findByCode(value);
-		if (state == null) {
+		if (state == null || StringUtils.isEmpty(state.getCode())) {
 			context.disableDefaultConstraintViolation();
 			context.buildConstraintViolationWithTemplate(context.getDefaultConstraintMessageTemplate())
 					.addConstraintViolation();
