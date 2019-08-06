@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 public class StateRule {
 	
@@ -12,6 +13,7 @@ public class StateRule {
 	//annotation ensures that validators in State fields will be called on validating StateRule objects
 	//ie. provides cascading validation
 	@Valid
+	@NotNull
 	private State state;
 	
 	@Valid

@@ -1,10 +1,12 @@
 package com.gridu.microservice.taxes.model;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 public class TaxRule {
 
 	@Valid
+	@NotNull
 	private TaxCategory taxCategory;
 	private Double rule;
 
