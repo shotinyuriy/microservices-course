@@ -6,7 +6,6 @@ import java.util.List;
 import javax.validation.groups.Default;
 
 import com.gridu.microservice.taxes.service.StateRuleService;
-import com.gridu.microservice.taxes.service.StateService;
 import com.gridu.microservice.taxes.service.TaxCategoryService;
 import com.gridu.microservice.taxes.validation.ValidationResult;
 import com.gridu.microservice.taxes.validation.ValidationService;
@@ -44,9 +43,6 @@ public class TaxesCalculationRestResourceV1 {
 
 	@Autowired
 	private StateRuleTransformer stateRuleTransformer;
-
-	@Autowired
-	private StateService stateService;
 
 	@Autowired
 	private TaxCategoryService taxCategoryService;
@@ -143,10 +139,6 @@ public class TaxesCalculationRestResourceV1 {
 		return stateRuleTransformer;
 	}
 
-	private StateService getStateService() {
-		return stateService;
-	}
-
 	private TaxCategoryService getTaxCategoryService() {
 		return taxCategoryService;
 	}
@@ -167,6 +159,10 @@ public class TaxesCalculationRestResourceV1 {
 			stateRule.addTaxRule(new TaxRule(taxCategory, stateRuleModel.getTax()));
 		}
 		return stateRule;
+	}
+	
+	public void setStateRuleTransformer(StateRuleTransformer stateRuleTransformer) {
+		this.stateRuleTransformer = stateRuleTransformer;
 	}
 
 }

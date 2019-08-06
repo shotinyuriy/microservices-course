@@ -35,7 +35,7 @@ public class ServiceTest {
 	public void setUp() {
 		stateDaoMock = Mockito.mock(StateDao.class);
 
-		stateService = new StateService();
+	//	stateService = new StateService();
 		stateService.setStateDao(stateDaoMock);
 
 		existingState1 = new State(1L, STATE_CODE, "Arizona");

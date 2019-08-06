@@ -1,7 +1,5 @@
 package com.gridu.microservice.taxes.model;
 
-import javax.validation.constraints.NotNull;
-
 import com.gridu.microservice.taxes.validation.ValidationErrorType;
 import com.gridu.microservice.taxes.validation.annotation.InvalidStateCode;
 import com.gridu.microservice.taxes.validation.group.StateCodeValidationGroup;
@@ -13,7 +11,6 @@ public class State {
 	@InvalidStateCode(message = ValidationErrorType.NOT_FOUND, groups = {StateCodeValidationGroup.class})
 	private String code;
 	
-	//@NotNull(message = ValidationErrorType.MISSING)
 	private String name;
 
 	public State() {
