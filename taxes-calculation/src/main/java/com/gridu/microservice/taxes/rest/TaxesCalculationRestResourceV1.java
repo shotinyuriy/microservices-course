@@ -94,10 +94,6 @@ public class TaxesCalculationRestResourceV1 {
 		return ResponseEntity.ok().body(getTaxCategoryService().getAll());
 	}
 
-	public void setStateRuleService(StateRuleService stateRuleService) {
-		this.stateRuleService = stateRuleService;
-	}
-
 	public void setStateRuleTransformer(StateRuleTransformer stateRuleTransformer) {
 		this.stateRuleTransformer = stateRuleTransformer;
 	}
