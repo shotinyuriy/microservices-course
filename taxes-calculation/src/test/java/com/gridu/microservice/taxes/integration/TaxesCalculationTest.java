@@ -3,15 +3,12 @@ package com.gridu.microservice.taxes.integration;
 import static org.junit.Assert.*;
 
 import com.gridu.microservice.taxes.dao.TaxCategoryDao;
-import com.gridu.microservice.taxes.exception.CustomConstraintViolationException;
 import com.gridu.microservice.taxes.model.TaxCategory;
 import com.gridu.microservice.taxes.rest.model.PostStateRuleRequest;
 import com.gridu.microservice.taxes.validation.GlobalDaoHolder;
 import com.gridu.microservice.taxes.validation.ValidationResult;
 import com.gridu.microservice.taxes.validation.ValidationService;
 import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
-
-import example.com.gridu.microservice.taxes.validation.StateValidatorService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -55,9 +52,6 @@ public class TaxesCalculationTest {
 	@Autowired
 	private ValidationService validationService;
 
-	@Autowired
-	private StateValidatorService stateValidatorService;
-
 	@Before
 	public void setUp() {
 		// ARRANGE + ASSERT
@@ -66,7 +60,6 @@ public class TaxesCalculationTest {
 		assertNotNull(taxCategoryService);
 		assertNotNull(stateService);
 		assertNotNull(validationService);
-		assertNotNull(stateValidatorService);
 		assertNotNull(GlobalDaoHolder.getTaxCategoryDao());
 	}
 	
@@ -159,17 +152,5 @@ public class TaxesCalculationTest {
 		assertTrue(errorResponseValues.contains("non existing one"));
 		assertTrue(errorResponseValues.contains("non existing two"));
 		assertTrue(errorResponseValues.contains(null));
-	}
-
-	@Test
-	public void stateServiceTest_validStateCode() {
-		String existingStateCode = stateService.getAll().get(0).getCode();
-		stateValidatorService.validateStateCodeExists(existingStateCode);
-	}
-
-	@Test(expected = CustomConstraintViolationException.class)
-	public void stateServiceTest_nonExistingStateCode() {
-		String stateCode = "ZZ";
-		stateValidatorService.validateStateCodeExists(stateCode);
 	}
 }

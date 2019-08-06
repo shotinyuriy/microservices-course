@@ -59,11 +59,10 @@ public class TaxesCalculationRestResourceV1 {
 		StateRule stateRule = provideStateRule(stateCode, rules);
 		List<ValidationResult> validationResults = getValidationService().validate(stateRule, Default.class,
 				StateCodeValidationGroup.class, TaxCategoryShouldExist.class);
-
 		if (validationResults.isEmpty()) {
-			getStateRuleService().saveStateRule(stateRule);
-			//TO DO - return /stateRules/v1/{stateCode}
-			return ResponseEntity.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).build();
+			StateRule saveStateRule = getStateRuleService().saveStateRule(stateRule);
+			return ResponseEntity.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON)
+					.body("/stateRules/v1/" + saveStateRule.getState().getCode());
 		} else {
 			List<ErrorResponse> validationErrorResponse = getValidationResultTransformer()
 					.provideValidationErrorResponse(validationResults);
@@ -82,8 +81,7 @@ public class TaxesCalculationRestResourceV1 {
 					.provideValidationErrorResponse(validationResults);
 			return ResponseEntity.badRequest().body(responseList);
 		}
-		return ResponseEntity
-				.ok(getStateRuleTransformer().toStateRuleViewModel(getStateRuleService().getStateRule(stateCode)));
+		return ResponseEntity.ok(getStateRuleTransformer().toStateRuleViewModel(stateRule));
 	}
 
 	@GetMapping(value = "/stateRules/v1", produces = "application/json")
@@ -92,7 +90,7 @@ public class TaxesCalculationRestResourceV1 {
 	}
 
 	@GetMapping(value = "/categories/v1", produces = "application/json")
-	public  ResponseEntity<List<TaxCategory>> getTaxCategories() {
+	public ResponseEntity<List<TaxCategory>> getTaxCategories() {
 		return ResponseEntity.ok().body(getTaxCategoryService().getAll());
 	}
 
@@ -102,10 +100,6 @@ public class TaxesCalculationRestResourceV1 {
 
 	public void setStateRuleTransformer(StateRuleTransformer stateRuleTransformer) {
 		this.stateRuleTransformer = stateRuleTransformer;
-	}
-
-	public void setTaxCategoryService(TaxCategoryService taxCategoryService) {
-		this.taxCategoryService = taxCategoryService;
 	}
 
 	private StateRuleService getStateRuleService() {
@@ -124,10 +118,14 @@ public class TaxesCalculationRestResourceV1 {
 		return validationResultTransformer;
 	}
 
+	public void setValidationResultTransformer(ValidationResultTransformer validationResultTransfomer) {
+		this.validationResultTransformer = validationResultTransfomer;
+	}
+
 	private ValidationService getValidationService() {
 		return validationService;
 	}
-	
+
 	private StateRule provideStateRule(String stateCode, StateRulesRequestModel rules) {
 		State state = new State(stateCode, null);
 		StateRule stateRule = new StateRule(state);
