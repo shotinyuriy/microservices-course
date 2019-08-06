@@ -3,10 +3,18 @@ package com.gridu.microservice.taxes.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StateRule {
+import javax.validation.Valid;
 
+public class StateRule {
+	
 	private Long id;
+
+	//annotation ensures that validators in State fields will be called on validating StateRule objects
+	//ie. provides cascading validation
+	@Valid
 	private State state;
+	
+	@Valid
 	private List<TaxRule> taxRules = new ArrayList<TaxRule>();;
 
 	public StateRule() {

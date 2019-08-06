@@ -29,4 +29,8 @@ public class StateRuleService {
 	public StateRule getStateRule(String stateCode) {
 		return getStateRuleDao().findByCode(stateCode);
 	}
+
+	public StateRule getStateRule(long id) {
+		return getStateRuleDao().findById(id);
+	}
 }

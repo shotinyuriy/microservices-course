@@ -1,9 +1,16 @@
 package com.gridu.microservice.taxes.model;
 
+import com.gridu.microservice.taxes.validation.ValidationErrorType;
+import com.gridu.microservice.taxes.validation.annotation.ValidStateCode;
+import com.gridu.microservice.taxes.validation.group.StateCodeValidationGroup;
+
 public class State {
 
 	private Long id;
+	
+	@ValidStateCode(message = ValidationErrorType.NOT_FOUND, groups = {StateCodeValidationGroup.class})
 	private String code;
+	
 	private String name;
 
 	public State() {
@@ -60,5 +67,14 @@ public class State {
 		int result = id != null ? id.hashCode() : 0;
 		result = 31 * result + (name != null ? name.hashCode() : 0);
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "State{" +
+			"id=" + id +
+			", code='" + code + '\'' +
+			", name='" + name + '\'' +
+			'}';
 	}
 }

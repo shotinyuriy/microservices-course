@@ -1,8 +1,14 @@
 package com.gridu.microservice.taxes.model;
 
+import com.gridu.microservice.taxes.validation.ValidationErrorType;
+import com.gridu.microservice.taxes.validation.annotation.ExistingTaxCategoryName;
+import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
+
 public class TaxCategory {
 
 	private Long id;
+
+	@ExistingTaxCategoryName(message = ValidationErrorType.INVALID, groups = {TaxCategoryShouldExist.class})
 	private String name;
 
 	public TaxCategory() {
