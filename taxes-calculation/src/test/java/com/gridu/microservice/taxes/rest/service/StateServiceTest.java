@@ -15,28 +15,32 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+/**
+ * 
+ * Use commented lines setUp method or the annotation approach for creating mock instances
+ *
+ */
 @RunWith(MockitoJUnitRunner.class)
-public class ServiceTest {
+public class StateServiceTest {
 
 	private static final String STATE_CODE = "AZ";
 	private static final String STATE_CODE_2 = "AR";
 
+	private State existingState1;
+
+	private State existingState1_copy;
+
+	private State existingState2;
+	@Mock
+	private StateDao stateDaoMock;
 	@InjectMocks
 	private StateService stateService;
 
-	@Mock
-	private StateDao stateDaoMock;
-
-	private State existingState1;
-	private State existingState1_copy;
-	private State existingState2;
-
 	@Before
 	public void setUp() {
-		stateDaoMock = Mockito.mock(StateDao.class);
-
-	//	stateService = new StateService();
-		stateService.setStateDao(stateDaoMock);
+//		stateDaoMock = Mockito.mock(StateDao.class);
+//		stateService = new StateService();
+//		stateService.setStateDao(stateDaoMock);
 
 		existingState1 = new State(1L, STATE_CODE, "Arizona");
 		existingState1_copy = new State(1L, STATE_CODE, "Arizona");
@@ -46,26 +50,13 @@ public class ServiceTest {
 			.thenReturn(existingState2);
 	}
 
-	@Test
-	public void testFindByCode_FindExisting() {
+	@Test(expected = RuntimeException.class)
+	public void testFindByCode_ExceptionThrow() {
 		// ARRANGE
-		Mockito.when(stateDaoMock.findByCode(STATE_CODE))
-			.thenReturn(existingState1_copy);
-
+		Mockito.when(stateDaoMock.findByCode(Mockito.anyString()))
+			.thenThrow(new RuntimeException("TEST EXCEPTION"));
 		// ACT
-		State foundState = stateService.findByCode(STATE_CODE);
-		// ASSERT
-		assertNotNull(foundState);
-		assertEquals(existingState1, foundState);
-	}
-
-	@Test
-	public void testFindByCode_FindNotExisting() {
-		// ARRANGE
-		Mockito.when(stateDaoMock.findByCode(Mockito.eq(STATE_CODE)))
-			.thenReturn(existingState1_copy);
-		// ACT
-		State foundState = stateService.findByCode("XX");
+		State foundState = stateService.findByCode(null);
 		// ASSERT
 		assertNull(foundState);
 	}
@@ -81,13 +72,25 @@ public class ServiceTest {
 		assertNull(foundState);
 	}
 
-	@Test(expected = RuntimeException.class)
-	public void testFindByCode_ExceptionThrow() {
+	@Test
+	public void testFindByCode_FindExisting() {
 		// ARRANGE
-		Mockito.when(stateDaoMock.findByCode(Mockito.anyString()))
-			.thenThrow(new RuntimeException("TEST EXCEPTION"));
+		Mockito.when(stateDaoMock.findByCode(STATE_CODE))
+			.thenReturn(existingState1_copy);
 		// ACT
-		State foundState = stateService.findByCode(null);
+		State foundState = stateService.findByCode(STATE_CODE);
+		// ASSERT
+		assertNotNull(foundState);
+		assertEquals(existingState1, foundState);
+	}
+
+	@Test
+	public void testFindByCode_FindNotExisting() {
+		// ARRANGE
+		Mockito.when(stateDaoMock.findByCode(Mockito.eq(STATE_CODE)))
+			.thenReturn(existingState1_copy);
+		// ACT
+		State foundState = stateService.findByCode("XX");
 		// ASSERT
 		assertNull(foundState);
 	}

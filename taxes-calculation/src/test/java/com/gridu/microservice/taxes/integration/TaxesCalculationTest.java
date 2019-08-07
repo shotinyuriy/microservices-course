@@ -3,15 +3,17 @@ package com.gridu.microservice.taxes.integration;
 import static org.junit.Assert.*;
 
 import com.gridu.microservice.taxes.dao.TaxCategoryDao;
-import com.gridu.microservice.taxes.exception.CustomConstraintViolationException;
 import com.gridu.microservice.taxes.model.TaxCategory;
+import com.gridu.microservice.taxes.rest.TaxesCalculationRestResourceV1;
 import com.gridu.microservice.taxes.rest.model.PostStateRuleRequest;
+import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel;
+import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel.StateRuleModel;
+import com.gridu.microservice.taxes.rest.transformer.StateRuleTransformer;
+import com.gridu.microservice.taxes.rest.transformer.ValidationResultTransformer;
 import com.gridu.microservice.taxes.validation.GlobalDaoHolder;
 import com.gridu.microservice.taxes.validation.ValidationResult;
 import com.gridu.microservice.taxes.validation.ValidationService;
 import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
-
-import example.com.gridu.microservice.taxes.validation.StateValidatorService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,13 +27,13 @@ import com.gridu.microservice.taxes.service.StateRuleService;
 import com.gridu.microservice.taxes.service.StateService;
 import com.gridu.microservice.taxes.service.TaxCategoryService;
 
-
 import javax.validation.groups.Default;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import java.util.stream.Collectors;
-
 
 @ContextConfiguration("file:src/main/webapp/config/application-context.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -39,7 +41,7 @@ public class TaxesCalculationTest {
 
 	@Autowired
 	private DataInitializerService dataInitializerService;
-	
+
 	@Autowired
 	private TaxCategoryService taxCategoryService;
 
@@ -56,7 +58,13 @@ public class TaxesCalculationTest {
 	private ValidationService validationService;
 
 	@Autowired
-	private StateValidatorService stateValidatorService;
+	private ValidationResultTransformer validationResultTransformer;
+
+	@Autowired
+	private StateRuleTransformer stateRuleTransformer;
+
+	@Autowired
+	private TaxesCalculationRestResourceV1 controller;
 
 	@Before
 	public void setUp() {
@@ -66,18 +74,13 @@ public class TaxesCalculationTest {
 		assertNotNull(taxCategoryService);
 		assertNotNull(stateService);
 		assertNotNull(validationService);
-		assertNotNull(stateValidatorService);
+		assertNotNull(validationResultTransformer);
+		assertNotNull(stateRuleTransformer);
+		assertNotNull(controller);
 		assertNotNull(GlobalDaoHolder.getTaxCategoryDao());
+		assertNotNull(GlobalDaoHolder.getStateDao());
 	}
-	
-	@Test
-	public void test() {
-		assertEquals(3, taxCategoryService.getAll().size());
-		assertEquals(5, stateService.getAll().size());
-		assertEquals(2, stateRuleService.getAll().size());
 
-	}
-	
 	@Test
 	public void nonExistingTaxCategoryValidationTest() {
 		// ARRANGE
@@ -86,10 +89,12 @@ public class TaxesCalculationTest {
 
 		TaxCategory taxCategory = new TaxCategory();
 		taxCategory.setName("nonExisting");
-		
-		// ACT - validate the tax category using a specific validation groups: a Default group + our custom group
-		List<ValidationResult> constraintViolations = validationService.validate(taxCategory, Default.class, TaxCategoryShouldExist.class);
-		
+
+		// ACT - validate the tax category using a specific validation groups: a Default
+		// group + our custom group
+		List<ValidationResult> constraintViolations = validationService.validate(taxCategory, Default.class,
+				TaxCategoryShouldExist.class);
+
 		// ASSERT
 		assertNotNull(constraintViolations);
 		assertEquals(1, constraintViolations.size());
@@ -100,10 +105,12 @@ public class TaxesCalculationTest {
 	public void existingTaxCategoryValidationTest() {
 		// ARRANGE
 		TaxCategory taxCategory1 = taxCategoryDao.findById(1L);
-		
-		// ACT - validate the tax category using a specific validation groups: a Default group + our custom group
-		List<ValidationResult> constraintViolations1 = validationService.validate(taxCategory1, Default.class, TaxCategoryShouldExist.class);
-		
+
+		// ACT - validate the tax category using a specific validation groups: a Default
+		// group + our custom group
+		List<ValidationResult> constraintViolations1 = validationService.validate(taxCategory1, Default.class,
+				TaxCategoryShouldExist.class);
+
 		// ASSERT
 		assertNotNull(constraintViolations1);
 		assertEquals(0, constraintViolations1.size());
@@ -118,11 +125,11 @@ public class TaxesCalculationTest {
 		double i = 0.1;
 		for (TaxCategory taxCategory : taxCategoryService.getAll()) {
 			request.getRules().put(taxCategory.getName(), i);
-			i+= 0.01;
+			i += 0.01;
 		}
 		// add not existing categories
 		request.getRules().put("non existing one", i);
-		i+=0.1;
+		i += 0.1;
 		request.getRules().put("non existing two", i);
 
 		// ACT - validating map of rules
@@ -130,8 +137,10 @@ public class TaxesCalculationTest {
 
 		// ASSERT
 		assertNotNull(constraintViolations);
-		assertTrue(constraintViolations.contains(new ValidationResult("rules.non existing one.invalid", request.getRules())));
-		assertTrue(constraintViolations.contains(new ValidationResult("rules.non existing two.invalid", request.getRules())));
+		assertTrue(constraintViolations
+				.contains(new ValidationResult("rules.non existing one.invalid", request.getRules())));
+		assertTrue(constraintViolations
+				.contains(new ValidationResult("rules.non existing two.invalid", request.getRules())));
 	}
 
 	@Test
@@ -154,7 +163,8 @@ public class TaxesCalculationTest {
 
 		// ASSERT
 		assertNotNull(constraintViolations);
-		List<Object> errorResponseValues = constraintViolations.stream().map(cv -> cv.getValue()).collect(Collectors.toList());
+		List<Object> errorResponseValues = constraintViolations.stream().map(cv -> cv.getValue())
+				.collect(Collectors.toList());
 
 		assertTrue(errorResponseValues.contains("non existing one"));
 		assertTrue(errorResponseValues.contains("non existing two"));
@@ -162,14 +172,49 @@ public class TaxesCalculationTest {
 	}
 
 	@Test
-	public void stateServiceTest_validStateCode() {
-		String existingStateCode = stateService.getAll().get(0).getCode();
-		stateValidatorService.validateStateCodeExists(existingStateCode);
+	public void taxCalculationController_addNewRule_updateExistingRuleTest() {
+		
+		String stateRulesUpdateCode = "PA";
+		// ASSERT INITIAL APP STATE
+		assertTrue(stateService.findByCode(stateRulesUpdateCode) != null);
+		assertEquals(2, stateRuleService.getStateRule(stateRulesUpdateCode).getTaxRules().size());
+		
+		// ARRANGE
+		StateRulesRequestModel requestModel = new StateRulesRequestModel();
+		List<StateRuleModel> modelRules = new ArrayList<StateRulesRequestModel.StateRuleModel>();
+		modelRules.add(new StateRuleModel("clothing", 0.16));
+		modelRules.add(new StateRuleModel("electronic devices", 0.12));
+		modelRules.add(new StateRuleModel("books", 0.10));
+		requestModel.setRules(modelRules);
+
+		// ACT
+		controller.addNewRule(stateRulesUpdateCode, requestModel);
+		
+		// ASSERT
+		assertEquals(3, stateRuleService.getStateRule(stateRulesUpdateCode).getTaxRules().size());
 	}
 
-	@Test(expected = CustomConstraintViolationException.class)
-	public void stateServiceTest_nonExistingStateCode() {
-		String stateCode = "ZZ";
-		stateValidatorService.validateStateCodeExists(stateCode);
+	@Test
+	public void taxCalculationController_addNewRule_addNewRuleTest() {
+		
+		String newRulesStateCode = "NJ";
+		// ASSERT INITIAL APP STATE
+		assertTrue(stateService.findByCode(newRulesStateCode) != null);
+		assertTrue(stateService.findByCode(newRulesStateCode) != null);
+		assertEquals(0, stateRuleService.getStateRule(newRulesStateCode).getTaxRules().size());
+		
+		// ARRANGE
+		StateRulesRequestModel requestModel = new StateRulesRequestModel();
+		List<StateRuleModel> modelRules = new ArrayList<StateRulesRequestModel.StateRuleModel>();
+		modelRules.add(new StateRuleModel("clothing", 0.16));
+		modelRules.add(new StateRuleModel("electronic devices", 0.12));
+		modelRules.add( new StateRuleModel("books", 0.10));
+		requestModel.setRules(modelRules);
+
+		// ACT
+		controller.addNewRule(newRulesStateCode, requestModel);
+		
+		// ASSERT
+		assertEquals(3, stateRuleService.getStateRule(newRulesStateCode).getTaxRules().size());
 	}
 }
