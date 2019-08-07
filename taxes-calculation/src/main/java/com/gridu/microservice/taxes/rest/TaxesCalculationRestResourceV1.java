@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gridu.microservice.taxes.exception.handler.ErrorResponse;
-import com.gridu.microservice.taxes.model.State;
 import com.gridu.microservice.taxes.model.StateRule;
 import com.gridu.microservice.taxes.model.TaxCategory;
 import com.gridu.microservice.taxes.model.TaxRule;
@@ -63,7 +62,7 @@ public class TaxesCalculationRestResourceV1 {
 	@PostMapping(value = "/stateRules/v1/{stateCode}", produces = "application/json")
 	public ResponseEntity<?> addNewRule(@PathVariable(value = "stateCode") String stateCode,
 			@RequestBody StateRulesRequestModel rules) {
-
+		
 		StateRule stateRule = provideStateRule(stateCode, rules);
 		List<ValidationResult> validationResults = getValidationService().validate(stateRule, Default.class,
 				StateCodeValidationGroup.class, TaxCategoryShouldExist.class);
@@ -133,12 +132,11 @@ public class TaxesCalculationRestResourceV1 {
 	private StateRule provideStateRule(String stateCode, StateRulesRequestModel rules) {
 		StateRule stateRule = getStateRuleService().getStateRule(stateCode);
 		if(stateRule == null || stateRule.getId() == null) {
-			State state = getStateService().getStateDao().findByCode(stateCode);
-			stateRule = new StateRule(state);
+			stateRule = new StateRule(getStateService().getStateDao().findByCode(stateCode));
 		}
 		for (StateRuleModel stateRuleModel : rules.getRules()) {
-			TaxCategory taxCategory = new TaxCategory(stateRuleModel.getCategory());
-			stateRule.addTaxRule(new TaxRule(taxCategory, stateRuleModel.getTax()));
+			TaxCategory category = getTaxCategoryService().findByCategory(stateRuleModel.getCategory());
+			stateRule.addTaxRule(new TaxRule(category, stateRuleModel.getTax()));
 		}
 		return stateRule;
 	}

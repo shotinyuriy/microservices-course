@@ -7,26 +7,26 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 public class StateRule {
-	
+
 	private Long id;
 
-	//annotation ensures that validators in State fields will be called on validating StateRule objects
-	//ie. provides cascading validation
+	// annotation ensures that validators in State fields will be called on
+	// validating StateRule objects
+	// ie. provides cascading validation
 	@Valid
 	@NotNull
 	private State state;
-	
+
 	@Valid
 	private List<TaxRule> taxRules = new ArrayList<TaxRule>();
-	
 
 	public StateRule() {
 	}
-	
+
 	public StateRule(State state) {
 		this.state = state;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -50,8 +50,18 @@ public class StateRule {
 	public List<TaxRule> getTaxRules() {
 		return taxRules;
 	}
-	
+
 	public void addTaxRule(TaxRule taxRule) {
-		getTaxRules().add(taxRule);
+		boolean updated = false;
+		for (TaxRule rule : taxRules) {
+			if (rule.getTaxCategory().equals(taxRule.getTaxCategory())) {
+				rule.setRule(taxRule.getRule());
+				updated = true;
+				break;
+			}
+		}
+		if (!updated) {
+			getTaxRules().add(taxRule);
+		}
 	}
 }

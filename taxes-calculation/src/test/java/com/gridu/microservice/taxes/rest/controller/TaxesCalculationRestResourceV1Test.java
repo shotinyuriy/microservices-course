@@ -23,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+import com.gridu.microservice.taxes.dao.StateDao;
 import com.gridu.microservice.taxes.exception.handler.ErrorResponse;
 import com.gridu.microservice.taxes.model.State;
 import com.gridu.microservice.taxes.model.StateRule;
@@ -34,6 +35,8 @@ import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel.StateRuleM
 import com.gridu.microservice.taxes.rest.transformer.StateRuleTransformer;
 import com.gridu.microservice.taxes.rest.transformer.ValidationResultTransformer;
 import com.gridu.microservice.taxes.service.StateRuleService;
+import com.gridu.microservice.taxes.service.StateService;
+import com.gridu.microservice.taxes.service.TaxCategoryService;
 import com.gridu.microservice.taxes.validation.ValidationResult;
 import com.gridu.microservice.taxes.validation.ValidationService;
 import com.gridu.microservice.taxes.validation.group.StateCodeValidationGroup;
@@ -52,6 +55,12 @@ public class TaxesCalculationRestResourceV1Test {
 
 	@InjectMocks
 	private TaxesCalculationRestResourceV1 controller;
+	
+	@Mock
+	private StateService stateServiceMock;
+	
+	@Mock
+	private TaxCategoryService taxCategoryServiceMock;
 
 	@Mock
 	private StateRuleService stateRuleServiceMock;
@@ -75,8 +84,14 @@ public class TaxesCalculationRestResourceV1Test {
 		rules.add(new StateRuleModel(TAX_CATEGORY_CLOTHES, TAX_2));
 		rulesModel.setRules(rules);
 
+		StateDao stateDao = Mockito.mock(StateDao.class);
+		Mockito.when(stateDao.findByCode(STATE_CODE_AZ)).thenReturn( new State(STATE_CODE_AZ, STATE_NAME_ARIZONA));
+		Mockito.when(stateServiceMock.getStateDao()).thenReturn(stateDao);
+		
+		Mockito.when(taxCategoryServiceMock.findByCategory(TAX_CATEGORY_DEVICES)).thenReturn(new TaxCategory(TAX_CATEGORY_DEVICES));
+		Mockito.when(taxCategoryServiceMock.findByCategory(TAX_CATEGORY_CLOTHES)).thenReturn(new TaxCategory(TAX_CATEGORY_CLOTHES));
+		
 		ArgumentCaptor<StateRule> stateRuleCaptor = ArgumentCaptor.forClass(StateRule.class);
-
 		Mockito.when(validationServiceMock.validate(stateRuleCaptor.capture(), Matchers.eq(Default.class),
 				Matchers.eq(StateCodeValidationGroup.class), Matchers.eq(TaxCategoryShouldExist.class)))
 				.thenReturn(new ArrayList<ValidationResult>());
@@ -105,6 +120,13 @@ public class TaxesCalculationRestResourceV1Test {
 		rules.add(new StateRuleModel(TAX_CATEGORY_DEVICES, TAX_1));
 		rules.add(new StateRuleModel(TAX_CATEGORY_CLOTHES, TAX_2));
 		rulesModel.setRules(rules);
+
+		StateDao stateDao = Mockito.mock(StateDao.class);
+		Mockito.when(stateDao.findByCode(STATE_CODE_AZ)).thenReturn( new State(STATE_CODE_AZ, STATE_NAME_ARIZONA));
+		Mockito.when(stateServiceMock.getStateDao()).thenReturn(stateDao);
+		
+		Mockito.when(taxCategoryServiceMock.findByCategory(TAX_CATEGORY_DEVICES)).thenReturn(new TaxCategory());
+		Mockito.when(taxCategoryServiceMock.findByCategory(TAX_CATEGORY_CLOTHES)).thenReturn(new TaxCategory());
 
 		ArgumentCaptor<StateRule> stateRuleCaptor = ArgumentCaptor.forClass(StateRule.class);
 		List<ValidationResult> result = new ArrayList<ValidationResult>();
