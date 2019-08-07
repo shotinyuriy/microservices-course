@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.groups.Default;
 
 import com.gridu.microservice.taxes.service.StateRuleService;
+import com.gridu.microservice.taxes.service.StateService;
 import com.gridu.microservice.taxes.service.TaxCategoryService;
 import com.gridu.microservice.taxes.validation.ValidationResult;
 import com.gridu.microservice.taxes.validation.ValidationService;
@@ -51,6 +52,13 @@ public class TaxesCalculationRestResourceV1 {
 
 	@Autowired
 	private ValidationService validationService;
+
+	@Autowired
+	private StateService stateService;
+
+	private StateService getStateService() {
+		return stateService;
+	}
 
 	@PostMapping(value = "/stateRules/v1/{stateCode}", produces = "application/json")
 	public ResponseEntity<?> addNewRule(@PathVariable(value = "stateCode") String stateCode,
@@ -123,8 +131,11 @@ public class TaxesCalculationRestResourceV1 {
 	}
 
 	private StateRule provideStateRule(String stateCode, StateRulesRequestModel rules) {
-		State state = new State(stateCode, null);
-		StateRule stateRule = new StateRule(state);
+		StateRule stateRule = getStateRuleService().getStateRule(stateCode);
+		if(stateRule == null || stateRule.getId() == null) {
+			State state = getStateService().getStateDao().findByCode(stateCode);
+			stateRule = new StateRule(state);
+		}
 		for (StateRuleModel stateRuleModel : rules.getRules()) {
 			TaxCategory taxCategory = new TaxCategory(stateRuleModel.getCategory());
 			stateRule.addTaxRule(new TaxRule(taxCategory, stateRuleModel.getTax()));

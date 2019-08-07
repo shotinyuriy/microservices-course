@@ -17,7 +17,8 @@ public class StateRule {
 	private State state;
 	
 	@Valid
-	private List<TaxRule> taxRules = new ArrayList<TaxRule>();;
+	private List<TaxRule> taxRules = new ArrayList<TaxRule>();
+	
 
 	public StateRule() {
 	}
