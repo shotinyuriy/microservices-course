@@ -30,29 +30,30 @@ public class ValidationService {
 	}
 
 	/**
-	 * NOTE: probably this method could throw an ConstraintViolationException or our custom validation exception
-	 * List of ValidationResult is returned for the example simplicity
-	 * @param obj - an object to validate
+	 * NOTE: probably this method could throw an ConstraintViolationException or our
+	 * custom validation exception List of ValidationResult is returned for the
+	 * example simplicity
+	 * 
+	 * @param obj              - an object to validate
 	 * @param validationGroups
-	 * @param <T> NOTE: use of generics is not necessary here currently,
-	 *              but it is used to comply with the validate(T, Class...) method signature of Validator
+	 * @param <T>              NOTE: use of generics is not necessary here
+	 *                         currently, but it is used to comply with the
+	 *                         validate(T, Class...) method signature of Validator
 	 * @return
 	 */
 	public <T> List<ValidationResult> validate(T obj, Class<?>... validationGroups) {
 		List<ValidationResult> validationResults;
-			Set<ConstraintViolation<T>> constraintViolations = factory.getValidator().validate(obj, validationGroups);
-			validationResults = convertToValidationResult(constraintViolations);
+		Set<ConstraintViolation<T>> constraintViolations = factory.getValidator().validate(obj, validationGroups);
+		validationResults = convertToValidationResult(constraintViolations);
 
 		return validationResults;
 	}
 
 	public static <T> List<ValidationResult> convertToValidationResult(Set<ConstraintViolation<T>> violations) {
-		return violations.stream()
-			.map(violation -> {
-				String errorCode = violation.getPropertyPath().toString() + "." + violation.getMessage();
-				Object value = violation.getInvalidValue();
-				return new ValidationResult(errorCode, value);
-			})
-			.collect(Collectors.toList());
+		return violations.stream().map(violation -> {
+			String errorCode = ValidationErrorType.ERROR + "." + violation.getMessage();
+			Object value = violation.getInvalidValue();
+			return new ValidationResult(errorCode, value);
+		}).collect(Collectors.toList());
 	}
 }
