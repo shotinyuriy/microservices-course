@@ -11,13 +11,15 @@ import com.gridu.microservice.taxes.validation.annotation.ValidStateCode;
 
 public class StateCodeValidator implements ConstraintValidator<ValidStateCode, String> {
 
+	private static String ENTITY_NAME = "state.";
+
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
 		State state = GlobalDaoHolder.getStateDao().findByCode(value);
 		if (state == null || StringUtils.isEmpty(state.getCode())) {
 			context.disableDefaultConstraintViolation();
-			context.buildConstraintViolationWithTemplate(context.getDefaultConstraintMessageTemplate())
-					.addConstraintViolation();
+			String messageTemplate = ENTITY_NAME + context.getDefaultConstraintMessageTemplate();
+			context.buildConstraintViolationWithTemplate(messageTemplate).addConstraintViolation();
 			return false;
 		}
 		return true;
