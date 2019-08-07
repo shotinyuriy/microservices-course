@@ -11,14 +11,15 @@ https://dzone.com/articles/docker-for-mac-mysql-setup
 
 ### DEPLOYMENT SHORTCUTS
 
-#### Start docker with mysql server version 8.0
+#### Initialize and start docker with mysql server version 8.0
 Container name will be mysql1 (--name mysql1).
 This command will try to find the docker image mentioned in the end of it in local repository
-if it is not there it will pull a new one from the internet 
-``` bash
+if it is not there it will pull a new one from the internet.
 START DOCKER WITH PORT FORWARDING FOR 3306 (MySQL 8.0)
+``` bash
 docker run -p 3306:3306 -d --name mysql1 -e MYSQL_ROOT_PASSWORD=Passw0rd1 mysql/mysql-server:8.0
 ```
+This command can be run just once per a container name (mysql1 in this case).
 
 #### Check the docker container status
 ``` bash
@@ -31,6 +32,13 @@ CONTAINER ID        IMAGE                COMMAND                  CREATED
 a3fb00c34877        mysql/mysql-server   "/entrypoint.sh my..."   2 minutes ago       
 STATUS                   PORTS                               NAMES
 Up 2 minutes (healthy)   0.0.0.0:3306->3306/tcp, 33060/tcp   mysql
+```
+
+#### Starting and Stopping already initialized container
+Once a container has been initialized. We can stop and start it using its name and the following simple commands.
+```bash
+docker stop mysql1
+docker start mysql1
 ```
 
 #### Connect to the mysql db with docker
