@@ -1,7 +1,14 @@
 package com.gridu.microservice.taxes.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Table(name="state")
+@Entity
 public class State {
 
+	@Id
 	private Long id;
 	private String code;
 	private String name;

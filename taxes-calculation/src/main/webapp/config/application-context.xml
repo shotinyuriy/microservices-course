@@ -39,5 +39,7 @@
 	<!--<bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">-->
 		<!--<property name="prettyPrint" value="true"/>-->
 	<!--</bean>-->
+
+	<import resource="em-persinstence-context.xml"/>
        
 </beans>
