@@ -204,7 +204,8 @@ StateRule {
 
 # if the category does not exist in the DB return "error.category.invalid"
 # if the state code does not exist in the DB return "error.state.notFound"
-# if an item code does is null or empty return "error.id.empty"
+# if an item id does is null return "error.id.missing"
+# if an item id does is empty return "error.id.empty"
 
 + Response 400 (application/json)
 {
@@ -216,6 +217,9 @@ StateRule {
     {
       "errorCode": "error.category.invalid",
       "value": "invalidCategory2"
+    },
+    {
+      "errorCode": "error.id.missing"
     },
     {
       "errorCode": "error.id.empty"
