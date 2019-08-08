@@ -15,8 +15,26 @@ import com.gridu.microservice.taxes.model.StateRule;
 @Repository
 public class InMemoryStateRuleDao implements StateRuleDao {
 
-	private final Map<Long, StateRule> STATE_RULES = new ConcurrentHashMap<>();
 	private AtomicLong id = new AtomicLong(0);
+	private final Map<Long, StateRule> STATE_RULES = new ConcurrentHashMap<>();
+
+	@Override
+	public List<StateRule> find(Predicate<StateRule> predicate) {
+		return STATE_RULES.values().stream()
+				.filter(predicate)
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public StateRule findByCode(String stateCode) {
+		Predicate<StateRule> stateRuleByCode = p -> p.getState().getCode().equals(stateCode);
+		return STATE_RULES.values().stream().filter(stateRuleByCode).findFirst().orElseGet(() -> new StateRule());
+	}
+
+	@Override
+	public StateRule findById(Long id) {
+		return STATE_RULES.get(id);
+	}
 
 	@Override
 	public List<StateRule> getAll() {
@@ -33,23 +51,4 @@ public class InMemoryStateRuleDao implements StateRuleDao {
 		STATE_RULES.put(stateRule.getId(), stateRule);
 		return stateRule;
 	}
-
-	@Override
-	public StateRule findById(Long id) {
-		return STATE_RULES.get(id);
-	}
-
-	@Override
-	public List<StateRule> find(Predicate<StateRule> predicate) {
-		return STATE_RULES.values().stream()
-				.filter(predicate)
-				.collect(Collectors.toList());
-	}
-
-	@Override
-	public StateRule findByCode(String stateCode) {
-		Predicate<StateRule> stateRuleByCode = p -> p.getState().getCode().equals(stateCode);
-		return STATE_RULES.values().stream().filter(stateRuleByCode).findFirst().orElseGet(() -> new StateRule());
-	}
-
 }

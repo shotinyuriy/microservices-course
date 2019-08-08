@@ -14,8 +14,24 @@ import com.gridu.microservice.taxes.model.State;
 @Repository
 public class InMemoryStateDao implements StateDao {
 
-	private final Map<Long, State> STATES = new ConcurrentHashMap<>();
 	private AtomicLong id = new AtomicLong(0);
+	private final Map<Long, State> STATES = new ConcurrentHashMap<>();
+
+	@Override
+	public List<State> find(Predicate<State> predicate) {
+		return STATES.values().stream().filter(predicate).collect(Collectors.toList());
+	}
+
+	@Override
+	public State findByCode(String code) {
+		Predicate<State> stateByCode = p -> p.getCode().equals(code);
+		return STATES.values().stream().filter(stateByCode).findFirst().orElseGet(() -> new State());
+	}
+
+	@Override
+	public State findById(Long id) {
+		return STATES.get(id);
+	}
 
 	@Override
 	public List<State> getAll() {
@@ -29,22 +45,6 @@ public class InMemoryStateDao implements StateDao {
 		}
 		STATES.put(state.getId(), state);
 		return state;
-	}
-
-	@Override
-	public State findById(Long id) {
-		return STATES.get(id);
-	}
-
-	@Override
-	public List<State> find(Predicate<State> predicate) {
-		return STATES.values().stream().filter(predicate).collect(Collectors.toList());
-	}
-
-	@Override
-	public State findByCode(String code) {
-		Predicate<State> stateByCode = p -> p.getCode().equals(code);
-		return STATES.values().stream().filter(stateByCode).findFirst().orElseGet(() -> new State());
 	}
 
 }

@@ -3,6 +3,7 @@ package com.gridu.microservice.taxes.validation;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.Path;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
@@ -53,6 +54,8 @@ public class ValidationService {
 		return violations.stream().map(violation -> {
 			String errorCode = ValidationErrorType.ERROR + "." + violation.getMessage();
 			Object value = violation.getInvalidValue();
+			Path propertyPath = violation.getPropertyPath(); //store inside validation result
+
 			return new ValidationResult(errorCode, value);
 		}).collect(Collectors.toList());
 	}

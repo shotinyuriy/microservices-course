@@ -27,30 +27,6 @@ public class StateRule {
 		this.state = state;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public State getState() {
-		return state;
-	}
-
-	public void setState(State state) {
-		this.state = state;
-	}
-
-	public void setTaxRules(List<TaxRule> taxRules) {
-		this.taxRules = taxRules;
-	}
-
-	public List<TaxRule> getTaxRules() {
-		return taxRules;
-	}
-
 	public void addTaxRule(TaxRule taxRule) {
 		boolean updated = false;
 		for (TaxRule rule : taxRules) {
@@ -63,5 +39,39 @@ public class StateRule {
 		if (!updated) {
 			getTaxRules().add(taxRule);
 		}
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public State getState() {
+		return state;
+	}
+
+	public Double getTax(String category) {
+		Double tax = 0.0;
+		for (TaxRule taxRule : taxRules) {
+			if (taxRule.getTaxCategory().getName().equals(category)) {
+				tax = taxRule.getRule();
+			}
+		}
+		return tax;
+	}
+
+	public List<TaxRule> getTaxRules() {
+		return taxRules;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setState(State state) {
+		this.state = state;
+	}
+
+	public void setTaxRules(List<TaxRule> taxRules) {
+		this.taxRules = taxRules;
 	}
 }

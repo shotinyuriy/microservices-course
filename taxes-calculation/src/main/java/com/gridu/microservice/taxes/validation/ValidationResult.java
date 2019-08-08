@@ -2,7 +2,7 @@ package com.gridu.microservice.taxes.validation;
 
 public class ValidationResult {
 
-	private String errorCode; //error code
+	private String errorCode; //error type + property name/path
 	private Object value; //value which is wrong
 	
 	public ValidationResult(String errorCode, Object value) {
@@ -35,7 +35,6 @@ public class ValidationResult {
 		
 		if(errorCode != null ? !errorCode.equals(that.getErrorCode()) : that.errorCode != null) return false;
 		return value != null ? value.equals(that.value) : that.value == null;
-		//check this??
 	}
 	
 	@Override

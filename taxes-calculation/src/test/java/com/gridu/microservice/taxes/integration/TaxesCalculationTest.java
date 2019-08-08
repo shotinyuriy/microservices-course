@@ -3,6 +3,7 @@ package com.gridu.microservice.taxes.integration;
 import static org.junit.Assert.*;
 
 import com.gridu.microservice.taxes.dao.TaxCategoryDao;
+import com.gridu.microservice.taxes.exception.handler.RestExceptionHandler;
 import com.gridu.microservice.taxes.model.TaxCategory;
 import com.gridu.microservice.taxes.rest.TaxesCalculationRestResourceV1;
 import com.gridu.microservice.taxes.rest.model.PostStateRuleRequest;
@@ -67,6 +68,9 @@ public class TaxesCalculationTest {
 	@Autowired
 	private TaxesCalculationRestResourceV1 controller;
 
+	@Autowired
+	private RestExceptionHandler exceptionHandler;
+	
 	@Before
 	public void setUp() {
 		// ARRANGE + ASSERT
@@ -78,6 +82,7 @@ public class TaxesCalculationTest {
 		assertNotNull(validationResultTransformer);
 		assertNotNull(stateRuleTransformer);
 		assertNotNull(controller);
+		assertNotNull(exceptionHandler);
 		assertNotNull(GlobalDaoHolder.getTaxCategoryDao());
 		assertNotNull(GlobalDaoHolder.getStateDao());
 	}

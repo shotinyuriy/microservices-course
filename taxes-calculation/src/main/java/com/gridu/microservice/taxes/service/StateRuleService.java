@@ -33,4 +33,8 @@ public class StateRuleService {
 	public StateRule getStateRule(long id) {
 		return getStateRuleDao().findById(id);
 	}
+	
+	public Double getTax(long id, String category) {
+		return getStateRuleDao().findById(id).getTax(category);
+	}
 }
