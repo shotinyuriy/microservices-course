@@ -46,4 +46,10 @@ public class InMemoryTaxCategoryDao implements TaxCategoryDao {
 				.collect(Collectors.toList());
 	}
 
+	@Override
+	public TaxCategory findByCategory(String category) {
+		Predicate<TaxCategory> taxByCategory = p -> p.getName().equals(category);
+		return TAX_CATEGORIES.values().stream().filter(taxByCategory).findFirst().orElseGet(() -> new TaxCategory());
+	}
+
 }

@@ -1,8 +1,9 @@
-package com.gridu.microservice.taxes.validation.annotation;
+package com.gridu.microservice.taxes.entity.validator;
 
 
 import com.gridu.microservice.taxes.model.TaxCategory;
 import com.gridu.microservice.taxes.validation.GlobalDaoHolder;
+import com.gridu.microservice.taxes.validation.annotation.ExistingTaxCategoryName;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

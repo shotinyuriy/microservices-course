@@ -5,6 +5,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @Table(name="state_rule")
 @Entity
@@ -14,6 +16,8 @@ public class TaxRule {
 	private Long id;
 
 	@Transient
+	@Valid
+	@NotNull
 	private TaxCategory taxCategory;
 
 	private Double rule;
@@ -47,5 +51,23 @@ public class TaxRule {
 
 	public void setTaxCategory(TaxCategory taxCategory) {
 		this.taxCategory = taxCategory;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		TaxRule that = (TaxRule) o;
+
+		if (taxCategory != null ? !taxCategory.equals(that.taxCategory) : that.taxCategory != null) return false;
+		return rule != null ? rule.equals(that.rule) : that.rule == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = rule != null ? rule.hashCode() : 0;
+		result = 31 * result + (rule != null ? rule.hashCode() : 0);
+		return result;
 	}
 }

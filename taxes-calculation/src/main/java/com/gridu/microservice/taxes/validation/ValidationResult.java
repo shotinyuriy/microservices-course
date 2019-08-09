@@ -1,14 +1,11 @@
 package com.gridu.microservice.taxes.validation;
 
-public class ErrorResponse {
+public class ValidationResult {
 
-	private String errorCode;
-	private Object value;
-
-	public ErrorResponse() {
-	}
-
-	public ErrorResponse(String errorCode, Object value) {
+	private String errorCode; //error code
+	private Object value; //value which is wrong
+	
+	public ValidationResult(String errorCode, Object value) {
 		this.errorCode = errorCode;
 		this.value = value;
 	}
@@ -28,18 +25,19 @@ public class ErrorResponse {
 	public void setValue(Object value) {
 		this.value = value;
 	}
-
+	
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-
-		ErrorResponse that = (ErrorResponse) o;
-
-		if (errorCode != null ? !errorCode.equals(that.errorCode) : that.errorCode != null) return false;
+	public boolean equals(Object obj) {
+		if(this == obj) return true;
+		if(obj == null || getClass() != obj.getClass()) return false;
+		
+		ValidationResult that = (ValidationResult) obj;
+		
+		if(errorCode != null ? !errorCode.equals(that.getErrorCode()) : that.errorCode != null) return false;
 		return value != null ? value.equals(that.value) : that.value == null;
+		//check this??
 	}
-
+	
 	@Override
 	public int hashCode() {
 		int result = errorCode != null ? errorCode.hashCode() : 0;

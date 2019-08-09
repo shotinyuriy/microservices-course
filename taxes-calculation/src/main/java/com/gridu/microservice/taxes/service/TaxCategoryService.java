@@ -14,6 +14,14 @@ public class TaxCategoryService {
 	@Autowired
 	private TaxCategoryDao taxCategoryDao;
 
+	public TaxCategory findByCategory(String category) {
+		return getTaxCategoryDao().findByCategory(category);
+	}
+
+	public TaxCategory findById(Long id) {
+		return getTaxCategoryDao().findById(id);
+	}
+
 	public List<TaxCategory> getAll() {
 		return getTaxCategoryDao().getAll();
 	}
@@ -22,15 +30,11 @@ public class TaxCategoryService {
 		return getTaxCategoryDao().save(taxCategory);
 	}
 
-	public TaxCategory findById(Long id) {
-		return getTaxCategoryDao().findById(id);
-	}
-
-	public TaxCategoryDao getTaxCategoryDao() {
-		return taxCategoryDao;
-	}
-
 	public void setTaxCategoryDao(TaxCategoryDao taxCategoryDao) {
 		this.taxCategoryDao = taxCategoryDao;
+	}
+	
+	private TaxCategoryDao getTaxCategoryDao() {
+		return taxCategoryDao;
 	}
 }

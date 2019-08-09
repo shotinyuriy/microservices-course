@@ -30,7 +30,7 @@ public class StateRuleTransformer {
 		return viewModel;
 	}
 
-	private Map<String, Double> getTaxRules(List<TaxRule> taxRules) {
+	public Map<String, Double> getTaxRules(List<TaxRule> taxRules) {
 		Map<String, Double> viewModelRules = new HashMap<String, Double>();
 		for (TaxRule taxRule : taxRules) {
 			viewModelRules.put(taxRule.getTaxCategory().getName(), taxRule.getRule());
