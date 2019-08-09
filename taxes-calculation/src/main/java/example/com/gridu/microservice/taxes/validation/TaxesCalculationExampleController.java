@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.groups.Default;
 
+import com.gridu.microservice.taxes.rest.transformer.ValidationResultTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,9 @@ public class TaxesCalculationExampleController {
 	
 	@Autowired
 	private ValidationService validationService;
+
+	@Autowired
+	private ValidationResultTransformer validationResultTransformer;
 	
 	
 	/**
@@ -48,12 +52,7 @@ public class TaxesCalculationExampleController {
 				StateCodeValidationGroup.class);
 
 		if (!validationResults.isEmpty()) {
-			List<ErrorResponse> responseList = new ArrayList<ErrorResponse>();
-			for (ValidationResult validationResult : validationResults) {
-				ErrorResponse errorResponse = new ErrorResponse(validationResult.getErrorCode(),
-						validationResult.getValue());
-				responseList.add(errorResponse);
-			}
+			List<ErrorResponse> responseList = getValidationResultTransformer().provideValidationErrorResponse(validationResults);
 			return ResponseEntity.badRequest().body(responseList);
 		}
 
@@ -70,5 +69,13 @@ public class TaxesCalculationExampleController {
 	
 	private ValidationService getValidationService() {
 		return validationService;
+	}
+
+	public ValidationResultTransformer getValidationResultTransformer() {
+		return validationResultTransformer;
+	}
+
+	public void setValidationResultTransformer(ValidationResultTransformer validationResultTransformer) {
+		this.validationResultTransformer = validationResultTransformer;
 	}
 }

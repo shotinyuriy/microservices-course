@@ -11,7 +11,7 @@
 	   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 	   http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
-  <context:property-placeholder location="config/persistence-mysql.properties"/>
+  <context:property-placeholder location="classpath*:persistence-mysql.properties"/>
 
   <bean id="dataSource"
         class="org.apache.tomcat.dbcp.dbcp.BasicDataSource">

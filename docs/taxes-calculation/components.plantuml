@@ -7,11 +7,17 @@ component "StateRuleService" as SRS
 component "TaxCategoryDao" as TCD
 component "StateDao" as SD
 component "StateRuleDao" as SRD
+component "ValidationService" as VS
+component "ValidationResult\nTransformer" as VRT
+component "StateRule\nTransformer" as SRT
 
 component "DataInitializerService" as DIS
 
 TCRR -d-> TCS
 TCRR -d-> SRS
+TCRR -d-> VS
+TCRR -r-> VRT
+TCRR -r-> SRT
 
 TCS -d-> TCD
 SRS -d-> SRD

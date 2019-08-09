@@ -55,10 +55,6 @@ public class TaxesCalculationRestResourceV1 {
 	@Autowired
 	private StateService stateService;
 
-	private StateService getStateService() {
-		return stateService;
-	}
-
 	@PostMapping(value = "/stateRules/v1/{stateCode}", produces = "application/json")
 	public ResponseEntity<?> addNewRule(@PathVariable(value = "stateCode") String stateCode,
 			@RequestBody StateRulesRequestModel rules) {
@@ -103,6 +99,10 @@ public class TaxesCalculationRestResourceV1 {
 
 	public void setStateRuleTransformer(StateRuleTransformer stateRuleTransformer) {
 		this.stateRuleTransformer = stateRuleTransformer;
+	}
+
+	private StateService getStateService() {
+		return stateService;
 	}
 
 	private StateRuleService getStateRuleService() {

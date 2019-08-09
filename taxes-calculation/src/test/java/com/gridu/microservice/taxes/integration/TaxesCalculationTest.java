@@ -97,8 +97,9 @@ public class TaxesCalculationTest {
 
 		// ASSERT
 		assertNotNull(constraintViolations);
-		assertEquals(1, constraintViolations.size());
+		assertEquals(2, constraintViolations.size());
 		assertTrue(constraintViolations.contains(new ValidationResult("name.invalid", "nonExisting")));
+		assertTrue(constraintViolations.contains(new ValidationResult("id.missing", null)));
 	}
 
 	@Test
