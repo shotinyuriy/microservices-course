@@ -1,13 +1,19 @@
 package com.gridu.microservice.taxes.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+@Table(name="state_rule")
+@Entity
 public class StateRule {
 
+	@Id
 	private Long id;
 
 	// annotation ensures that validators in State fields will be called on
@@ -15,10 +21,11 @@ public class StateRule {
 	// ie. provides cascading validation
 	@Valid
 	@NotNull
+	@Transient
 	private State state;
 
-	@Valid
-	private List<TaxRule> taxRules = new ArrayList<TaxRule>();
+	@Transient
+	private List<TaxRule> taxRules = new ArrayList<TaxRule>();;
 
 	public StateRule() {
 	}

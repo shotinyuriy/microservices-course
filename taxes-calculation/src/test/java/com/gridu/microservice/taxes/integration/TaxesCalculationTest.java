@@ -17,7 +17,6 @@ import com.gridu.microservice.taxes.validation.ValidationService;
 import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,8 +102,9 @@ public class TaxesCalculationTest {
 
 		// ASSERT
 		assertNotNull(constraintViolations);
-		assertEquals(1, constraintViolations.size());
-		assertTrue(constraintViolations.contains(new ValidationResult("error.category.invalid", "nonExisting")));
+		assertEquals(2, constraintViolations.size());
+		assertTrue(constraintViolations.contains(new ValidationResult("error.category.invalid", "nonExisting", "name")));
+		assertTrue(constraintViolations.contains(new ValidationResult("error.missing", null, "id")));
 	}
 
 	@Test
@@ -123,7 +123,6 @@ public class TaxesCalculationTest {
 	}
 
 	@Test
-	@Ignore("Need to be fixed.")
 	public void taxCategoryServiceTest_taxCategoryRulesValidation() {
 		// ARRANGE
 		PostStateRuleRequest request = new PostStateRuleRequest();
@@ -144,8 +143,11 @@ public class TaxesCalculationTest {
 
 		// ASSERT
 		assertNotNull(constraintViolations);
+		assertEquals(2, constraintViolations.size());
 		assertTrue(constraintViolations
-				.contains(new ValidationResult("error.invalid", request.getRules())));
+				.contains(new ValidationResult("error.invalid", request.getRules(), "rules.non existing one")));
+		assertTrue(constraintViolations
+				.contains(new ValidationResult("error.invalid", request.getRules(), "rules.non existing two")));
 	}
 
 	@Test

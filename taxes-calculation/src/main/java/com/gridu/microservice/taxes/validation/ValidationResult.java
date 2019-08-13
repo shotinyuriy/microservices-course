@@ -27,9 +27,9 @@ public class ValidationResult {
 
 		if (errorCode != null ? !errorCode.equals(that.getErrorCode()) : that.errorCode != null)
 			return false;
-		if (value != null ? value.equals(that.value) : that.value == null)
+		if (value != null ? !value.equals(that.value) : that.value != null)
 			return false;
-		return propertyPath != null ? propertyPath.equals(that.propertyPath) : that.propertyPath == null;
+		return propertyPath != null ? propertyPath.equals(that.propertyPath) : that.propertyPath != null;
 	}
 
 	public String getErrorCode() {

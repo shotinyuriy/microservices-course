@@ -29,7 +29,7 @@ public class TaxesCalculationItemsRequestModel {
 		}
 	}
 
-	public static class TaxCalcualtionItemModel {
+	public static class TaxCalculationItemModel {
 
 		private String category;
 		@NotNull(message = ValidationErrorType.MISSING)
@@ -37,9 +37,9 @@ public class TaxesCalculationItemsRequestModel {
 		private Double price;
 		private TaxesModel taxes;
 		
-		public TaxCalcualtionItemModel() {
+		public TaxCalculationItemModel() {
 		}
-		public TaxCalcualtionItemModel(String id, String category, Double price,
+		public TaxCalculationItemModel(String id, String category, Double price,
 				TaxesModel taxes) {
 			this.id = id;
 			this.category = category;
@@ -107,9 +107,9 @@ public class TaxesCalculationItemsRequestModel {
 	private ShippingAddress address;
 
 	@Valid
-	private List<TaxCalcualtionItemModel> items = new ArrayList<TaxCalcualtionItemModel>();
+	private List<TaxCalculationItemModel> items = new ArrayList<TaxCalculationItemModel>();
 
-	public List<TaxCalcualtionItemModel> getItems() {
+	public List<TaxCalculationItemModel> getItems() {
 		return items;
 	}
 
@@ -121,7 +121,7 @@ public class TaxesCalculationItemsRequestModel {
 		this.address = address;
 	}
 
-	public void setItems(List<TaxCalcualtionItemModel> items) {
+	public void setItems(List<TaxCalculationItemModel> items) {
 		this.items = items;
 	}
 }

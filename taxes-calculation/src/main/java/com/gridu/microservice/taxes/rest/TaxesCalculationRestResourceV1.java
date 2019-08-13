@@ -32,7 +32,7 @@ import com.gridu.microservice.taxes.model.TaxRule;
 import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel;
 import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel.StateRuleModel;
 import com.gridu.microservice.taxes.rest.model.TaxesCalculationItemsRequestModel;
-import com.gridu.microservice.taxes.rest.model.TaxesCalculationItemsRequestModel.TaxCalcualtionItemModel;
+import com.gridu.microservice.taxes.rest.model.TaxesCalculationItemsRequestModel.TaxCalculationItemModel;
 import com.gridu.microservice.taxes.rest.model.TaxesCalculationItemsRequestModel.TaxesModel;
 import com.gridu.microservice.taxes.rest.transformer.StateRuleTransformer;
 import com.gridu.microservice.taxes.rest.transformer.ValidationResultTransformer;
@@ -86,7 +86,7 @@ public class TaxesCalculationRestResourceV1 {
 					HttpStatus.BAD_REQUEST);
 		}
 
-		List<ValidationResult> validationResults = validateTaxesCalcualtionData(order);
+		List<ValidationResult> validationResults = validateTaxesCalculationData(order);
 		if (!validationResults.isEmpty()) {
 			throw new CustomConstraintViolationException("Constraint violation on data model.",
 					getValidationResultTransformer().provideValidationErrorResponse(validationResults),
@@ -94,7 +94,7 @@ public class TaxesCalculationRestResourceV1 {
 		}
 
 		long stateRuleId = getStateRuleService().getStateRule(order.getStateCode()).getId();
-		for (TaxCalcualtionItemModel taxCalcItem : order.getItems()) {
+		for (TaxCalculationItemModel taxCalcItem : order.getItems()) {
 			taxCalcItem.setTaxes(new TaxesModel(getStateRuleService().getTax(stateRuleId, taxCalcItem.getCategory())));
 		}
 		return ResponseEntity.ok().body(order);
@@ -168,13 +168,13 @@ public class TaxesCalculationRestResourceV1 {
 		return stateRule;
 	}
 
-	private List<ValidationResult> validateTaxesCalcualtionData(TaxesCalculationItemsRequestModel order) {
+	private List<ValidationResult> validateTaxesCalculationData(TaxesCalculationItemsRequestModel order) {
 		List<ValidationResult> validationResults = new ArrayList<ValidationResult>();
 		StateRule stateRule = getStateRuleService().getStateRule(order.getStateCode());
 		validationResults
 				.addAll(getValidationService().validate(stateRule, Default.class, StateCodeValidationGroup.class));
 
-		for (TaxCalcualtionItemModel taxCalcItem : order.getItems()) {
+		for (TaxCalculationItemModel taxCalcItem : order.getItems()) {
 			TaxCategory taxCategory = getTaxCategoryService().findByCategory(taxCalcItem.getCategory());
 			validationResults
 					.addAll(getValidationService().validate(taxCategory, Default.class, TaxCategoryShouldExist.class));

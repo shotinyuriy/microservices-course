@@ -35,7 +35,7 @@ import com.gridu.microservice.taxes.rest.TaxesCalculationRestResourceV1;
 import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel;
 import com.gridu.microservice.taxes.rest.model.TaxesCalculationItemsRequestModel;
 import com.gridu.microservice.taxes.rest.model.TaxesCalculationItemsRequestModel.ShippingAddress;
-import com.gridu.microservice.taxes.rest.model.TaxesCalculationItemsRequestModel.TaxCalcualtionItemModel;
+import com.gridu.microservice.taxes.rest.model.TaxesCalculationItemsRequestModel.TaxCalculationItemModel;
 import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel.StateRuleModel;
 import com.gridu.microservice.taxes.rest.transformer.StateRuleTransformer;
 import com.gridu.microservice.taxes.rest.transformer.ValidationResultTransformer;
@@ -225,11 +225,11 @@ public class TaxesCalculationRestResourceV1Test {
 		TaxesCalculationItemsRequestModel requestModel = new TaxesCalculationItemsRequestModel();
 		requestModel.setAddress(new ShippingAddress(STATE_CODE_AZ));
 
-		List<TaxCalcualtionItemModel> calcualtionItemModels = new ArrayList<TaxesCalculationItemsRequestModel.TaxCalcualtionItemModel>();
-		TaxCalcualtionItemModel model1 = new TaxCalcualtionItemModel(TAX_CATEGORY_ITEM_ID_1, TAX_CATEGORY_CLOTHES,
+		List<TaxCalculationItemModel> calcualtionItemModels = new ArrayList<TaxesCalculationItemsRequestModel.TaxCalculationItemModel>();
+		TaxCalculationItemModel model1 = new TaxCalculationItemModel(TAX_CATEGORY_ITEM_ID_1, TAX_CATEGORY_CLOTHES,
 				PRICE_1, null);
 		calcualtionItemModels.add(model1);
-		TaxCalcualtionItemModel model2 = new TaxCalcualtionItemModel(TAX_CATEGORY_ITEM_ID_2, TAX_CATEGORY_DEVICES,
+		TaxCalculationItemModel model2 = new TaxCalculationItemModel(TAX_CATEGORY_ITEM_ID_2, TAX_CATEGORY_DEVICES,
 				PRICE_2, null);
 		calcualtionItemModels.add(model2);
 		requestModel.setItems(calcualtionItemModels);
@@ -315,8 +315,8 @@ public class TaxesCalculationRestResourceV1Test {
 		TaxesCalculationItemsRequestModel requestModel = new TaxesCalculationItemsRequestModel();
 		requestModel.setAddress(new ShippingAddress(STATE_CODE_AZ));
 
-		List<TaxCalcualtionItemModel> calcualtionItemModels = new ArrayList<TaxesCalculationItemsRequestModel.TaxCalcualtionItemModel>();
-		TaxCalcualtionItemModel model = new TaxCalcualtionItemModel(TAX_CATEGORY_ITEM_ID_1, invalidCategoryName,
+		List<TaxCalculationItemModel> calcualtionItemModels = new ArrayList<TaxesCalculationItemsRequestModel.TaxCalculationItemModel>();
+		TaxCalculationItemModel model = new TaxCalculationItemModel(TAX_CATEGORY_ITEM_ID_1, invalidCategoryName,
 				PRICE_1, null);
 		calcualtionItemModels.add(model);
 		requestModel.setItems(calcualtionItemModels);

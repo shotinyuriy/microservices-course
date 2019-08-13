@@ -2,10 +2,19 @@ package com.gridu.microservice.taxes.model;
 
 import com.gridu.microservice.taxes.validation.ValidationErrorType;
 import com.gridu.microservice.taxes.validation.annotation.ExistingTaxCategoryName;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
 
+@Table(name="tax_category")
+@Entity
 public class TaxCategory {
 
+	@Id
+	@NotNull(message = ValidationErrorType.MISSING, groups = {TaxCategoryShouldExist.class})
 	private Long id;
 
 	@ExistingTaxCategoryName(message = ValidationErrorType.INVALID, groups = {TaxCategoryShouldExist.class})
