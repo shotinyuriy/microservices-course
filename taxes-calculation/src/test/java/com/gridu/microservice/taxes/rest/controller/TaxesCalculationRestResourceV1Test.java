@@ -234,7 +234,7 @@ public class TaxesCalculationRestResourceV1Test {
 		calcualtionItemModels.add(model2);
 		requestModel.setItems(calcualtionItemModels);
 
-		Mockito.when(validationServiceMock.validate(requestModel, Default.class))
+		Mockito.when(validationServiceMock.validate(requestModel))
 				.thenReturn(new ArrayList<ValidationResult>());
 
 		State state = new State(STATE_CODE_AZ, STATE_NAME_ARIZONA);
@@ -275,8 +275,8 @@ public class TaxesCalculationRestResourceV1Test {
 		assertEquals(PRICE_1, viewModel.getItems().get(0).getPrice());
 		assertEquals(PRICE_2, viewModel.getItems().get(1).getPrice());
 
-		assertEquals(TAX_1, viewModel.getItems().get(0).getTax());
-		assertEquals(TAX_2, viewModel.getItems().get(1).getTax());
+		assertEquals("1.56", viewModel.getItems().get(0).getTax());
+		assertEquals("3.38", viewModel.getItems().get(1).getTax());
 	}
 
 	@Test
@@ -288,7 +288,7 @@ public class TaxesCalculationRestResourceV1Test {
 		String errorCode = "error.id.missing";
 		validationResults.add(new ValidationResult(errorCode, ""));
 
-		Mockito.when(validationServiceMock.validate(requestModel, Default.class)).thenReturn(validationResults);
+		Mockito.when(validationServiceMock.validate(requestModel)).thenReturn(validationResults);
 
 		// ACT
 		try {

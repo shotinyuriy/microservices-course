@@ -63,7 +63,7 @@ public class TaxesCalculationItemsRequestModel {
 			return taxes;
 		}
 
-		public Double getTax() {
+		public String getTax() {
 			return taxes.getStateTax();
 		}
 		
@@ -86,20 +86,20 @@ public class TaxesCalculationItemsRequestModel {
 
 	public static class TaxesModel {
 
-		private Double stateTax;
+		private String stateTax;
 
 		public TaxesModel() {
 		}
 
-		public TaxesModel(Double tax) {
+		public TaxesModel(String tax) {
 			setStateTax(tax);
 		}
 
-		public Double getStateTax() {
+		public String getStateTax() {
 			return stateTax;
 		}
 
-		public void setStateTax(Double stateTax) {
+		public void setStateTax(String stateTax) {
 			this.stateTax = stateTax;
 		}
 	}

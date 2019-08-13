@@ -1,6 +1,5 @@
 package example.com.gridu.microservice.taxes.validation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.groups.Default;

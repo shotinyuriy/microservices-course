@@ -1,5 +1,6 @@
 package com.gridu.microservice.taxes.rest;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,8 @@ import com.gridu.microservice.taxes.rest.transformer.ValidationResultTransformer
 @RestController
 @RequestMapping("/taxes")
 public class TaxesCalculationRestResourceV1 {
+	
+	private static DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.00");
 
 	@Autowired
 	private StateRuleService stateRuleService;
@@ -79,7 +82,7 @@ public class TaxesCalculationRestResourceV1 {
 	@PostMapping(value = "/calculation/v1", produces = "application/json")
 	public ResponseEntity<?> calculateTaxesPerItem(@RequestBody TaxesCalculationItemsRequestModel order) {
 
-		List<ValidationResult> modelValidationResult = getValidationService().validate(order, Default.class);
+		List<ValidationResult> modelValidationResult = getValidationService().validate(order);
 		if (!modelValidationResult.isEmpty()) {
 			throw new CustomConstraintViolationException("Constraint violation on request model.",
 					getValidationResultTransformer().provideValidationErrorResponse(modelValidationResult),
@@ -95,7 +98,8 @@ public class TaxesCalculationRestResourceV1 {
 
 		long stateRuleId = getStateRuleService().getStateRule(order.getStateCode()).getId();
 		for (TaxCalculationItemModel taxCalcItem : order.getItems()) {
-			taxCalcItem.setTaxes(new TaxesModel(getStateRuleService().getTax(stateRuleId, taxCalcItem.getCategory())));
+			String tax = DECIMAL_FORMAT.format(taxCalcItem.getPrice() * getStateRuleService().getTax(stateRuleId, taxCalcItem.getCategory()));
+			taxCalcItem.setTaxes(new TaxesModel(tax));
 		}
 		return ResponseEntity.ok().body(order);
 	}
