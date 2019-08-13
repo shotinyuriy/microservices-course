@@ -222,40 +222,22 @@ public class TaxesCalculationRestResourceV1Test {
 		long stateRuleId = 9;
 
 		// ARRANGE
-		TaxesCalculationItemsRequestModel requestModel = new TaxesCalculationItemsRequestModel();
-		requestModel.setAddress(new ShippingAddress(STATE_CODE_AZ));
-
-		List<TaxCalculationItemModel> calcualtionItemModels = new ArrayList<TaxesCalculationItemsRequestModel.TaxCalculationItemModel>();
-		TaxCalculationItemModel model1 = new TaxCalculationItemModel(TAX_CATEGORY_ITEM_ID_1, TAX_CATEGORY_CLOTHES,
-				PRICE_1, null);
-		calcualtionItemModels.add(model1);
-		TaxCalculationItemModel model2 = new TaxCalculationItemModel(TAX_CATEGORY_ITEM_ID_2, TAX_CATEGORY_DEVICES,
-				PRICE_2, null);
-		calcualtionItemModels.add(model2);
-		requestModel.setItems(calcualtionItemModels);
-
-		Mockito.when(validationServiceMock.validate(requestModel))
-				.thenReturn(new ArrayList<ValidationResult>());
-
-		State state = new State(STATE_CODE_AZ, STATE_NAME_ARIZONA);
-		StateRule stateRule = new StateRule(state);
+		TaxesCalculationItemsRequestModel requestModel = createTxCalcRequestModel();
+		StateRule stateRule = new StateRule(new State(STATE_CODE_AZ, STATE_NAME_ARIZONA));
 		stateRule.setId(stateRuleId);
+		TaxCategory taxCategoryClothes = new TaxCategory(TAX_CATEGORY_CLOTHES);
+		TaxCategory taxCategoryDevices = new TaxCategory(TAX_CATEGORY_DEVICES);
 
+		Mockito.when(validationServiceMock.validate(requestModel)).thenReturn(new ArrayList<ValidationResult>());
 		Mockito.when(stateRuleServiceMock.getStateRule(STATE_CODE_AZ)).thenReturn(stateRule);
-
 		Mockito.when(validationServiceMock.validate(stateRule, Default.class, StateCodeValidationGroup.class))
 				.thenReturn(new ArrayList<ValidationResult>());
-
-		TaxCategory taxCategoryClothes = new TaxCategory(TAX_CATEGORY_CLOTHES);
 		Mockito.when(taxCategoryServiceMock.findByCategory(TAX_CATEGORY_CLOTHES)).thenReturn(taxCategoryClothes);
 		Mockito.when(validationServiceMock.validate(taxCategoryClothes, Default.class, TaxCategoryShouldExist.class))
 				.thenReturn(new ArrayList<ValidationResult>());
-
-		TaxCategory taxCategoryDevices = new TaxCategory(TAX_CATEGORY_DEVICES);
 		Mockito.when(taxCategoryServiceMock.findByCategory(TAX_CATEGORY_DEVICES)).thenReturn(taxCategoryDevices);
 		Mockito.when(validationServiceMock.validate(taxCategoryDevices, Default.class, TaxCategoryShouldExist.class))
 				.thenReturn(new ArrayList<ValidationResult>());
-
 		Mockito.when(stateRuleServiceMock.getTax(stateRuleId, TAX_CATEGORY_CLOTHES)).thenReturn(TAX_1);
 		Mockito.when(stateRuleServiceMock.getTax(stateRuleId, TAX_CATEGORY_DEVICES)).thenReturn(TAX_2);
 
@@ -279,9 +261,24 @@ public class TaxesCalculationRestResourceV1Test {
 		assertEquals("3.38", viewModel.getItems().get(1).getTax());
 	}
 
+	private TaxesCalculationItemsRequestModel createTxCalcRequestModel() {
+		TaxesCalculationItemsRequestModel requestModel = new TaxesCalculationItemsRequestModel();
+		requestModel.setAddress(new ShippingAddress(STATE_CODE_AZ));
+
+		List<TaxCalculationItemModel> calcualtionItemModels = new ArrayList<TaxesCalculationItemsRequestModel.TaxCalculationItemModel>();
+		TaxCalculationItemModel model1 = new TaxCalculationItemModel(TAX_CATEGORY_ITEM_ID_1, TAX_CATEGORY_CLOTHES,
+				PRICE_1, null);
+		calcualtionItemModels.add(model1);
+		TaxCalculationItemModel model2 = new TaxCalculationItemModel(TAX_CATEGORY_ITEM_ID_2, TAX_CATEGORY_DEVICES,
+				PRICE_2, null);
+		calcualtionItemModels.add(model2);
+		requestModel.setItems(calcualtionItemModels);
+		return requestModel;
+	}
+
 	@Test
 	public void calculateTaxesPerItem_missingItemIds() {
-		
+
 		// ARRANGE
 		TaxesCalculationItemsRequestModel requestModel = new TaxesCalculationItemsRequestModel();
 		List<ValidationResult> validationResults = new ArrayList<ValidationResult>();
@@ -310,7 +307,7 @@ public class TaxesCalculationRestResourceV1Test {
 		long stateRuleId = 9;
 		String invalidCategoryName = "invalidCategory";
 		String errorCode = "error.category.invalid";
-		
+
 		// ARRANGE
 		TaxesCalculationItemsRequestModel requestModel = new TaxesCalculationItemsRequestModel();
 		requestModel.setAddress(new ShippingAddress(STATE_CODE_AZ));
