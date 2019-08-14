@@ -1,35 +1,39 @@
 package com.gridu.microservice.taxes.exception;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.http.HttpStatus;
+
+import com.gridu.microservice.taxes.exception.handler.ErrorResponse;
 
 public class CustomConstraintViolationException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
-	private Set<CustomConstraintViolationData> constraintViolations = new HashSet<CustomConstraintViolationData>();
+	private List<ErrorResponse> constraintViolations;
 	private HttpStatus status;
 
+	
 	public CustomConstraintViolationException(String message) {
-		super(message);
-	}
-
-	public CustomConstraintViolationException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public CustomConstraintViolationException(Throwable cause) {
-		super(cause);
+		this(message, new ArrayList<ErrorResponse>());
 	}
 	
-	public void addViolationResult(CustomConstraintViolationData violationResult) {
+	public CustomConstraintViolationException(String message, List<ErrorResponse> violationResults) {
+		this(message, violationResults, HttpStatus.NOT_FOUND);
+	}
+
+	public CustomConstraintViolationException(String message, List<ErrorResponse> violationResults, HttpStatus status) {
+		super(message);
+		this.constraintViolations = violationResults;
+		this.status = status;
+	}
+	
+	public void addViolationResult(ErrorResponse violationResult) {
 		constraintViolations.add(violationResult);
 	}
 
-	public void addViolationResults(List<CustomConstraintViolationData> violationResults) {
-		for (CustomConstraintViolationData valiationResult : violationResults) {
+	public void addViolationResults(List<ErrorResponse> violationResults) {
+		for (ErrorResponse valiationResult : violationResults) {
 			addViolationResult(valiationResult);
 		}
 	}
@@ -38,7 +42,7 @@ public class CustomConstraintViolationException extends RuntimeException {
 		return status;
 	}
 
-	public Set<CustomConstraintViolationData> getViolationResults() {
+	public List<ErrorResponse> getViolationResults() {
 		return constraintViolations;
 	}
 

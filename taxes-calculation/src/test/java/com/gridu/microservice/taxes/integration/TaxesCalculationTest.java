@@ -3,6 +3,7 @@ package com.gridu.microservice.taxes.integration;
 import static org.junit.Assert.*;
 
 import com.gridu.microservice.taxes.dao.TaxCategoryDao;
+import com.gridu.microservice.taxes.exception.handler.RestExceptionHandler;
 import com.gridu.microservice.taxes.model.TaxCategory;
 import com.gridu.microservice.taxes.rest.TaxesCalculationRestResourceV1;
 import com.gridu.microservice.taxes.rest.model.PostStateRuleRequest;
@@ -66,6 +67,9 @@ public class TaxesCalculationTest {
 	@Autowired
 	private TaxesCalculationRestResourceV1 controller;
 
+	@Autowired
+	private RestExceptionHandler exceptionHandler;
+	
 	@Before
 	public void setUp() {
 		// ARRANGE + ASSERT
@@ -77,6 +81,7 @@ public class TaxesCalculationTest {
 		assertNotNull(validationResultTransformer);
 		assertNotNull(stateRuleTransformer);
 		assertNotNull(controller);
+		assertNotNull(exceptionHandler);
 		assertNotNull(GlobalDaoHolder.getTaxCategoryDao());
 		assertNotNull(GlobalDaoHolder.getStateDao());
 	}
@@ -97,8 +102,9 @@ public class TaxesCalculationTest {
 
 		// ASSERT
 		assertNotNull(constraintViolations);
-		assertEquals(1, constraintViolations.size());
-		assertTrue(constraintViolations.contains(new ValidationResult("name.invalid", "nonExisting")));
+		assertEquals(2, constraintViolations.size());
+		assertTrue(constraintViolations.contains(new ValidationResult("error.category.invalid", "nonExisting", "name")));
+		assertTrue(constraintViolations.contains(new ValidationResult("error.missing", null, "id")));
 	}
 
 	@Test
@@ -137,10 +143,11 @@ public class TaxesCalculationTest {
 
 		// ASSERT
 		assertNotNull(constraintViolations);
+		assertEquals(2, constraintViolations.size());
 		assertTrue(constraintViolations
-				.contains(new ValidationResult("rules.non existing one.invalid", request.getRules())));
+				.contains(new ValidationResult("error.invalid", request.getRules(), "rules.non existing one")));
 		assertTrue(constraintViolations
-				.contains(new ValidationResult("rules.non existing two.invalid", request.getRules())));
+				.contains(new ValidationResult("error.invalid", request.getRules(), "rules.non existing two")));
 	}
 
 	@Test
@@ -199,7 +206,6 @@ public class TaxesCalculationTest {
 		
 		String newRulesStateCode = "NJ";
 		// ASSERT INITIAL APP STATE
-		assertTrue(stateService.findByCode(newRulesStateCode) != null);
 		assertTrue(stateService.findByCode(newRulesStateCode) != null);
 		assertEquals(0, stateRuleService.getStateRule(newRulesStateCode).getTaxRules().size());
 		
