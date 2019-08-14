@@ -76,6 +76,7 @@ public class TaxesCalculationRestResourceV1Test {
 
 	@Mock
 	private ValidationService validationServiceMock;
+	
 
 	@Before
 	public void setBefore() {
@@ -238,8 +239,8 @@ public class TaxesCalculationRestResourceV1Test {
 		Mockito.when(taxCategoryServiceMock.findByCategory(TAX_CATEGORY_DEVICES)).thenReturn(taxCategoryDevices);
 		Mockito.when(validationServiceMock.validate(taxCategoryDevices, Default.class, TaxCategoryShouldExist.class))
 				.thenReturn(new ArrayList<ValidationResult>());
-		Mockito.when(stateRuleServiceMock.getTax(stateRuleId, TAX_CATEGORY_CLOTHES)).thenReturn(TAX_1);
-		Mockito.when(stateRuleServiceMock.getTax(stateRuleId, TAX_CATEGORY_DEVICES)).thenReturn(TAX_2);
+		Mockito.when(stateRuleServiceMock.calculateTaxPrice(STATE_CODE_AZ, TAX_CATEGORY_CLOTHES, PRICE_1)).thenReturn(TAX_1*PRICE_1);
+		Mockito.when(stateRuleServiceMock.calculateTaxPrice(STATE_CODE_AZ, TAX_CATEGORY_DEVICES, PRICE_2)).thenReturn(TAX_2*PRICE_2);
 
 		// ACT
 		ResponseEntity<?> responseModel = controller.calculateTaxesPerItem(requestModel);

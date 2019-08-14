@@ -41,7 +41,7 @@ import com.gridu.microservice.taxes.rest.transformer.ValidationResultTransformer
 @RestController
 @RequestMapping("/taxes")
 public class TaxesCalculationRestResourceV1 {
-	
+
 	private static DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.00");
 
 	@Autowired
@@ -96,11 +96,8 @@ public class TaxesCalculationRestResourceV1 {
 					HttpStatus.BAD_REQUEST);
 		}
 
-		long stateRuleId = getStateRuleService().getStateRule(order.getStateCode()).getId();
-		for (TaxCalculationItemModel taxCalcItem : order.getItems()) {
-			String tax = DECIMAL_FORMAT.format(taxCalcItem.getPrice() * getStateRuleService().getTax(stateRuleId, taxCalcItem.getCategory()));
-			taxCalcItem.setTaxes(new TaxesModel(tax));
-		}
+		updateTaxCalcItemsModelWithTax(order);
+
 		return ResponseEntity.ok().body(order);
 	}
 
@@ -170,6 +167,14 @@ public class TaxesCalculationRestResourceV1 {
 			stateRule.addTaxRule(new TaxRule(category, stateRuleModel.getTax()));
 		}
 		return stateRule;
+	}
+
+	private void updateTaxCalcItemsModelWithTax(TaxesCalculationItemsRequestModel order) {
+		for (TaxCalculationItemModel taxCalcItem : order.getItems()) {
+			String tax = DECIMAL_FORMAT.format(getStateRuleService().calculateTaxPrice(order.getStateCode(),
+					taxCalcItem.getCategory(), taxCalcItem.getPrice()));
+			taxCalcItem.setTaxes(new TaxesModel(tax));
+		}
 	}
 
 	private List<ValidationResult> validateTaxesCalculationData(TaxesCalculationItemsRequestModel order) {
