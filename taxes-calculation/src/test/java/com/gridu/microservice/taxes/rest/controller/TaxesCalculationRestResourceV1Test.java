@@ -31,16 +31,17 @@ import com.gridu.microservice.taxes.model.State;
 import com.gridu.microservice.taxes.model.StateRule;
 import com.gridu.microservice.taxes.model.TaxCategory;
 import com.gridu.microservice.taxes.model.TaxRule;
+import com.gridu.microservice.taxes.model.TaxesCalculationItemsModel;
+import com.gridu.microservice.taxes.model.TaxesCalculationItemsModel.ShippingAddress;
+import com.gridu.microservice.taxes.model.TaxesCalculationItemsModel.TaxCalculationItemModel;
 import com.gridu.microservice.taxes.rest.TaxesCalculationRestResourceV1;
 import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel;
-import com.gridu.microservice.taxes.rest.model.TaxesCalculationItemsRequestModel;
-import com.gridu.microservice.taxes.rest.model.TaxesCalculationItemsRequestModel.ShippingAddress;
-import com.gridu.microservice.taxes.rest.model.TaxesCalculationItemsRequestModel.TaxCalculationItemModel;
 import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel.StateRuleModel;
 import com.gridu.microservice.taxes.rest.transformer.StateRuleTransformer;
 import com.gridu.microservice.taxes.rest.transformer.ValidationResultTransformer;
 import com.gridu.microservice.taxes.service.StateRuleService;
 import com.gridu.microservice.taxes.service.StateService;
+import com.gridu.microservice.taxes.service.TaxCalculatorService;
 import com.gridu.microservice.taxes.service.TaxCategoryService;
 import com.gridu.microservice.taxes.validation.ValidationResult;
 import com.gridu.microservice.taxes.validation.ValidationService;
@@ -82,6 +83,10 @@ public class TaxesCalculationRestResourceV1Test {
 	public void setBefore() {
 		controller.setStateRuleTransformer(new StateRuleTransformer());
 		controller.setValidationResultTransformer(new ValidationResultTransformer());
+		
+		TaxCalculatorService taxCalculatorService = new TaxCalculatorService();
+		taxCalculatorService.setStateRuleService(stateRuleServiceMock);
+		controller.setTaxCalculatorService(taxCalculatorService);
 	}
 
 	@Test
@@ -223,12 +228,15 @@ public class TaxesCalculationRestResourceV1Test {
 		long stateRuleId = 9;
 
 		// ARRANGE
-		TaxesCalculationItemsRequestModel requestModel = createTxCalcRequestModel();
+		TaxesCalculationItemsModel requestModel = createTxCalcRequestModel();
 		StateRule stateRule = new StateRule(new State(STATE_CODE_AZ, STATE_NAME_ARIZONA));
 		stateRule.setId(stateRuleId);
+
 		TaxCategory taxCategoryClothes = new TaxCategory(TAX_CATEGORY_CLOTHES);
 		TaxCategory taxCategoryDevices = new TaxCategory(TAX_CATEGORY_DEVICES);
-
+		stateRule.addTaxRule(new TaxRule(taxCategoryClothes, TAX_1));
+		stateRule.addTaxRule(new TaxRule(taxCategoryDevices, TAX_2));
+		
 		Mockito.when(validationServiceMock.validate(requestModel)).thenReturn(new ArrayList<ValidationResult>());
 		Mockito.when(stateRuleServiceMock.getStateRule(STATE_CODE_AZ)).thenReturn(stateRule);
 		Mockito.when(validationServiceMock.validate(stateRule, Default.class, StateCodeValidationGroup.class))
@@ -239,16 +247,15 @@ public class TaxesCalculationRestResourceV1Test {
 		Mockito.when(taxCategoryServiceMock.findByCategory(TAX_CATEGORY_DEVICES)).thenReturn(taxCategoryDevices);
 		Mockito.when(validationServiceMock.validate(taxCategoryDevices, Default.class, TaxCategoryShouldExist.class))
 				.thenReturn(new ArrayList<ValidationResult>());
-		Mockito.when(stateRuleServiceMock.calculateTaxPrice(STATE_CODE_AZ, TAX_CATEGORY_CLOTHES, PRICE_1)).thenReturn(TAX_1*PRICE_1);
-		Mockito.when(stateRuleServiceMock.calculateTaxPrice(STATE_CODE_AZ, TAX_CATEGORY_DEVICES, PRICE_2)).thenReturn(TAX_2*PRICE_2);
+		Mockito.when(stateRuleServiceMock.getStateRule(stateRuleId)).thenReturn(stateRule);
 
 		// ACT
 		ResponseEntity<?> responseModel = controller.calculateTaxesPerItem(requestModel);
 
 		// ASSERT
 		Object responseBody = responseModel.getBody();
-		assertTrue(responseBody instanceof TaxesCalculationItemsRequestModel);
-		TaxesCalculationItemsRequestModel viewModel = (TaxesCalculationItemsRequestModel) responseBody;
+		assertTrue(responseBody instanceof TaxesCalculationItemsModel);
+		TaxesCalculationItemsModel viewModel = (TaxesCalculationItemsModel) responseBody;
 		assertEquals(STATE_CODE_AZ, viewModel.getStateCode());
 		assertEquals(TAX_CATEGORY_ITEM_ID_1, viewModel.getItems().get(0).getId());
 		assertEquals(TAX_CATEGORY_ITEM_ID_2, viewModel.getItems().get(1).getId());
@@ -262,11 +269,11 @@ public class TaxesCalculationRestResourceV1Test {
 		assertEquals("3.38", viewModel.getItems().get(1).getTax());
 	}
 
-	private TaxesCalculationItemsRequestModel createTxCalcRequestModel() {
-		TaxesCalculationItemsRequestModel requestModel = new TaxesCalculationItemsRequestModel();
+	private TaxesCalculationItemsModel createTxCalcRequestModel() {
+		TaxesCalculationItemsModel requestModel = new TaxesCalculationItemsModel();
 		requestModel.setAddress(new ShippingAddress(STATE_CODE_AZ));
 
-		List<TaxCalculationItemModel> calcualtionItemModels = new ArrayList<TaxesCalculationItemsRequestModel.TaxCalculationItemModel>();
+		List<TaxCalculationItemModel> calcualtionItemModels = new ArrayList<TaxesCalculationItemsModel.TaxCalculationItemModel>();
 		TaxCalculationItemModel model1 = new TaxCalculationItemModel(TAX_CATEGORY_ITEM_ID_1, TAX_CATEGORY_CLOTHES,
 				PRICE_1, null);
 		calcualtionItemModels.add(model1);
@@ -281,7 +288,7 @@ public class TaxesCalculationRestResourceV1Test {
 	public void calculateTaxesPerItem_missingItemIds() {
 
 		// ARRANGE
-		TaxesCalculationItemsRequestModel requestModel = new TaxesCalculationItemsRequestModel();
+		TaxesCalculationItemsModel requestModel = new TaxesCalculationItemsModel();
 		List<ValidationResult> validationResults = new ArrayList<ValidationResult>();
 		String errorCode = "error.id.missing";
 		validationResults.add(new ValidationResult(errorCode, ""));
@@ -310,10 +317,10 @@ public class TaxesCalculationRestResourceV1Test {
 		String errorCode = "error.category.invalid";
 
 		// ARRANGE
-		TaxesCalculationItemsRequestModel requestModel = new TaxesCalculationItemsRequestModel();
+		TaxesCalculationItemsModel requestModel = new TaxesCalculationItemsModel();
 		requestModel.setAddress(new ShippingAddress(STATE_CODE_AZ));
 
-		List<TaxCalculationItemModel> calcualtionItemModels = new ArrayList<TaxesCalculationItemsRequestModel.TaxCalculationItemModel>();
+		List<TaxCalculationItemModel> calcualtionItemModels = new ArrayList<TaxesCalculationItemsModel.TaxCalculationItemModel>();
 		TaxCalculationItemModel model = new TaxCalculationItemModel(TAX_CATEGORY_ITEM_ID_1, invalidCategoryName,
 				PRICE_1, null);
 		calcualtionItemModels.add(model);

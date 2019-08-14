@@ -1,4 +1,4 @@
-package com.gridu.microservice.taxes.rest.model;
+package com.gridu.microservice.taxes.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 import com.gridu.microservice.taxes.validation.ValidationErrorType;
 
-public class TaxesCalculationItemsRequestModel {
+public class TaxesCalculationItemsModel {
 
 	public static class ShippingAddress {
 		private String state;

@@ -1,6 +1,5 @@
 package com.gridu.microservice.taxes.rest;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +7,7 @@ import javax.validation.groups.Default;
 
 import com.gridu.microservice.taxes.service.StateRuleService;
 import com.gridu.microservice.taxes.service.StateService;
+import com.gridu.microservice.taxes.service.TaxCalculatorService;
 import com.gridu.microservice.taxes.service.TaxCategoryService;
 import com.gridu.microservice.taxes.validation.ValidationResult;
 import com.gridu.microservice.taxes.validation.ValidationService;
@@ -30,19 +30,16 @@ import com.gridu.microservice.taxes.exception.CustomConstraintViolationException
 import com.gridu.microservice.taxes.model.StateRule;
 import com.gridu.microservice.taxes.model.TaxCategory;
 import com.gridu.microservice.taxes.model.TaxRule;
+import com.gridu.microservice.taxes.model.TaxesCalculationItemsModel;
+import com.gridu.microservice.taxes.model.TaxesCalculationItemsModel.TaxCalculationItemModel;
 import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel;
 import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel.StateRuleModel;
-import com.gridu.microservice.taxes.rest.model.TaxesCalculationItemsRequestModel;
-import com.gridu.microservice.taxes.rest.model.TaxesCalculationItemsRequestModel.TaxCalculationItemModel;
-import com.gridu.microservice.taxes.rest.model.TaxesCalculationItemsRequestModel.TaxesModel;
 import com.gridu.microservice.taxes.rest.transformer.StateRuleTransformer;
 import com.gridu.microservice.taxes.rest.transformer.ValidationResultTransformer;
 
 @RestController
 @RequestMapping("/taxes")
 public class TaxesCalculationRestResourceV1 {
-
-	private static DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.00");
 
 	@Autowired
 	private StateRuleService stateRuleService;
@@ -52,6 +49,9 @@ public class TaxesCalculationRestResourceV1 {
 
 	@Autowired
 	private StateService stateService;
+
+	@Autowired
+	private TaxCalculatorService taxCalculatorService;
 
 	@Autowired
 	private TaxCategoryService taxCategoryService;
@@ -80,7 +80,7 @@ public class TaxesCalculationRestResourceV1 {
 	}
 
 	@PostMapping(value = "/calculation/v1", produces = "application/json")
-	public ResponseEntity<?> calculateTaxesPerItem(@RequestBody TaxesCalculationItemsRequestModel order) {
+	public ResponseEntity<?> calculateTaxesPerItem(@RequestBody TaxesCalculationItemsModel order) {
 
 		List<ValidationResult> modelValidationResult = getValidationService().validate(order);
 		if (!modelValidationResult.isEmpty()) {
@@ -96,7 +96,7 @@ public class TaxesCalculationRestResourceV1 {
 					HttpStatus.BAD_REQUEST);
 		}
 
-		updateTaxCalcItemsModelWithTax(order);
+		getTaxCalculatorService().updateTaxCalcItemsModelWithTax(order);
 
 		return ResponseEntity.ok().body(order);
 	}
@@ -129,6 +129,10 @@ public class TaxesCalculationRestResourceV1 {
 		this.stateRuleTransformer = stateRuleTransformer;
 	}
 
+	public void setTaxCalculatorService(TaxCalculatorService taxCalculatorService) {
+		this.taxCalculatorService = taxCalculatorService;
+	}
+	
 	public void setValidationResultTransformer(ValidationResultTransformer validationResultTransfomer) {
 		this.validationResultTransformer = validationResultTransfomer;
 	}
@@ -143,6 +147,10 @@ public class TaxesCalculationRestResourceV1 {
 
 	private StateService getStateService() {
 		return stateService;
+	}
+
+	private TaxCalculatorService getTaxCalculatorService() {
+		return taxCalculatorService;
 	}
 
 	private TaxCategoryService getTaxCategoryService() {
@@ -169,15 +177,7 @@ public class TaxesCalculationRestResourceV1 {
 		return stateRule;
 	}
 
-	private void updateTaxCalcItemsModelWithTax(TaxesCalculationItemsRequestModel order) {
-		for (TaxCalculationItemModel taxCalcItem : order.getItems()) {
-			String tax = DECIMAL_FORMAT.format(getStateRuleService().calculateTaxPrice(order.getStateCode(),
-					taxCalcItem.getCategory(), taxCalcItem.getPrice()));
-			taxCalcItem.setTaxes(new TaxesModel(tax));
-		}
-	}
-
-	private List<ValidationResult> validateTaxesCalculationData(TaxesCalculationItemsRequestModel order) {
+	private List<ValidationResult> validateTaxesCalculationData(TaxesCalculationItemsModel order) {
 		List<ValidationResult> validationResults = new ArrayList<ValidationResult>();
 		StateRule stateRule = getStateRuleService().getStateRule(order.getStateCode());
 		validationResults

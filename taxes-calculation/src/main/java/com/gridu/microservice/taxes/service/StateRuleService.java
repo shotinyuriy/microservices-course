@@ -33,9 +33,4 @@ public class StateRuleService {
 	public StateRule getStateRule(long id) {
 		return getStateRuleDao().findById(id);
 	}
-	
-	public Double calculateTaxPrice(String stateCode, String category, Double price) {
-		long stateRuleId = this.getStateRule(stateCode).getId();
-		return price * getStateRuleDao().findById(stateRuleId).getTax(category);
-	}
 }
