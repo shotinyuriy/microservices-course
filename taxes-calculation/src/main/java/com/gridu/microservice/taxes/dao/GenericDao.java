@@ -8,5 +8,6 @@ public interface GenericDao<K, T> {
 	List<T> getAll();
 	T save(T entity);
 	T findById(K id);
+	T remove(T entity);
 	List<T> find(Predicate<T> predicate);
 }

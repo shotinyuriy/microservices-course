@@ -40,6 +40,8 @@
 		<!--<property name="prettyPrint" value="true"/>-->
 	<!--</bean>-->
 
-	<import resource="em-persinstence-context.xml"/>
-       
+	<beans profile="entity-manager">
+		<import resource="em-persinstence-context.xml"/>
+	</beans>
 </beans>
+

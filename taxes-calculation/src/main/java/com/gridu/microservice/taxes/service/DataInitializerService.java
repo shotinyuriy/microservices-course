@@ -34,27 +34,33 @@ public class DataInitializerService implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 
-		getTaxCategoryService().saveTaxCategory(new TaxCategory("books"));
-		getTaxCategoryService().saveTaxCategory(new TaxCategory("clothing"));
-		getTaxCategoryService().saveTaxCategory(new TaxCategory("electronic devices"));
+		saveIfNotExists(new TaxCategory("books"));
+		saveIfNotExists(new TaxCategory("clothing"));
+		saveIfNotExists(new TaxCategory("electronic devices"));
 
 
-		getStateService().saveState(new State("AZ", "Arizona"));
-		getStateService().saveState(new State("CA", "California"));
-		getStateService().saveState(new State("NJ", "New Jersey"));
-		getStateService().saveState(new State("NY", "New York"));
-		getStateService().saveState(new State("PA", "Pennsylvania"));
-		
+		saveIfNotExists(new State("AZ", "Arizona"));
+		saveIfNotExists(new State("CA", "California"));
+		saveIfNotExists(new State("NJ", "New Jersey"));
+		saveIfNotExists(new State("NY", "New York"));
+		saveIfNotExists(new State("PA", "Pennsylvania"));
+
+		getStateService().getAll().forEach(s -> {
+			removeStateRuleIfExists(s.getCode());
+		});
+
 		StateRule stateRuleAz = new StateRule(getStateService().findByCode("AZ"));
 		stateRuleAz.addTaxRule(new TaxRule(getTaxCategoryService().findById(1l), 0.12));
 		stateRuleAz.addTaxRule(new TaxRule(getTaxCategoryService().findById(2l), 0.22));
-		getStateRuleService().saveStateRule(stateRuleAz);
+		saveIfNotExists(stateRuleAz);
 		
 		
 		StateRule stateRulePa = new StateRule(getStateService().findByCode("PA"));
 		stateRulePa.addTaxRule(new TaxRule(getTaxCategoryService().findById(2l), 0.08));
 		stateRulePa.addTaxRule(new TaxRule(getTaxCategoryService().findById(3l), 0.15));
-		getStateRuleService().saveStateRule(stateRulePa);
+		saveIfNotExists(stateRulePa);
+
+
 		
 		//BEGIN OF @ExamplePurpose
 //		StateRule emptyStateRule = new StateRule();
@@ -63,6 +69,33 @@ public class DataInitializerService implements InitializingBean {
 //		emptyStateRule.setTaxRules(new ArrayList<TaxRule>());
 //		getStateRuleService().saveStateRule(emptyStateRule);
 		//END OF @ExamplePurpose
+	}
+
+	protected void saveIfNotExists(TaxCategory taxCategory) {
+		if (getTaxCategoryService().findByCategory(taxCategory.getName()) == null) {
+			getTaxCategoryService().saveTaxCategory(taxCategory);
+		}
+	}
+
+	protected void saveIfNotExists(State state) {
+		if (getStateService().findByCode(state.getCode()) == null) {
+			getStateService().saveState(state);
+		}
+	}
+
+	protected void saveIfNotExists(StateRule stateRule) {
+		if(stateRule.getState().getCode() != null) {
+			if (getStateRuleService().getStateRule(stateRule.getState().getCode()) == null) {
+				getStateRuleService().saveStateRule(stateRule);
+			}
+		}
+	}
+
+	protected void removeStateRuleIfExists(String stateCode) {
+		StateRule stateRule = getStateRuleService().getStateRule(stateCode);
+		if (stateRule != null) {
+			getStateRuleService().removeSateRule(stateRule);
+		}
 	}
 
 	public TaxCategoryService getTaxCategoryService() {

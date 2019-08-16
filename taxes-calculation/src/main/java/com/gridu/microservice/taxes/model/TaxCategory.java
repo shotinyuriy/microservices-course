@@ -4,10 +4,17 @@ import com.gridu.microservice.taxes.validation.ValidationErrorType;
 import com.gridu.microservice.taxes.validation.annotation.ExistingTaxCategoryName;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
+
+import java.util.List;
 
 @Table(name="tax_category")
 @Entity
@@ -19,6 +26,9 @@ public class TaxCategory {
 
 	@ExistingTaxCategoryName(message = ValidationErrorType.INVALID, groups = {TaxCategoryShouldExist.class})
 	private String name;
+
+//	@OneToMany(mappedBy = "taxCategory", fetch = FetchType.LAZY)
+//	private List<TaxRule> taxRules;
 
 	public TaxCategory() {
 	}
@@ -47,6 +57,14 @@ public class TaxCategory {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+//	public List<TaxRule> getTaxRules() {
+//		return taxRules;
+//	}
+//
+//	public void setTaxRules(List<TaxRule> taxRules) {
+//		this.taxRules = taxRules;
+//	}
 
 	@Override
 	public boolean equals(Object o) {

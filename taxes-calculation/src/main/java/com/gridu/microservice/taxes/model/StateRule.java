@@ -1,7 +1,18 @@
 package com.gridu.microservice.taxes.model;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.util.ArrayList;
@@ -21,11 +32,13 @@ public class StateRule {
 	// ie. provides cascading validation
 	@Valid
 	@NotNull
-	@Transient
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "state_id")
 	private State state;
 
-	@Transient
-	private List<TaxRule> taxRules = new ArrayList<TaxRule>();;
+	@Cascade(CascadeType.ALL)
+	@OneToMany(mappedBy = "stateRule", fetch = FetchType.EAGER)
+	private List<TaxRule> taxRules = new ArrayList<TaxRule>();
 
 	public StateRule() {
 	}
@@ -37,13 +50,14 @@ public class StateRule {
 	public void addTaxRule(TaxRule taxRule) {
 		boolean updated = false;
 		for (TaxRule rule : taxRules) {
-			if (rule.getTaxCategory().equals(taxRule.getTaxCategory())) {
+			if (rule.getTaxCategory() != null && rule.getTaxCategory().equals(taxRule.getTaxCategory())) {
 				rule.setRule(taxRule.getRule());
 				updated = true;
 				break;
 			}
 		}
 		if (!updated) {
+			taxRule.setStateRule(this);
 			getTaxRules().add(taxRule);
 		}
 	}

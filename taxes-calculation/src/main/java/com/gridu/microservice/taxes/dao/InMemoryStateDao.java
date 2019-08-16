@@ -7,10 +7,12 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import com.gridu.microservice.taxes.model.State;
 
+@Profile("inmemory")
 @Repository
 public class InMemoryStateDao implements StateDao {
 
@@ -31,6 +33,14 @@ public class InMemoryStateDao implements StateDao {
 	@Override
 	public State findById(Long id) {
 		return STATES.get(id);
+	}
+
+	@Override
+	public State remove(State entity) {
+		if (STATES.containsKey(entity.getId())) {
+			return STATES.remove(entity);
+		}
+		return null;
 	}
 
 	@Override

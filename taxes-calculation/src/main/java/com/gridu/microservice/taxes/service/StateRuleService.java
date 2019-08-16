@@ -33,4 +33,8 @@ public class StateRuleService {
 	public StateRule getStateRule(long id) {
 		return getStateRuleDao().findById(id);
 	}
+
+	public void removeSateRule(StateRule stateRule) {
+		getStateRuleDao().remove(stateRule);
+	}
 }
