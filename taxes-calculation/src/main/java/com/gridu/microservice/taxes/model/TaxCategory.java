@@ -4,6 +4,7 @@ import com.gridu.microservice.taxes.validation.ValidationErrorType;
 import com.gridu.microservice.taxes.validation.annotation.ExistingTaxCategoryName;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -13,7 +14,7 @@ import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
 @Entity
 public class TaxCategory {
 
-	@Id
+	@Id @GeneratedValue
 	@NotNull(message = ValidationErrorType.MISSING, groups = {TaxCategoryShouldExist.class})
 	private Long id;
 

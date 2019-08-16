@@ -62,6 +62,7 @@ public class TaxesCalculationRestResourceV1 {
 	@Autowired
 	private ValidationService validationService;
 
+	//TO BE FIXED
 	@PostMapping(value = "/stateRules/v1/{stateCode}", produces = "application/json")
 	public ResponseEntity<?> addNewRule(@PathVariable(value = "stateCode") String stateCode,
 			@RequestBody StateRulesRequestModel rules) {

@@ -7,11 +7,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import com.gridu.microservice.taxes.model.State;
 
 @Repository
+@Profile("in-memory")
 public class InMemoryStateDao implements StateDao {
 
 	private AtomicLong id = new AtomicLong(0);
