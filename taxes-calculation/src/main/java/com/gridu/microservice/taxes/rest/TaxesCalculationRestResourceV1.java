@@ -173,7 +173,6 @@ public class TaxesCalculationRestResourceV1 {
 		for (StateRuleModel stateRuleModel : rules.getRules()) {
 			TaxCategory category = getTaxCategoryService().findByCategory(stateRuleModel.getCategory());
 			TaxRule taxRule = new TaxRule(category, stateRuleModel.getTax());
-			taxRule.setStateRule(stateRule);
 			stateRule.addTaxRule(taxRule);
 		}
 		return stateRule;

@@ -53,6 +53,7 @@ public class StateRule {
 			}
 		}
 		if (!updated) {
+			taxRule.setStateRule(this);
 			getTaxRules().add(taxRule);
 		}
 	}

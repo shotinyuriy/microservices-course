@@ -47,11 +47,9 @@ public class DataInitializerService implements InitializingBean {
 		
 		StateRule stateRuleAz = new StateRule(getStateService().findByCode("AZ"));
 		TaxRule taxRule1 = new TaxRule(getTaxCategoryService().findById(1l), 0.12);
-		taxRule1.setStateRule(stateRuleAz);
 		stateRuleAz.addTaxRule(taxRule1);
 		
 		TaxRule taxRule2 = new TaxRule(getTaxCategoryService().findById(2l), 0.22);
-		taxRule2.setStateRule(stateRuleAz);
 		stateRuleAz.addTaxRule(taxRule2);
 		getStateRuleService().saveStateRule(stateRuleAz);
 		
