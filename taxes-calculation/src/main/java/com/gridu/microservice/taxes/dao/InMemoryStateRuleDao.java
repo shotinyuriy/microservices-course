@@ -1,5 +1,9 @@
 package com.gridu.microservice.taxes.dao;
 
+import com.gridu.microservice.taxes.model.State;
+import com.gridu.microservice.taxes.model.StateRule;
+import org.springframework.stereotype.Repository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -7,10 +11,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Repository;
-
-import com.gridu.microservice.taxes.model.StateRule;
 
 @Repository
 public class InMemoryStateRuleDao implements StateRuleDao {
@@ -28,7 +28,7 @@ public class InMemoryStateRuleDao implements StateRuleDao {
 	@Override
 	public StateRule findByCode(String stateCode) {
 		Predicate<StateRule> stateRuleByCode = p -> p.getState().getCode().equals(stateCode);
-		return STATE_RULES.values().stream().filter(stateRuleByCode).findFirst().orElseGet(() -> new StateRule());
+		return STATE_RULES.values().stream().filter(stateRuleByCode).findFirst().orElseGet(() -> new StateRule(new State(stateCode, "")));
 	}
 
 	@Override

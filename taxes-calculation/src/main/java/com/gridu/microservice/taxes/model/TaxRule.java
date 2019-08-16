@@ -5,6 +5,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Table(name="state_rule")
@@ -19,6 +21,8 @@ public class TaxRule {
 	@NotNull
 	private TaxCategory taxCategory;
 
+	@Min(value = 0, message = "error.taxRule.tooSmall")
+	@Max(value = 1, message = "error.taxRule.tooBig")
 	private Double rule;
 
 	public TaxRule() {}
