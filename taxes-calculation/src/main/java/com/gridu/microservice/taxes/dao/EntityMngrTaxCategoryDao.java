@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.hibernate.Session;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
@@ -19,7 +20,6 @@ public class EntityMngrTaxCategoryDao  implements TaxCategoryDao {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	//TO BE FIXED
 	@Override
 	public List<TaxCategory> find(Predicate<TaxCategory> predicate) {
 		throw new UnsupportedOperationException();
@@ -47,12 +47,14 @@ public class EntityMngrTaxCategoryDao  implements TaxCategoryDao {
 	@Override
 	@Transactional
 	public TaxCategory save(TaxCategory entity) {
-		getEntityManager().persist(entity);
+		Session session = getEntityManager().unwrap(Session.class);
+		Long id = (Long) session.save(entity);
+		session.close();
+		entity.setId(id);
 		return entity;
 	}
 
 	private EntityManager getEntityManager() {
 		return entityManager;
 	}
-
 }

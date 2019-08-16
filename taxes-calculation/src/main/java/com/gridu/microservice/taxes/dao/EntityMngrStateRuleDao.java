@@ -1,5 +1,6 @@
 package com.gridu.microservice.taxes.dao;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -7,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.hibernate.Session;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
@@ -27,11 +29,11 @@ public class EntityMngrStateRuleDao implements StateRuleDao {
 
 	@Override
 	public StateRule findByCode(String code) {
-		State state = (State) getEntityManager().createQuery("from State where code = ?")
-				.setParameter(0, code).getResultList().get(0);
+		State state = (State) getEntityManager().createQuery("from State where code = ?").setParameter(0, code)
+				.getResultList().get(0);
 		List<StateRule> stateRule = getEntityManager().createQuery("from StateRule where state_id = ?")
 				.setParameter(0, state.getId()).getResultList();
-		return  stateRule.isEmpty() ? null : stateRule.get(0);
+		return stateRule.isEmpty() ? null : stateRule.get(0);
 	}
 
 	@Override
@@ -49,12 +51,14 @@ public class EntityMngrStateRuleDao implements StateRuleDao {
 	@Override
 	@Transactional
 	public StateRule save(StateRule entity) {
-		getEntityManager().persist(entity);
+		Session session = getEntityManager().unwrap(Session.class);
+		Long id = (Long) session.save(entity);
+		session.close();
+		entity.setId(id);
 		return entity;
 	}
 
 	private EntityManager getEntityManager() {
 		return entityManager;
 	}
-
 }

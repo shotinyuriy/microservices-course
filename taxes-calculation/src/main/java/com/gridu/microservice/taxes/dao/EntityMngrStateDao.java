@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.hibernate.Session;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
@@ -47,7 +48,10 @@ public class EntityMngrStateDao implements StateDao {
 	@Override
 	@Transactional
 	public State save(State entity) {
-		getEntityManager().persist(entity);
+		Session session = getEntityManager().unwrap(Session.class);
+		Long id = (Long) session.save(entity);
+		session.close();
+		entity.setId(id);
 		return entity;
 	}
 
