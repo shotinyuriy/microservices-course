@@ -1,9 +1,14 @@
 package com.gridu.microservice.taxes.rest.v2.model;
 
+import com.gridu.microservice.taxes.validation.ValidationErrorType;
+import com.gridu.microservice.taxes.validation.annotation.ExistingTaxCategoryName;
+import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
+
 /**
  * Created by anasimijonovic on 8/15/19.
  */
 public class TaxRuleModelV2 {
+    @ExistingTaxCategoryName(message = ValidationErrorType.NOT_FOUND, groups = {TaxCategoryShouldExist.class})
     private String categoryName;
     private Double taxRule;
 

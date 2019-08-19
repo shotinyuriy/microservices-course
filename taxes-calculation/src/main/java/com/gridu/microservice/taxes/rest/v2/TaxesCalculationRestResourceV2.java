@@ -16,6 +16,7 @@ import com.gridu.microservice.taxes.validation.ValidationResult;
 import com.gridu.microservice.taxes.validation.ValidationService;
 import com.gridu.microservice.taxes.validation.group.StateCodeValidationGroup;
 import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
+import com.gridu.microservice.taxes.validation.validationContainerModel.StateCodeContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -57,21 +58,29 @@ public class TaxesCalculationRestResourceV2 {
 
     @GetMapping(value = "/stateRules/v2/{stateCode}", produces = "application/json")
     public ResponseEntity<?> getStateRule(@PathVariable String stateCode) {
-        StateRule stateRule = stateRuleService.getStateRule(stateCode);
+        StateCodeContainer stateCodeContainer = new StateCodeContainer(stateCode);
 
-        List<ValidationResult> validationResults = validationService.validate(stateRule, Default.class,
-                StateCodeValidationGroup.class);
+        List<ValidationResult> validationResults = validationService.validate(stateCodeContainer);
         if (!validationResults.isEmpty()) {
             throw new CustomConstraintViolationException("Constraint violation.",
                     validationResultTransformer.provideValidationErrorResponse(validationResults),
                     HttpStatus.NOT_FOUND);
         }
 
+        StateRule stateRule = stateRuleService.getStateRule(stateCode);
+
         return ResponseEntity.ok(stateRuleTransformer.toStateRuleResponseModel(stateRule));
     }
 
     @PostMapping(value = "/stateRules/v2/{stateCode}", produces = "application/json")
     public ResponseEntity<?> addStateRule(@PathVariable String stateCode, @RequestBody StateRuleRequestModelV2 rules) {
+        List<ValidationResult> requestDataValidationResults = validationService.validate(rules, TaxCategoryShouldExist.class);
+        if (!requestDataValidationResults.isEmpty()) {
+            throw new CustomConstraintViolationException("Constraint violation.",
+                    validationResultTransformer.provideValidationErrorResponse(requestDataValidationResults),
+                    HttpStatus.BAD_REQUEST);
+        }
+
         StateRule stateRule = provideStateRule(stateCode, rules);
 
         List<ValidationResult> validationResults = validationService.validate(stateRule, Default.class,
