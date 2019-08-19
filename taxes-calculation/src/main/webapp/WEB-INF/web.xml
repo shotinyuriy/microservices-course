@@ -12,6 +12,11 @@
     <param-value>/config/application-context.xml</param-value>
   </context-param>
 
+	<context-param>
+		<param-name>spring.profiles.active</param-name>
+		<param-value>entity-manager</param-value>
+	</context-param>
+
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
@@ -32,5 +37,6 @@
     <servlet-name>rest-webapp</servlet-name>
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
+
 
 </web-app>

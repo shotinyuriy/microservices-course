@@ -61,7 +61,7 @@ public class TaxesCalculationRestResourceV1 {
 
 	@Autowired
 	private ValidationService validationService;
-
+	
 	@PostMapping(value = "/stateRules/v1/{stateCode}", produces = "application/json")
 	public ResponseEntity<?> addNewRule(@PathVariable(value = "stateCode") String stateCode,
 			@RequestBody StateRulesRequestModel rules) {
@@ -172,7 +172,8 @@ public class TaxesCalculationRestResourceV1 {
 		}
 		for (StateRuleModel stateRuleModel : rules.getRules()) {
 			TaxCategory category = getTaxCategoryService().findByCategory(stateRuleModel.getCategory());
-			stateRule.addTaxRule(new TaxRule(category, stateRuleModel.getTax()));
+			TaxRule taxRule = new TaxRule(category, stateRuleModel.getTax());
+			stateRule.addTaxRule(taxRule);
 		}
 		return stateRule;
 	}

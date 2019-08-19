@@ -1,31 +1,40 @@
 package com.gridu.microservice.taxes.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 @Table(name="state_rule")
 @Entity
 public class StateRule {
 
-	@Id
+	@Id @GeneratedValue
 	private Long id;
-
-	// annotation ensures that validators in State fields will be called on
-	// validating StateRule objects
-	// ie. provides cascading validation
+	
+	//provides cascading validation
 	@Valid
 	@NotNull
-	@Transient
+	@OneToOne
+	@JoinColumn(name="state_id")
+	@NotFound(action = NotFoundAction.EXCEPTION)
 	private State state;
 
-	@Transient
-	private List<TaxRule> taxRules = new ArrayList<TaxRule>();;
+	@OneToMany(mappedBy = "stateRule", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Collection<TaxRule> taxRules = new ArrayList<TaxRule>();
 
 	public StateRule() {
 	}
@@ -44,6 +53,7 @@ public class StateRule {
 			}
 		}
 		if (!updated) {
+			taxRule.setStateRule(this);
 			getTaxRules().add(taxRule);
 		}
 	}
@@ -66,7 +76,7 @@ public class StateRule {
 		return tax;
 	}
 
-	public List<TaxRule> getTaxRules() {
+	public Collection<TaxRule> getTaxRules() {
 		return taxRules;
 	}
 
