@@ -1,6 +1,7 @@
 package com.gridu.microservice.taxes.dao;
 
 import com.gridu.microservice.taxes.model.StateRule;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Repository
+@Profile("in-memory")
 public class InMemoryStateRuleDao implements StateRuleDao {
 
 	private AtomicLong id = new AtomicLong(0);

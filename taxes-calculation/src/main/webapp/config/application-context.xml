@@ -41,5 +41,10 @@
 	<!--</bean>-->
 
 	<import resource="em-persinstence-context.xml"/>
-       
+      <beans profile="in-memory">
+      	<bean id="inMemoryDataCondig" class="com.gridu.microservice.taxes.service.DataInitializerService"></bean>
+      </beans>
+            <beans profile="entity-manager">
+      	<bean id="entityManagerDataCondig" class="com.gridu.microservice.taxes.service.EntityManagerDataService"></bean>
+      </beans>
 </beans>

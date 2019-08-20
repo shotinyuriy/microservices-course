@@ -46,14 +46,20 @@ public class DataInitializerService implements InitializingBean {
 		getStateService().saveState(new State("PA", "Pennsylvania"));
 		
 		StateRule stateRuleAz = new StateRule(getStateService().findByCode("AZ"));
-		stateRuleAz.addTaxRule(new TaxRule(getTaxCategoryService().findById(1l), 0.12));
-		stateRuleAz.addTaxRule(new TaxRule(getTaxCategoryService().findById(2l), 0.22));
+		TaxRule taxRule1 = new TaxRule(getTaxCategoryService().findById(1l), 0.12);
+		stateRuleAz.addTaxRule(taxRule1);
+		
+		TaxRule taxRule2 = new TaxRule(getTaxCategoryService().findById(2l), 0.22);
+		stateRuleAz.addTaxRule(taxRule2);
 		getStateRuleService().saveStateRule(stateRuleAz);
 		
-		
 		StateRule stateRulePa = new StateRule(getStateService().findByCode("PA"));
-		stateRulePa.addTaxRule(new TaxRule(getTaxCategoryService().findById(2l), 0.08));
-		stateRulePa.addTaxRule(new TaxRule(getTaxCategoryService().findById(3l), 0.15));
+		TaxRule taxRule3 = new TaxRule(getTaxCategoryService().findById(2l), 0.08);
+		taxRule3.setStateRule(stateRulePa);
+		stateRulePa.addTaxRule(taxRule3);
+		TaxRule taxRule4 = new TaxRule(getTaxCategoryService().findById(3l), 0.15);
+		stateRulePa.addTaxRule(taxRule4);
+		taxRule4.setStateRule(stateRulePa);
 		getStateRuleService().saveStateRule(stateRulePa);
 		
 		//BEGIN OF @ExamplePurpose
