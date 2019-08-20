@@ -1,5 +1,8 @@
 package com.gridu.microservice.taxes.dao;
 
+import com.gridu.microservice.taxes.model.TaxCategory;
+import org.springframework.stereotype.Repository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -7,10 +10,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Repository;
-
-import com.gridu.microservice.taxes.model.TaxCategory;
 
 @Repository
 public class InMemoryTaxCategoryDao implements TaxCategoryDao {

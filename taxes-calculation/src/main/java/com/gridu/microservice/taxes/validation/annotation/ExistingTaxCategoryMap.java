@@ -22,7 +22,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = ExistingTaxCategoryMapValidator.class)
 @Documented
 public @interface ExistingTaxCategoryMap {
-	String message() default ValidationErrorType.INVALID;
+	String message() default ValidationErrorType.NOT_FOUND;
 
 	Class<?>[] groups() default {};
 
