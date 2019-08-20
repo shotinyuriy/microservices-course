@@ -52,8 +52,7 @@ public class EntityManagerStateDao implements StateDao {
 			entity.setId(id);
 		}
 
-		State managedEntity = em.find(State.class, entity.getId());
-		if (managedEntity != null) {
+		if (em.contains(entity)) {
 			em.merge(entity);
 		} else {
 			em.persist(entity);

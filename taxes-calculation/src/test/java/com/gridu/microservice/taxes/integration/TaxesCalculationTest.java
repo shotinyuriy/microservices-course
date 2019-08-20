@@ -37,7 +37,7 @@ import java.util.List;
 
 import java.util.stream.Collectors;
 
-@ActiveProfiles("entity-manager")
+@ActiveProfiles("inmemory")
 @ContextConfiguration("file:src/main/webapp/config/application-context.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class TaxesCalculationTest {

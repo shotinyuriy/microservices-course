@@ -62,11 +62,7 @@ public class EntityManagerStateRuleDao implements StateRuleDao {
 	@Override
 	public StateRule save(StateRule entity) {
 		EntityManager em = getEntityManager();
-		StateRule managedEntity = null;
-		if (entity.getId() != null) {
-			managedEntity = findById(entity.getId());
-		}
-		if (managedEntity != null) {
+		if (em.contains(entity)) {
 			em.merge(entity);
 		} else {
 			entity.setId(getNextId());

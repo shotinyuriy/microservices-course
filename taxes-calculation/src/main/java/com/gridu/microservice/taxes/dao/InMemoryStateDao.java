@@ -27,7 +27,10 @@ public class InMemoryStateDao implements StateDao {
 	@Override
 	public State findByCode(String code) {
 		Predicate<State> stateByCode = p -> p.getCode().equals(code);
-		return STATES.values().stream().filter(stateByCode).findFirst().orElseGet(() -> new State());
+		return STATES.values().stream()
+			.filter(stateByCode)
+			.findFirst()
+			.orElseGet(() -> null);
 	}
 
 	@Override

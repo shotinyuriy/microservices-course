@@ -52,12 +52,8 @@ public class EntityManagerTaxCategoryDao implements TaxCategoryDao {
 	@Override
 	public TaxCategory save(TaxCategory entity) {
 		EntityManager em = getEntityManager();
-		TaxCategory managedEntity = null;
-		if (entity.getId() != null) {
-			managedEntity = findById(entity.getId());
-		}
 
-		if (managedEntity != null) {
+		if (em.contains(entity)) {
 			em.merge(entity);
 		} else {
 			Long id = getNextId();
