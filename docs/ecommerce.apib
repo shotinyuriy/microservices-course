@@ -220,11 +220,13 @@ FORMAT: 1A
     {
       "id": "0123456789",
       "name": "Champions T-Shirt",
+      "taxCategory": "clothing",
       "price": 12.99,
       "currency": "USD"
     },
     {
       "id": "0123456780",
+      "taxCategory": "electronic devices",
       "name": "Champions Watches",
       "price": 22.99,
       "currency": "USD"
@@ -238,7 +240,7 @@ FORMAT: 1A
   "name": "Harry Potter and Hidden Room",
   "price": 24.99,
   "currency": "USD",
-  "category": "books",
+  "taxCategory": "books",
   "childSkus": []
 }
 
@@ -284,6 +286,7 @@ FORMAT: 1A
 }
 
 # GET /products/{productId}
++ Response 200 OK
 {
   "id": "01234567890",
   "name": "Harry Potter and Hidden Room",
@@ -291,9 +294,14 @@ FORMAT: 1A
   "currency": "USD",
   "taxCategory": "books",
   "childSkus": [
+    {
+      "id": "sku001"
+    }
   ]
 }
 
+# Product with id does not exist
++ Response 404 Not Found
 
 # PATCH /products/{productId}
 {
@@ -302,10 +310,38 @@ FORMAT: 1A
   "currency": "USD",
   "taxCategory": "books",
   "childSkus": [
+      {
+        "id": "sku001"
+      }
   ]
 }
 
-+ Response 201
+# Successful Update
++ Response 200 OK
+
+# Product to update does not exist
++ Response 404 Not Found
+
+# DELETE /products/{productId}
+{
+  "name": "Harry Potter and Hidden Room",
+  "price": 25.99,
+  "currency": "USD",
+  "taxCategory": "books",
+  "childSkus": [
+      {
+        "id": "sku001"
+      }
+  ]
+}
+
+# Successful Deletion
++ Response 204 No Content
+
+# Product to delete does not exist
++ Response 404 Not Found
+
+
 
 # TODO: design API for the shopping cart service
 
