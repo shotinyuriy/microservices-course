@@ -62,8 +62,11 @@ public class EntityManagerStateRuleDao implements StateRuleDao {
 	@Override
 	public StateRule save(StateRule entity) {
 		EntityManager em = getEntityManager();
-		if (em.contains(entity)) {
-			em.merge(entity);
+		if (entity.getId() != null) {
+			StateRule managedStateRule = findById(entity.getId());
+			if (managedStateRule != null) {
+				em.merge(entity);
+			}
 		} else {
 			entity.setId(getNextId());
 			em.persist(entity);
@@ -78,9 +81,6 @@ public class EntityManagerStateRuleDao implements StateRuleDao {
 	public StateRule findById(Long id) {
 		EntityManager em = getEntityManager();
 		StateRule stateRule = em.find(StateRule.class, id);
-		if (stateRule != null) {
-			stateRule.getTaxRules().size(); // TRIGGER LAZY INITIALIZATION
-		}
 		return stateRule;
 	}
 
@@ -112,9 +112,6 @@ public class EntityManagerStateRuleDao implements StateRuleDao {
 		List<StateRule> stateRules = query.getResultList();
 
 		StateRule stateRule = (stateRules == null || stateRules.isEmpty()) ? null : stateRules.get(0);
-		if (stateRule != null) {
-			stateRule.getTaxRules().size(); // TRIGGER LAZY INITIALIZATION
-		}
 
 		return stateRule;
 	}

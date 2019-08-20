@@ -53,8 +53,11 @@ public class EntityManagerTaxCategoryDao implements TaxCategoryDao {
 	public TaxCategory save(TaxCategory entity) {
 		EntityManager em = getEntityManager();
 
-		if (em.contains(entity)) {
-			em.merge(entity);
+		if (entity.getId() != null){
+			TaxCategory managedTaxCategory = findById(entity.getId());
+			if (managedTaxCategory != null) {
+				em.merge(entity);
+			}
 		} else {
 			Long id = getNextId();
 			entity.setId(id);

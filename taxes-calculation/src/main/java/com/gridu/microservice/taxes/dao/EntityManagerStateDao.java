@@ -51,8 +51,8 @@ public class EntityManagerStateDao implements StateDao {
 			long id = (long) entity.getCode().toUpperCase().hashCode();
 			entity.setId(id);
 		}
-
-		if (em.contains(entity)) {
+		State managedState = findById(entity.getId());
+		if (managedState != null) {
 			em.merge(entity);
 		} else {
 			em.persist(entity);

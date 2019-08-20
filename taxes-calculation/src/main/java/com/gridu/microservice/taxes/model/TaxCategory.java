@@ -27,9 +27,6 @@ public class TaxCategory {
 	@ExistingTaxCategoryName(message = ValidationErrorType.INVALID, groups = {TaxCategoryShouldExist.class})
 	private String name;
 
-//	@OneToMany(mappedBy = "taxCategory", fetch = FetchType.LAZY)
-//	private List<TaxRule> taxRules;
-
 	public TaxCategory() {
 	}
 
@@ -57,14 +54,6 @@ public class TaxCategory {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-//	public List<TaxRule> getTaxRules() {
-//		return taxRules;
-//	}
-//
-//	public void setTaxRules(List<TaxRule> taxRules) {
-//		this.taxRules = taxRules;
-//	}
 
 	@Override
 	public boolean equals(Object o) {
