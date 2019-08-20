@@ -10,6 +10,8 @@ import java.util.Map;
 
 public class ExistingTaxCategoryMapValidator implements ConstraintValidator<ExistingTaxCategoryMap, Map<String, ?>> {
 
+	private static final String ENTITY_NAME = "category.";
+
 	@Override
 	public void initialize(ExistingTaxCategoryMap existingTaxCategoryMap) {
 	}
@@ -27,13 +29,12 @@ public class ExistingTaxCategoryMapValidator implements ConstraintValidator<Exis
 				// violations
 				constraintValidatorContext.disableDefaultConstraintViolation();
 				constraintValidatorContext
-						.buildConstraintViolationWithTemplate(
-								constraintValidatorContext.getDefaultConstraintMessageTemplate())
-						.addPropertyNode(taxCategoryName) // we need to put the invalid tax category name some where,
-															// ideally it would be a value, but it is mutable via this
-															// constraintValidatorContext
-						.addConstraintViolation();
-				valid = false;
+					.buildConstraintViolationWithTemplate(ENTITY_NAME + constraintValidatorContext.getDefaultConstraintMessageTemplate())
+					.addPropertyNode(taxCategoryName) // we need to put the invalid tax category name some where,
+														// ideally it would be a value, but it is mutable via this constraintValidatorContext
+					.addConstraintViolation();
+
+        valid = false;
 			}
 		}
 

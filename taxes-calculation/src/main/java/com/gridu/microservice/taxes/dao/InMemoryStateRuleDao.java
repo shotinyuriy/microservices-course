@@ -1,5 +1,8 @@
 package com.gridu.microservice.taxes.dao;
 
+import com.gridu.microservice.taxes.model.StateRule;
+import org.springframework.stereotype.Repository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

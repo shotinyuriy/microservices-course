@@ -23,7 +23,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface ExistingTaxCategoryName {
 
-	String message() default ValidationErrorType.INVALID;
+	String message() default ValidationErrorType.NOT_FOUND;
 
 	Class<?>[] groups() default {};
 

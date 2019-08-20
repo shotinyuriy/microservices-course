@@ -103,7 +103,7 @@ public class TaxesCalculationTest {
 		// ASSERT
 		assertNotNull(constraintViolations);
 		assertEquals(2, constraintViolations.size());
-		assertTrue(constraintViolations.contains(new ValidationResult("error.category.invalid", "nonExisting", "name")));
+		assertTrue(constraintViolations.contains(new ValidationResult("error.category.notFound", "nonExisting", "name")));
 		assertTrue(constraintViolations.contains(new ValidationResult("error.missing", null, "id")));
 	}
 
@@ -145,9 +145,9 @@ public class TaxesCalculationTest {
 		assertNotNull(constraintViolations);
 		assertEquals(2, constraintViolations.size());
 		assertTrue(constraintViolations
-				.contains(new ValidationResult("error.invalid", request.getRules(), "rules.non existing one")));
+				.contains(new ValidationResult("error.category.notFound", request.getRules(), "rules.non existing one")));
 		assertTrue(constraintViolations
-				.contains(new ValidationResult("error.invalid", request.getRules(), "rules.non existing two")));
+				.contains(new ValidationResult("error.category.notFound", request.getRules(), "rules.non existing two")));
 	}
 
 	@Test

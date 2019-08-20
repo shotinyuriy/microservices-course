@@ -7,6 +7,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.NotFound;
@@ -19,8 +21,6 @@ public class TaxRule {
 	@Id
 	@GeneratedValue
 	private Long id;
-
-	private Double rule;
 	
 	@ManyToOne
 	@JoinColumn(name="state_rule_id")
@@ -33,10 +33,14 @@ public class TaxRule {
 	@JoinColumn(name="tax_category_id")
 	@NotFound(action = NotFoundAction.IGNORE)
 	private TaxCategory taxCategory;
+  
+	@Min(value = 0, message = "error.taxRule.tooSmall")
+	@Max(value = 1, message = "error.taxRule.tooBig")
+	private Double rule;
 
-	public TaxRule() {
+  public TaxRule() {
 	}
-
+  
 	public TaxRule(TaxCategory taxCategory, Double rule) {
 		this.taxCategory = taxCategory;
 		this.rule = rule;

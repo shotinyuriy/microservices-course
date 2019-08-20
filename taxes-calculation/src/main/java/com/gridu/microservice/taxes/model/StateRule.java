@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -33,6 +34,7 @@ public class StateRule {
 	@NotFound(action = NotFoundAction.EXCEPTION)
 	private State state;
 
+  @Valid
 	@OneToMany(mappedBy = "stateRule", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Collection<TaxRule> taxRules = new ArrayList<TaxRule>();
 
