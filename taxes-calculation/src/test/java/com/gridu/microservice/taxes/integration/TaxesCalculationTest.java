@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -36,6 +37,7 @@ import java.util.List;
 
 import java.util.stream.Collectors;
 
+@ActiveProfiles("inmemory")
 @ContextConfiguration("file:src/main/webapp/config/application-context.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 public class TaxesCalculationTest {
@@ -206,8 +208,8 @@ public class TaxesCalculationTest {
 		
 		String newRulesStateCode = "NJ";
 		// ASSERT INITIAL APP STATE
-		assertTrue(stateService.findByCode(newRulesStateCode) != null);
-		assertEquals(0, stateRuleService.getStateRule(newRulesStateCode).getTaxRules().size());
+		assertNotNull(stateService.findByCode(newRulesStateCode) != null);
+		assertNull(stateRuleService.getStateRule(newRulesStateCode));
 		
 		// ARRANGE
 		StateRulesRequestModel requestModel = new StateRulesRequestModel();

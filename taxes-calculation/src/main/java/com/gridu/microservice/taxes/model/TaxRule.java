@@ -1,28 +1,46 @@
 package com.gridu.microservice.taxes.model;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-@Table(name="state_rule")
+@Table(name = "tax_rule")
 @Entity
 public class TaxRule {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Transient
 	@Valid
 	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "tax_category_id")
 	private TaxCategory taxCategory;
+
+	@Cascade(CascadeType.ALL)
+	@ManyToOne
+	@JoinColumn(name="state_rule_id")
+	private StateRule stateRule;
 
 	private Double rule;
 
-	public TaxRule() {}
-	
+	public TaxRule() {
+	}
+
 	public TaxRule(TaxCategory taxCategory, Double rule) {
 		this.taxCategory = taxCategory;
 		this.rule = rule;
@@ -51,7 +69,17 @@ public class TaxRule {
 	public void setTaxCategory(TaxCategory taxCategory) {
 		this.taxCategory = taxCategory;
 	}
-	
+
+	public StateRule getStateRule() {
+		return stateRule;
+	}
+
+	public void setStateRule(StateRule stateRule) {
+		this.stateRule = stateRule;
+	}
+
+
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

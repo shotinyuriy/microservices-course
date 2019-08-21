@@ -8,10 +8,12 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import com.gridu.microservice.taxes.model.TaxCategory;
 
+@Profile("inmemory")
 @Repository
 public class InMemoryTaxCategoryDao implements TaxCategoryDao {
 
@@ -40,16 +42,27 @@ public class InMemoryTaxCategoryDao implements TaxCategoryDao {
 	}
 
 	@Override
+	public TaxCategory remove(TaxCategory entity) {
+		if (TAX_CATEGORIES.containsKey(entity.getId())) {
+			return TAX_CATEGORIES.remove(entity.getId());
+		}
+		return null;
+	}
+
+	@Override
 	public List<TaxCategory> find(Predicate<TaxCategory> predicate) {
 		return TAX_CATEGORIES.values().stream()
-				.filter(predicate)
-				.collect(Collectors.toList());
+			.filter(predicate)
+			.collect(Collectors.toList());
 	}
 
 	@Override
 	public TaxCategory findByCategory(String category) {
 		Predicate<TaxCategory> taxByCategory = p -> p.getName().equals(category);
-		return TAX_CATEGORIES.values().stream().filter(taxByCategory).findFirst().orElseGet(() -> new TaxCategory());
+		return TAX_CATEGORIES.values().stream()
+			.filter(taxByCategory)
+			.findFirst()
+			.orElseGet(() -> null);
 	}
 
 }

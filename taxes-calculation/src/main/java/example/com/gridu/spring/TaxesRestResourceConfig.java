@@ -12,6 +12,7 @@ import com.gridu.microservice.taxes.rest.transformer.ValidationResultTransformer
 import com.gridu.microservice.taxes.service.DataInitializerService;
 import com.gridu.microservice.taxes.service.StateRuleService;
 import com.gridu.microservice.taxes.service.StateService;
+import com.gridu.microservice.taxes.service.TaxCalculatorService;
 import com.gridu.microservice.taxes.service.TaxCategoryService;
 import com.gridu.microservice.taxes.validation.ValidationService;
 import org.springframework.context.annotation.Bean;
@@ -48,6 +49,12 @@ public class TaxesRestResourceConfig {
 	public ValidationService validationService() {
 		ValidationService validationService = new ValidationService();
 		return validationService;
+	}
+
+	@Bean
+	public TaxCalculatorService taxCalculatorService() {
+		TaxCalculatorService taxCalculatorService = new TaxCalculatorService();
+		return taxCalculatorService;
 	}
 
 	@Bean
