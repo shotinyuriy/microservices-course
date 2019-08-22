@@ -1,43 +1,60 @@
 package com.gridu.microservices.productcatalog.rest;
 
-import com.gridu.microservices.productcatalog.rest.model.ClothingSkuResponse;
-import com.gridu.microservices.productcatalog.rest.model.SkuResponse;
+import com.gridu.microservices.productcatalog.data.model.Product;
+import com.gridu.microservices.productcatalog.data.service.ProductService;
+import com.gridu.microservices.productcatalog.rest.model.ProductRequest;
+import com.gridu.microservices.productcatalog.rest.transformer.ProductTransformer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/catalog")
 public class ProductCatalogRestResourceV1 {
 
-	@GetMapping(value = "/")
-	public ResponseEntity<List<SkuResponse>> getSkus() {
+	@Autowired
+	private ProductService productService;
 
-		return ResponseEntity.ok(generateFakeSkus("001"));
+	@Autowired
+	private ProductTransformer productTransformer;
+
+	@GetMapping("/products")
+	public ResponseEntity<List<Product>> getProducts() {
+
+		List<Product> products = new ArrayList<>();
+		productService.findAll().forEach(products::add);
+
+		return ResponseEntity.ok(products);
 	}
 
-	@GetMapping(value = "/products/{productId}/skus")
-	public ResponseEntity<List<SkuResponse>> getSkusForProductId(@PathVariable String productId) {
+	@PostMapping("/products")
+	public ResponseEntity<Object> addProduct(@RequestBody ProductRequest productRequest) {
 
-		return ResponseEntity.ok(generateFakeSkus(productId));
+		Product newProduct = productTransformer.fromProductRequest(productRequest);
+		Product savedProduct = productService.save(newProduct);
+
+		URI savedProductUri = URI.create("/products/"+product.getId());
+		return ResponseEntity.created(savedProductUri).build();
 	}
 
-	private List<SkuResponse> generateFakeSkus(String productId) {
-		List<SkuResponse> skus = new ArrayList<>();
+	@GetMapping("/products/{productId}")
+	public ResponseEntity<Product> getProductById(@PathVariable String productId) {
 
-		skus.add(new ClothingSkuResponse("sku1"+productId, "XS"));
-		skus.add(new ClothingSkuResponse("sku2"+productId, "S"));
-		skus.add(new ClothingSkuResponse("sku3"+productId, "M"));
-		skus.add(new ClothingSkuResponse("sku4"+productId, "L"));
-		skus.add(new ClothingSkuResponse("sku5"+productId, "XL"));
-		skus.add(new ClothingSkuResponse("sku6"+productId, "XXL"));
-		skus.add(new ClothingSkuResponse("sku7"+productId, "XXXL"));
-
-		return  skus;
+		Optional<Product> product = productService.findById(productId);
+		if(product.isPresent()) {
+			return ResponseEntity.ok(product.get());
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 }
