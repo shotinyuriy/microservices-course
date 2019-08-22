@@ -5,8 +5,8 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
+import com.gridu.microservice.rest.validation.ValidationErrorType;
 import com.gridu.microservice.taxes.entity.validator.StateCodeValidator;
-import com.gridu.microservice.taxes.validation.ValidationErrorType;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;

@@ -1,7 +1,7 @@
 package com.gridu.microservice.taxes.validation.annotation;
 
 import com.gridu.microservice.taxes.entity.validator.ExistingTaxCategoryNameValidator;
-import com.gridu.microservice.taxes.validation.ValidationErrorType;
+import com.gridu.microservice.rest.validation.ValidationErrorType;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

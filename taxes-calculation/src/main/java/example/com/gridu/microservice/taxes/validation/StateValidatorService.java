@@ -1,8 +1,8 @@
 package example.com.gridu.microservice.taxes.validation;
 
+import com.gridu.microservice.rest.validation.ErrorResponse;
 import com.gridu.microservice.taxes.dao.StateDao;
 import com.gridu.microservice.taxes.exception.CustomConstraintViolationException;
-import com.gridu.microservice.taxes.exception.handler.ErrorResponse;
 import com.gridu.microservice.taxes.model.State;
 
 import org.springframework.beans.factory.annotation.Autowired;

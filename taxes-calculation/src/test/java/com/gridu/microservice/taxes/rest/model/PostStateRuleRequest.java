@@ -8,7 +8,7 @@ import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-import static com.gridu.microservice.taxes.validation.ValidationErrorType.MISSING;
+import static com.gridu.microservice.rest.validation.ValidationErrorType.MISSING;
 
 public class PostStateRuleRequest {
 

@@ -2,6 +2,7 @@ package com.gridu.microservice.taxes.integration;
 
 import static org.junit.Assert.*;
 
+import com.gridu.microservice.rest.validation.ValidationErrorType;
 import com.gridu.microservice.taxes.dao.TaxCategoryDao;
 import com.gridu.microservice.taxes.exception.handler.RestExceptionHandler;
 import com.gridu.microservice.taxes.model.TaxCategory;
@@ -12,10 +13,11 @@ import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel.StateRuleM
 import com.gridu.microservice.taxes.rest.transformer.StateRuleTransformer;
 import com.gridu.microservice.taxes.rest.transformer.ValidationResultTransformer;
 import com.gridu.microservice.taxes.validation.GlobalDaoHolder;
-import com.gridu.microservice.taxes.validation.ValidationResult;
+import com.gridu.microservice.rest.validation.ValidationResult;
 import com.gridu.microservice.taxes.validation.ValidationService;
 import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
 
+import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,12 +31,14 @@ import com.gridu.microservice.taxes.service.StateRuleService;
 import com.gridu.microservice.taxes.service.StateService;
 import com.gridu.microservice.taxes.service.TaxCategoryService;
 
+import javax.validation.Path;
 import javax.validation.groups.Default;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @ActiveProfiles("inmemory")
@@ -99,14 +103,14 @@ public class TaxesCalculationTest {
 
 		// ACT - validate the tax category using a specific validation groups: a Default
 		// group + our custom group
-		List<ValidationResult> constraintViolations = validationService.validate(taxCategory, Default.class,
+		Set<ValidationResult> constraintViolations = validationService.validate(taxCategory, Default.class,
 				TaxCategoryShouldExist.class);
 
 		// ASSERT
 		assertNotNull(constraintViolations);
 		assertEquals(2, constraintViolations.size());
-		assertTrue(constraintViolations.contains(new ValidationResult("error.category.invalid", "nonExisting", "name")));
-		assertTrue(constraintViolations.contains(new ValidationResult("error.missing", null, "id")));
+//		assertTrue(constraintViolations.contains(new ValidationResult(createPropertyPath("name"), ValidationErrorType.INVALID, "nonExisting")));
+//		assertTrue(constraintViolations.contains(new ValidationResult(createPropertyPath("id"), ValidationErrorType.MISSING, null)));
 	}
 
 	@Test
@@ -116,7 +120,7 @@ public class TaxesCalculationTest {
 
 		// ACT - validate the tax category using a specific validation groups: a Default
 		// group + our custom group
-		List<ValidationResult> constraintViolations1 = validationService.validate(taxCategory1, Default.class,
+		Set<ValidationResult> constraintViolations1 = validationService.validate(taxCategory1, Default.class,
 				TaxCategoryShouldExist.class);
 
 		// ASSERT
@@ -141,15 +145,15 @@ public class TaxesCalculationTest {
 		request.getRules().put("non existing two", i);
 
 		// ACT - validating map of rules
-		List<ValidationResult> constraintViolations = validationService.validate(request, TaxCategoryShouldExist.class);
+		Set<ValidationResult> constraintViolations = validationService.validate(request, TaxCategoryShouldExist.class);
 
 		// ASSERT
 		assertNotNull(constraintViolations);
 		assertEquals(2, constraintViolations.size());
-		assertTrue(constraintViolations
-				.contains(new ValidationResult("error.invalid", request.getRules(), "rules.non existing one")));
-		assertTrue(constraintViolations
-				.contains(new ValidationResult("error.invalid", request.getRules(), "rules.non existing two")));
+//		assertTrue(constraintViolations
+//				.contains(new ValidationResult(createPropertyPath("rules.non existing one"), ValidationErrorType.INVALID, "non existing one")));
+//		assertTrue(constraintViolations
+//				.contains(new ValidationResult(createPropertyPath("rules.non existing two"), ValidationErrorType.INVALID,"non existing two")));
 	}
 
 	@Test
@@ -168,11 +172,11 @@ public class TaxesCalculationTest {
 		request.getRules().put(taxCategory2.getName(), null);
 
 		// ACT
-		List<ValidationResult> constraintViolations = validationService.validate(request);
+		Set<ValidationResult> constraintViolations = validationService.validate(request);
 
 		// ASSERT
 		assertNotNull(constraintViolations);
-		List<Object> errorResponseValues = constraintViolations.stream().map(cv -> cv.getValue())
+		List<Object> errorResponseValues = constraintViolations.stream().map(cv -> cv.getPropertyValue())
 				.collect(Collectors.toList());
 
 		assertTrue(errorResponseValues.contains("non existing one"));
@@ -224,5 +228,14 @@ public class TaxesCalculationTest {
 		
 		// ASSERT
 		assertEquals(3, stateRuleService.getStateRule(newRulesStateCode).getTaxRules().size());
+	}
+
+	public Path createPropertyPath(String propertyName) {
+		String[] parts = propertyName.split("\\.");
+		PathImpl path = PathImpl.createPathFromString(parts[0]);
+		for (int i = 1; i < parts.length; i++ ) {
+			path.addPropertyNode(parts[i]);
+		}
+		return path;
 	}
 }
