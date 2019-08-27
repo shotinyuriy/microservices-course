@@ -16,7 +16,7 @@ public class ExistingCategoryValidator implements ConstraintValidator<ExistingCa
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        Optional<ProductCategory> productCategory = GlobalDaoHolder.getProductCategoryRepository().findByName(value);
+        Optional<ProductCategory> productCategory = GlobalDaoHolder.getProductCategoryService().getProductCategoriesByName(value);
         if (!productCategory.isPresent() || StringUtils.isEmpty(productCategory.get().getId())) {
             context.disableDefaultConstraintViolation();
             String messageTemplate = ENTITY_NAME + context.getDefaultConstraintMessageTemplate();

@@ -1,7 +1,8 @@
 package com.gridu.microservices.productcatalog.validation;
 
-import com.gridu.microservices.productcatalog.dao.ProductCategoryRepository;
-import com.gridu.microservices.productcatalog.dao.ProductRepository;
+import com.gridu.microservices.productcatalog.service.ProductCategoryService;
+import com.gridu.microservices.productcatalog.service.ProductService;
+import com.gridu.microservices.productcatalog.service.SkuService;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -15,20 +16,26 @@ import org.springframework.stereotype.Component;
 @Component
 public class GlobalDaoHolder implements ApplicationContextAware {
 
-	private static ProductRepository productRepository;
-	private static ProductCategoryRepository productCategoryRepository;
+	private static ProductService productService;
+	private static ProductCategoryService productCategoryService;
+	private static SkuService skuService;
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		productRepository = applicationContext.getBean(ProductRepository.class);
-		productCategoryRepository = applicationContext.getBean(ProductCategoryRepository.class);
+		productService = applicationContext.getBean(ProductService.class);
+		productCategoryService = applicationContext.getBean(ProductCategoryService.class);
+		skuService = applicationContext.getBean(SkuService.class);
 	}
 
-	public static ProductRepository getProductRepository() {
-		return productRepository;
+	public static ProductService getProductService() {
+		return productService;
 	}
 
-	public static ProductCategoryRepository getProductCategoryRepository() {
-		return productCategoryRepository;
+	public static ProductCategoryService getProductCategoryService() {
+		return productCategoryService;
+	}
+
+	public static SkuService getSkuService() {
+		return skuService;
 	}
 }

@@ -4,6 +4,7 @@ import com.gridu.microservices.productcatalog.exception.CustomConstraintViolatio
 import com.gridu.microservices.productcatalog.model.*;
 import com.gridu.microservices.productcatalog.rest.model.ProductId;
 import com.gridu.microservices.productcatalog.rest.model.ProductModel;
+import com.gridu.microservices.productcatalog.rest.model.SkuId;
 import com.gridu.microservices.productcatalog.rest.transformer.ProductTransformer;
 import com.gridu.microservices.productcatalog.rest.transformer.ValidationResultTransformer;
 import com.gridu.microservices.productcatalog.service.ProductCategoryService;
@@ -140,6 +141,22 @@ public class ProductCatalogueController {
         productService.deleteProduct(productId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("OK");
+    }
+
+    @GetMapping(value = "/search/products", produces = "application/json")
+    public ResponseEntity<?> getSku(@RequestParam Long skuId) {
+        SkuId skuIdHolder = new SkuId(skuId);
+
+        List<ValidationResult> validationResults = validationService.validate(skuIdHolder);
+        if (!validationResults.isEmpty()) {
+            throw new CustomConstraintViolationException("Constraint violation.",
+                    validationResultTransformer.provideValidationErrorResponse(validationResults),
+                    HttpStatus.NOT_FOUND);
+        }
+
+        Sku sku = skuService.getSkuById(skuId);
+
+        return ResponseEntity.ok(sku);
     }
 
     public Product fromProductModel(ProductModel model) {

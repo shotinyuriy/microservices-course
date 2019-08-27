@@ -15,7 +15,7 @@ public class UniqueProductNameValidator implements ConstraintValidator<UniquePro
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        Optional<Product> product = GlobalDaoHolder.getProductRepository().findByName(value);
+        Optional<Product> product = GlobalDaoHolder.getProductService().getProductsByName(value);
         if (product.isPresent()) {
             context.disableDefaultConstraintViolation();
             String messageTemplate = ENTITY_NAME + context.getDefaultConstraintMessageTemplate();

@@ -1,5 +1,7 @@
 package com.gridu.microservices.productcatalog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -25,6 +27,7 @@ public class Product {
     private ProductCategory category;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Sku> childSkus;
 
     @Min(0)
