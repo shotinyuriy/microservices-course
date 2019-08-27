@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by anasimijonovic on 8/20/19.
@@ -24,12 +25,16 @@ public class ProductService {
         return products;
     }
 
-    public List<Product> getProductsByName(String name) {
+    public Product getById(Long id) {
+        return productRepository.findById(id).orElse(null);
+    }
+
+    public Optional<Product> getProductsByName(String name) {
         return productRepository.findByName(name);
     }
 
-    public void addProduct(Product product) {
-        productRepository.save(product);
+    public Product addProduct(Product product) {
+        return productRepository.save(product);
     }
 
     public void updateProduct(Product product) {

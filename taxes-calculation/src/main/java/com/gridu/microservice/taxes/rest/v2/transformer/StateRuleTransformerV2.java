@@ -2,8 +2,8 @@ package com.gridu.microservice.taxes.rest.v2.transformer;
 
 import com.gridu.microservice.taxes.model.StateRule;
 import com.gridu.microservice.taxes.model.TaxRule;
-import com.gridu.microservice.taxes.rest.v2.model.TaxRuleModelV2;
 import com.gridu.microservice.taxes.rest.v2.model.StateRuleResponseModelV2;
+import com.gridu.microservice.taxes.rest.v2.model.TaxRuleModelV2;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class StateRuleTransformerV2 {
         StateRuleResponseModelV2 responseModel = new StateRuleResponseModelV2();
         responseModel.setId(stateRule.getId());
         responseModel.setStateCode(stateRule.getState().getCode());
-        responseModel.setTaxRules(toTaxRulesResponseModel(stateRule.getTaxRules()));
+        responseModel.setTaxRules(toTaxRulesResponseModel(new ArrayList<>(stateRule.getTaxRules())));
 
         return responseModel;
     }
