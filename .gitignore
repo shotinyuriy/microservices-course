@@ -2,4 +2,5 @@
 **/classes
 **/*.iml
 **/.settings
+**/target
 .idea
