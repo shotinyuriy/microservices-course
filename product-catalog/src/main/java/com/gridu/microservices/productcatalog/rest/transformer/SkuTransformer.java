@@ -13,8 +13,8 @@ public class SkuTransformer {
 		Sku sku = null;
 		if (skuRequest.getColor() != null) {
 			ElectronicDeviceSku electronicDeviceSku = new ElectronicDeviceSku();
-			electronicDeviceSku.setColor(electronicDeviceSku.getColor());
-			electronicDeviceSku = electronicDeviceSku;
+			electronicDeviceSku.setColor(skuRequest.getColor());
+			sku = electronicDeviceSku;
 		} else if (skuRequest.getSize() != null) {
 			ClothingSku clothingSku = new ClothingSku();
 			clothingSku.setSize(skuRequest.getSize());
