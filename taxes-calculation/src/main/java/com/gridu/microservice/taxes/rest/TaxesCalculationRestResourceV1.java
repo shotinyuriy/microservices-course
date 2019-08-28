@@ -62,6 +62,23 @@ public class TaxesCalculationRestResourceV1 {
 	@Autowired
 	private ValidationService validationService;
 	
+	
+	@GetMapping(value="/taxCategories/v1", produces = "application/json")
+	public ResponseEntity<?> getAllTaxCategories() {
+		List<TaxCategory> taxCategories = getTaxCategoryService().getAll();
+		List<String> categoryValues = new ArrayList<String>();
+		for (TaxCategory taxCategory : taxCategories) {
+			categoryValues.add(taxCategory.getName());
+		}
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(categoryValues);
+	}
+	
 	@PostMapping(value = "/stateRules/v1/{stateCode}", produces = "application/json")
 	public ResponseEntity<?> addNewRule(@PathVariable(value = "stateCode") String stateCode,
 			@RequestBody StateRulesRequestModel rules) {

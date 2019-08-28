@@ -33,6 +33,7 @@ public class EntityMngrStateRuleDao implements StateRuleDao {
 				.getResultList().get(0);
 		List<StateRule> stateRule = getEntityManager().createQuery("from StateRule where state_id = ?")
 				.setParameter(0, state.getId()).getResultList();
+		//get size of taxrules
 		return stateRule.isEmpty() ? null : stateRule.get(0);
 	}
 
