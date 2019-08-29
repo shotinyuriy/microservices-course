@@ -31,7 +31,7 @@ public class SchedulerService {
     @Scheduled(fixedDelayString = "${fixedDelay.in.milliseconds}")
     public void getTaxCategories() throws IOException {
         // generic type erasure -> should use parametrized type reference which uses reflection to capture class type
-        String url = "http://localhost:8090/taxes/categories/v1";
+        String url = "http://taxes-calculation/taxes/categories/v1";
         ResponseEntity<List<TaxCategoryModel>> response = restTemplate.exchange(url,
                 HttpMethod.GET,
                 null,
@@ -46,7 +46,7 @@ public class SchedulerService {
 
     @Scheduled(fixedDelayString = "${fixedDelay.in.milliseconds}")
     public void getTaxCategoriesWebClient() throws IOException {
-        String url = "http://localhost:8090/taxes/categories/v1";
+        String url = "http://taxes-calculation/taxes/categories/v1";
 
         List<TaxCategoryModel> response = webClientBuilder
                 .build()

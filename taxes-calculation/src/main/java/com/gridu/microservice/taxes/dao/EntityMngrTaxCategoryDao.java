@@ -1,17 +1,15 @@
 package com.gridu.microservice.taxes.dao;
 
-import java.util.List;
-import java.util.function.Predicate;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-
+import com.gridu.microservice.taxes.model.TaxCategory;
 import org.hibernate.Session;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
-import com.gridu.microservice.taxes.model.TaxCategory;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.function.Predicate;
 
 @Repository
 @Profile("entity-manager")
@@ -27,8 +25,8 @@ public class EntityMngrTaxCategoryDao  implements TaxCategoryDao {
 	
 	@Override
 	public TaxCategory findByCategory(String category) {
-		TaxCategory taxCategory = (TaxCategory) getEntityManager().createQuery("from TaxCategory where name = ?")
-				.setParameter(0, category).getResultList().get(0);
+		TaxCategory taxCategory = (TaxCategory) getEntityManager().createQuery("from TaxCategory where name = ?1")
+				.setParameter(1, category).getResultList().get(0);
 		return taxCategory;
 	}
 

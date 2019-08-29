@@ -1,17 +1,15 @@
 package com.gridu.microservice.taxes.dao;
 
-import java.util.List;
-import java.util.function.Predicate;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-
+import com.gridu.microservice.taxes.model.State;
 import org.hibernate.Session;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
-import com.gridu.microservice.taxes.model.State;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.function.Predicate;
 
 @Repository
 @Profile("entity-manager")
@@ -28,7 +26,7 @@ public class EntityMngrStateDao implements StateDao {
 
 	@Override
 	public State findByCode(String code) {
-		State state = (State) getEntityManager().createQuery("from State where code = ?").setParameter(0, code)
+		State state = (State) getEntityManager().createQuery("from State where code = ?1").setParameter(1, code)
 				.getResultList().get(0);
 		return state;
 	}
