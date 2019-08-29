@@ -37,7 +37,7 @@ public class SchedulerTasks {
 	@Autowired
 	private WebClient.Builder webClientBuilder;
 
-	//@Scheduled(fixedDelay = 5000 * 60)
+	@Scheduled(fixedDelay = 5000)
 	public void getTaxesCategoriesRestTemplate() {
 		List<String> categories = getTaxCategoriesFromRemoteSync();
 		updateCurrentProductCategories(categories);
@@ -71,7 +71,7 @@ public class SchedulerTasks {
 		RequestEntity<?> request = null;
 		List<String> categories = new ArrayList<String>();
 		try {
-			request = RequestEntity.get(new URI("http://localhost:8090/taxes/taxCategories/v1"))
+			request = RequestEntity.get(new URI("http://taxes-calculation-service/taxes/taxCategories/v1"))
 					.accept(MediaType.APPLICATION_JSON).build();
 		} catch (URISyntaxException e) {
 			processFurtherRequest = false;
@@ -88,6 +88,7 @@ public class SchedulerTasks {
 			}
 
 		}
+		System.err.println("Done with tax-calc remote call");
 		return categories;
 	}
 

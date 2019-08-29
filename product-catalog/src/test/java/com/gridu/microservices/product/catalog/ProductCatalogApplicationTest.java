@@ -3,7 +3,6 @@ package com.gridu.microservices.product.catalog;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -16,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.gridu.microservices.product.catalog.model.Product;
@@ -28,8 +28,10 @@ import com.gridu.microservices.product.catalog.service.ProductCategoryService;
 import com.gridu.microservices.product.catalog.service.ProductService;
 import com.gridu.microservices.product.catalog.service.SkuTypeService;
 
+@SpringBootTest(
+	       classes = ProductCatalogApplication.class)
+@TestPropertySource(properties = "classpath:application.properties")
 @RunWith(SpringRunner.class)
-@SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ProductCatalogApplicationTest {
 

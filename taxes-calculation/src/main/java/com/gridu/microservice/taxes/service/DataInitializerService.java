@@ -7,7 +7,6 @@ import com.gridu.microservice.taxes.model.TaxRule;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.stereotype.Service;
 
 /***
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service
-@EnableEurekaClient
 public class DataInitializerService implements InitializingBean {
 
 	@Autowired
@@ -35,7 +33,7 @@ public class DataInitializerService implements InitializingBean {
 	// executed after all beans created and dependencies are injected
 	@Override
 	public void afterPropertiesSet() throws Exception {
-	
+		
 		getTaxCategoryService().saveTaxCategory(new TaxCategory("books"));
 		getTaxCategoryService().saveTaxCategory(new TaxCategory("clothing"));
 		getTaxCategoryService().saveTaxCategory(new TaxCategory("electronic devices"));

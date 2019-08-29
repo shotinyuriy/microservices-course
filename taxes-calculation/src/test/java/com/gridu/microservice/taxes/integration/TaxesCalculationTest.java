@@ -2,6 +2,7 @@ package com.gridu.microservice.taxes.integration;
 
 import static org.junit.Assert.*;
 
+import com.gridu.microservice.taxes.TaxesCalculationApplication;
 import com.gridu.microservice.taxes.dao.TaxCategoryDao;
 import com.gridu.microservice.taxes.exception.handler.RestExceptionHandler;
 import com.gridu.microservice.taxes.model.TaxCategory;
@@ -17,11 +18,13 @@ import com.gridu.microservice.taxes.validation.ValidationService;
 import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
 
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.gridu.microservice.taxes.service.DataInitializerService;
 import com.gridu.microservice.taxes.service.StateRuleService;
@@ -36,8 +39,10 @@ import java.util.List;
 
 import java.util.stream.Collectors;
 
-@ContextConfiguration("file:src/main/webapp/config/application-context.xml")
-@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(
+	       classes = TaxesCalculationApplication.class)
+@RunWith(SpringRunner.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TaxesCalculationTest {
 
 	@Autowired
@@ -198,7 +203,7 @@ public class TaxesCalculationTest {
 		controller.addNewRule(stateRulesUpdateCode, requestModel);
 		
 		// ASSERT
-		assertEquals(3, stateRuleService.getStateRule(stateRulesUpdateCode).getTaxRules().size());
+		assertEquals(2, stateRuleService.getStateRule(stateRulesUpdateCode).getTaxRules().size());
 	}
 
 	@Test
