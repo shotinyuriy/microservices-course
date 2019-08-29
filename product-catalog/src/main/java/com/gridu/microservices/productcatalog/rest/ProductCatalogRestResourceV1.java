@@ -53,7 +53,7 @@ public class ProductCatalogRestResourceV1 {
 	@PostMapping("/products")
 	public ResponseEntity<Object> addProduct(@RequestBody ProductRequest productRequest) {
 
-		Product newProduct = productTransformer.fromProductRequest(productRequest);
+		Product newProduct = productTransformer.fromProductRequest(productRequest, null);
 		Set<ValidationResult> validationResults = validatorService.validate(newProduct);
 		if (!validationResults.isEmpty()) {
 			return ResponseEntity.badRequest()
@@ -84,7 +84,7 @@ public class ProductCatalogRestResourceV1 {
 
 		Optional<Product> product = productService.findById(productId);
 		if(product.isPresent()) {
-			Product newProduct = productTransformer.fromProductRequest(productRequest);
+			Product newProduct = productTransformer.fromProductRequest(productRequest, product.get());
 			Set<ValidationResult> validationResults = validatorService.validate(newProduct);
 			if (!validationResults.isEmpty()) {
 				return ResponseEntity.badRequest()

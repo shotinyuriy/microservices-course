@@ -1,6 +1,7 @@
 package com.gridu.microservices.productcatalog.data.model;
 
 import com.gridu.microservice.rest.validation.ValidationErrorType;
+import com.gridu.microservices.productcatalog.data.validator.annotation.ExistingTaxCategoryName;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
@@ -37,7 +38,7 @@ public class Product {
 
 	@NotNull(message = ValidationErrorType.MISSING)
 	@NotEmpty(message = ValidationErrorType.MISSING)
-	@Pattern(regexp = "(books)|(clothing)|(electronic devices)", message = ValidationErrorType.INVALID)
+	@ExistingTaxCategoryName
 	private String category;
 
 	@NotNull(message = ValidationErrorType.MISSING)
@@ -86,6 +87,19 @@ public class Product {
 
 	public void setChildSkus(List<Sku> childSkus) {
 		this.childSkus = childSkus;
+	}
+
+	public Sku findSku(String skuId) {
+		if (skuId == null) {
+			return null;
+		}
+		if(childSkus != null) {
+			return childSkus.stream()
+				.filter(sku -> skuId.equalsIgnoreCase(sku.getId()))
+				.findFirst()
+				.orElseGet(() -> null);
+		}
+		return null;
 	}
 
 	@Override

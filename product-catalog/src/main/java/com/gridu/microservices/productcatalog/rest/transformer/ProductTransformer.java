@@ -16,17 +16,27 @@ public class ProductTransformer {
 	@Autowired
 	protected SkuTransformer skuTransformer;
 
-	public Product fromProductRequest(ProductRequest productRequest) {
-		Product product = new Product();
-		product.setName(productRequest.getName());
-		product.setCategory(productRequest.getCategory());
-		product.setPrice(productRequest.getPrice());
+	public Product fromProductRequest(ProductRequest productRequest, Product existingProduct) {
+		if (existingProduct == null) {
+			existingProduct = new Product();
+		}
+		final Product updatedProduct = existingProduct;
+		updatedProduct.setName(productRequest.getName());
+		if (productRequest.getCategory() != null) {
+			updatedProduct.setCategory(productRequest.getCategory());
+		}
+		updatedProduct.setPrice(productRequest.getPrice());
 
 		List<Sku> childSkus = new ArrayList<>();
+
 		productRequest.getChildSkus().forEach(skuRequest -> {
-			childSkus.add(skuTransformer.fromSkuRequest(skuRequest));
+			Sku sku = null;
+			if (skuRequest.getId() != null) {
+				sku = updatedProduct.findSku(skuRequest.getId());
+			}
+			childSkus.add(skuTransformer.fromSkuRequest(skuRequest, sku, updatedProduct.getCategory()));
 		});
-		product.setChildSkus(childSkus);
-		return product;
+		updatedProduct.setChildSkus(childSkus);
+		return updatedProduct;
 	}
 }

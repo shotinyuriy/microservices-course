@@ -1,6 +1,7 @@
 package com.gridu.microservices.productcatalog.data.validator.annotation;
 
 import com.gridu.microservice.rest.validation.ValidationErrorType;
+import com.gridu.microservices.productcatalog.data.validator.impl.ExistingTaxCategoryNameValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -18,7 +19,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Target({FIELD, TYPE_USE, METHOD})
 @Retention(RUNTIME)
-//@Constraint(validatedBy = ExistingTaxCategoryNameValidator.class)
+@Constraint(validatedBy = ExistingTaxCategoryNameValidator.class)
 @Documented
 public @interface ExistingTaxCategoryName {
 
