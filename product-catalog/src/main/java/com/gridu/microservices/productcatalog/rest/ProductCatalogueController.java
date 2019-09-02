@@ -5,6 +5,7 @@ import com.gridu.microservices.productcatalog.model.*;
 import com.gridu.microservices.productcatalog.rest.model.ProductId;
 import com.gridu.microservices.productcatalog.rest.model.ProductModel;
 import com.gridu.microservices.productcatalog.rest.model.SkuId;
+import com.gridu.microservices.productcatalog.rest.model.SkuModel;
 import com.gridu.microservices.productcatalog.rest.transformer.ProductTransformer;
 import com.gridu.microservices.productcatalog.rest.transformer.ValidationResultTransformer;
 import com.gridu.microservices.productcatalog.service.ProductCategoryService;
@@ -156,7 +157,23 @@ public class ProductCatalogueController {
 
         Sku sku = skuService.getSkuById(skuId);
 
-        return ResponseEntity.ok(sku);
+        return ResponseEntity.ok(toSkuModel(sku));
+    }
+
+    private SkuModel toSkuModel(Sku sku) {
+        Product product = sku.getProduct();
+
+        ProductModel productModel = new ProductModel();
+        productModel.setId(product.getId());
+        productModel.setName(product.getName());
+        productModel.setCategory(product.getCategory().getName());
+        productModel.setPrice(product.getPrice());
+
+        SkuModel skuModel = new SkuModel();
+        skuModel.setId(sku.getId());
+        skuModel.setProductModel(productModel);
+
+        return skuModel;
     }
 
     public Product fromProductModel(ProductModel model) {
