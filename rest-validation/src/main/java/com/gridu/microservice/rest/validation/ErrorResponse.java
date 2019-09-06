@@ -1,12 +1,9 @@
-package com.gridu.microservice.taxes.exception.handler;
+package com.gridu.microservice.rest.validation;
 
 public class ErrorResponse {
 
 	private String errorCode;
 	private Object value;
-
-	public ErrorResponse() {
-	}
 
 	public ErrorResponse(String errorCode, Object value) {
 		this.errorCode = errorCode;

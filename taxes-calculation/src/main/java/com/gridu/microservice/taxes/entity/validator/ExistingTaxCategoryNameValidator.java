@@ -10,8 +10,6 @@ import java.util.List;
 
 public class ExistingTaxCategoryNameValidator implements ConstraintValidator<ExistingTaxCategoryName, String> {
 
-	private static String ENTITY_NAME = "category.";
-
 	@Override
 	public void initialize(ExistingTaxCategoryName existingTaxCategoryName) {
 	}
@@ -26,7 +24,7 @@ public class ExistingTaxCategoryNameValidator implements ConstraintValidator<Exi
 			// we are going to add our custom constraint violation
 			// therefore we need to disable the default one to avoid duplicated constraint violations
 			constraintValidatorContext.disableDefaultConstraintViolation();
-			String messageTemplate = ENTITY_NAME + constraintValidatorContext.getDefaultConstraintMessageTemplate();
+			String messageTemplate = constraintValidatorContext.getDefaultConstraintMessageTemplate();
 			constraintValidatorContext.buildConstraintViolationWithTemplate(messageTemplate).addConstraintViolation();
 			return false;
 		}

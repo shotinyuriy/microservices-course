@@ -5,10 +5,17 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import javax.validation.Path;
 import javax.validation.groups.Default;
 
+import com.gridu.microservice.rest.validation.ErrorResponse;
+import com.gridu.microservice.rest.validation.ValidationErrorType;
+import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +33,6 @@ import org.springframework.http.ResponseEntity;
 
 import com.gridu.microservice.taxes.dao.StateDao;
 import com.gridu.microservice.taxes.exception.CustomConstraintViolationException;
-import com.gridu.microservice.taxes.exception.handler.ErrorResponse;
 import com.gridu.microservice.taxes.model.State;
 import com.gridu.microservice.taxes.model.StateRule;
 import com.gridu.microservice.taxes.model.TaxCategory;
@@ -43,7 +49,7 @@ import com.gridu.microservice.taxes.service.StateRuleService;
 import com.gridu.microservice.taxes.service.StateService;
 import com.gridu.microservice.taxes.service.TaxCalculatorService;
 import com.gridu.microservice.taxes.service.TaxCategoryService;
-import com.gridu.microservice.taxes.validation.ValidationResult;
+import com.gridu.microservice.rest.validation.ValidationResult;
 import com.gridu.microservice.taxes.validation.ValidationService;
 import com.gridu.microservice.taxes.validation.group.StateCodeValidationGroup;
 import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
@@ -110,7 +116,7 @@ public class TaxesCalculationRestResourceV1Test {
 		ArgumentCaptor<StateRule> stateRuleCaptor = ArgumentCaptor.forClass(StateRule.class);
 		Mockito.when(validationServiceMock.validate(stateRuleCaptor.capture(), Matchers.eq(Default.class),
 				Matchers.eq(StateCodeValidationGroup.class), Matchers.eq(TaxCategoryShouldExist.class)))
-				.thenReturn(new ArrayList<ValidationResult>());
+				.thenReturn(new HashSet<ValidationResult>());
 		Mockito.when(stateRuleServiceMock.saveStateRule(stateRuleCaptor.capture())).thenAnswer(new Answer<StateRule>() {
 			@Override
 			public StateRule answer(InvocationOnMock invocation) throws Throwable {
@@ -145,10 +151,12 @@ public class TaxesCalculationRestResourceV1Test {
 		Mockito.when(taxCategoryServiceMock.findByCategory(TAX_CATEGORY_CLOTHES)).thenReturn(new TaxCategory());
 
 		ArgumentCaptor<StateRule> stateRuleCaptor = ArgumentCaptor.forClass(StateRule.class);
-		List<ValidationResult> result = new ArrayList<ValidationResult>();
+
+		Set<ValidationResult> result = new HashSet<>();
 		String invalidCode = "invalid code";
-		String errorCode = "error.invalid.state.code";
-		result.add(new ValidationResult(errorCode, invalidCode));
+		Path path = Mockito.mock(Path.class);
+		Mockito.when(path.toString()).thenReturn("state");
+		result.add(new ValidationResult(path, ValidationErrorType.INVALID, invalidCode));
 
 		Mockito.when(validationServiceMock.validate(stateRuleCaptor.capture(), Matchers.eq(Default.class),
 				Matchers.eq(StateCodeValidationGroup.class), Matchers.eq(TaxCategoryShouldExist.class)))
@@ -161,10 +169,10 @@ public class TaxesCalculationRestResourceV1Test {
 		} catch (CustomConstraintViolationException exception) {
 			// ASSERT
 			assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
-			List<ErrorResponse> errorResponses = exception.getViolationResults();
+			Collection<ErrorResponse> errorResponses = exception.getViolationResults();
 			assertEquals(1, errorResponses.size());
-			assertEquals(errorCode, errorResponses.get(0).getErrorCode());
-			assertEquals(invalidCode, errorResponses.get(0).getValue());
+			assertEquals("error.state.invalid", errorResponses.stream().findFirst().get().getErrorCode());
+			assertEquals(invalidCode, errorResponses.stream().findFirst().get().getValue());
 		}
 		// ASSERT
 		Mockito.verify(stateRuleServiceMock, Mockito.never()).saveStateRule(stateRuleCaptor.getValue());
@@ -176,13 +184,14 @@ public class TaxesCalculationRestResourceV1Test {
 		StateRule stateRule = new StateRule();
 		Mockito.when(stateRuleServiceMock.getStateRule(Mockito.anyString())).thenReturn(stateRule);
 
-		List<ValidationResult> validationResult = new ArrayList<ValidationResult>();
+		Set<ValidationResult> result = new HashSet<>();
 		String invalidCode = "invalid code";
-		String errorCode = "error.invalid.state.code";
-		validationResult.add(new ValidationResult(errorCode, invalidCode));
+		Path path = Mockito.mock(Path.class);
+		Mockito.when(path.toString()).thenReturn("state");
+		result.add(new ValidationResult(path, ValidationErrorType.INVALID, invalidCode));
 
 		Mockito.when(validationServiceMock.validate(stateRule, Default.class, StateCodeValidationGroup.class))
-				.thenReturn(validationResult);
+				.thenReturn(result);
 		// ACT
 		try {
 			controller.getStateRule(invalidCode);
@@ -190,10 +199,10 @@ public class TaxesCalculationRestResourceV1Test {
 		} catch (CustomConstraintViolationException exception) {
 			// ASSERT
 			assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
-			List<ErrorResponse> errorResponses = exception.getViolationResults();
+			Collection<ErrorResponse> errorResponses = exception.getViolationResults();
 			assertEquals(1, errorResponses.size());
-			assertEquals(errorCode, errorResponses.get(0).getErrorCode());
-			assertEquals(invalidCode, errorResponses.get(0).getValue());
+			assertEquals("error.state.invalid", errorResponses.stream().findFirst().get().getErrorCode());
+			assertEquals(invalidCode, errorResponses.stream().findFirst().get().getValue());
 		}
 		// ASSERT
 		Mockito.verify(stateRuleServiceMock, Mockito.never()).saveStateRule(Mockito.any(StateRule.class));
@@ -209,7 +218,7 @@ public class TaxesCalculationRestResourceV1Test {
 
 		Mockito.when(stateRuleServiceMock.getStateRule(STATE_CODE_AZ)).thenReturn(stateRule);
 		Mockito.when(validationServiceMock.validate(stateRule, Default.class, StateCodeValidationGroup.class))
-				.thenReturn(new ArrayList<ValidationResult>());
+				.thenReturn(new HashSet<ValidationResult>());
 		// ACT
 		ResponseEntity<?> stateRuleResponseEntity = controller.getStateRule(STATE_CODE_AZ);
 
@@ -237,16 +246,16 @@ public class TaxesCalculationRestResourceV1Test {
 		stateRule.addTaxRule(new TaxRule(taxCategoryClothes, TAX_1));
 		stateRule.addTaxRule(new TaxRule(taxCategoryDevices, TAX_2));
 		
-		Mockito.when(validationServiceMock.validate(requestModel)).thenReturn(new ArrayList<ValidationResult>());
+		Mockito.when(validationServiceMock.validate(requestModel)).thenReturn(new HashSet<ValidationResult>());
 		Mockito.when(stateRuleServiceMock.getStateRule(STATE_CODE_AZ)).thenReturn(stateRule);
 		Mockito.when(validationServiceMock.validate(stateRule, Default.class, StateCodeValidationGroup.class))
-				.thenReturn(new ArrayList<ValidationResult>());
+				.thenReturn(new HashSet<ValidationResult>());
 		Mockito.when(taxCategoryServiceMock.findByCategory(TAX_CATEGORY_CLOTHES)).thenReturn(taxCategoryClothes);
 		Mockito.when(validationServiceMock.validate(taxCategoryClothes, Default.class, TaxCategoryShouldExist.class))
-				.thenReturn(new ArrayList<ValidationResult>());
+				.thenReturn(new HashSet<ValidationResult>());
 		Mockito.when(taxCategoryServiceMock.findByCategory(TAX_CATEGORY_DEVICES)).thenReturn(taxCategoryDevices);
 		Mockito.when(validationServiceMock.validate(taxCategoryDevices, Default.class, TaxCategoryShouldExist.class))
-				.thenReturn(new ArrayList<ValidationResult>());
+				.thenReturn(new HashSet<ValidationResult>());
 		Mockito.when(stateRuleServiceMock.getStateRule(stateRuleId)).thenReturn(stateRule);
 
 		// ACT
@@ -289,9 +298,11 @@ public class TaxesCalculationRestResourceV1Test {
 
 		// ARRANGE
 		TaxesCalculationItemsModel requestModel = new TaxesCalculationItemsModel();
-		List<ValidationResult> validationResults = new ArrayList<ValidationResult>();
-		String errorCode = "error.id.missing";
-		validationResults.add(new ValidationResult(errorCode, ""));
+
+		Set<ValidationResult> validationResults = new HashSet<>();
+		Path path = Mockito.mock(Path.class);
+		Mockito.when(path.toString()).thenReturn("id");
+		validationResults.add(new ValidationResult(path, ValidationErrorType.MISSING, ""));
 
 		Mockito.when(validationServiceMock.validate(requestModel)).thenReturn(validationResults);
 
@@ -302,10 +313,10 @@ public class TaxesCalculationRestResourceV1Test {
 		} catch (CustomConstraintViolationException exception) {
 			// ASSERT
 			assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
-			List<ErrorResponse> errorResponses = exception.getViolationResults();
+			Collection<ErrorResponse> errorResponses = exception.getViolationResults();
 			assertEquals(1, errorResponses.size());
-			assertEquals(errorCode, errorResponses.get(0).getErrorCode());
-			assertEquals("", errorResponses.get(0).getValue());
+			assertEquals("error.id.missing", errorResponses.stream().findFirst().get().getErrorCode());
+			assertEquals("", errorResponses.stream().findFirst().get().getValue());
 		}
 	}
 
@@ -327,7 +338,7 @@ public class TaxesCalculationRestResourceV1Test {
 		requestModel.setItems(calcualtionItemModels);
 
 		Mockito.when(validationServiceMock.validate(requestModel, Default.class))
-				.thenReturn(new ArrayList<ValidationResult>());
+				.thenReturn(new HashSet<ValidationResult>());
 
 		State state = new State(STATE_CODE_AZ, STATE_NAME_ARIZONA);
 		StateRule stateRule = new StateRule(state);
@@ -336,11 +347,15 @@ public class TaxesCalculationRestResourceV1Test {
 		Mockito.when(stateRuleServiceMock.getStateRule(STATE_CODE_AZ)).thenReturn(stateRule);
 
 		Mockito.when(validationServiceMock.validate(stateRule, Default.class, StateCodeValidationGroup.class))
-				.thenReturn(new ArrayList<ValidationResult>());
+				.thenReturn(new HashSet<ValidationResult>());
 
-		List<ValidationResult> validationResults = new ArrayList<ValidationResult>();
+		Set<ValidationResult> validationResults = new HashSet<>();
+		String invalidCode = "invalid code";
+		Path path = Mockito.mock(Path.class);
+		Mockito.when(path.toString()).thenReturn("category");
+		validationResults.add(new ValidationResult(path, ValidationErrorType.INVALID, invalidCategoryName));
 
-		validationResults.add(new ValidationResult(errorCode, invalidCategoryName));
+
 
 		TaxCategory taxCategoryInvalid = new TaxCategory();
 		Mockito.when(taxCategoryServiceMock.findByCategory(invalidCategoryName)).thenReturn(taxCategoryInvalid);
@@ -354,10 +369,10 @@ public class TaxesCalculationRestResourceV1Test {
 		} catch (CustomConstraintViolationException exception) {
 			// ASSERT
 			assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
-			List<ErrorResponse> errorResponses = exception.getViolationResults();
+			Collection<ErrorResponse> errorResponses = exception.getViolationResults();
 			assertEquals(1, errorResponses.size());
-			assertEquals(errorCode, errorResponses.get(0).getErrorCode());
-			assertEquals(invalidCategoryName, errorResponses.get(0).getValue());
+			assertEquals(errorCode, errorResponses.stream().findFirst().get().getErrorCode());
+			assertEquals(invalidCategoryName, errorResponses.stream().findFirst().get().getValue());
 		}
 	}
 }

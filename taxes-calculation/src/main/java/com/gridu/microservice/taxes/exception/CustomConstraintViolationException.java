@@ -1,16 +1,17 @@
 package com.gridu.microservice.taxes.exception;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 
-import com.gridu.microservice.taxes.exception.handler.ErrorResponse;
+import com.gridu.microservice.rest.validation.ErrorResponse;
 
 public class CustomConstraintViolationException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
-	private List<ErrorResponse> constraintViolations;
+	private Collection<ErrorResponse> constraintViolations;
 	private HttpStatus status;
 
 	
@@ -22,7 +23,7 @@ public class CustomConstraintViolationException extends RuntimeException {
 		this(message, violationResults, HttpStatus.NOT_FOUND);
 	}
 
-	public CustomConstraintViolationException(String message, List<ErrorResponse> violationResults, HttpStatus status) {
+	public CustomConstraintViolationException(String message, Collection<ErrorResponse> violationResults, HttpStatus status) {
 		super(message);
 		this.constraintViolations = violationResults;
 		this.status = status;
@@ -42,7 +43,7 @@ public class CustomConstraintViolationException extends RuntimeException {
 		return status;
 	}
 
-	public List<ErrorResponse> getViolationResults() {
+	public Collection<ErrorResponse> getViolationResults() {
 		return constraintViolations;
 	}
 

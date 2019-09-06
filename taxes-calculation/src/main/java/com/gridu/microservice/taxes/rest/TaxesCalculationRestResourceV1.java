@@ -1,20 +1,24 @@
 package com.gridu.microservice.taxes.rest;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.validation.groups.Default;
-
+import com.gridu.microservice.rest.validation.ValidationResult;
+import com.gridu.microservice.taxes.exception.CustomConstraintViolationException;
+import com.gridu.microservice.taxes.model.StateRule;
+import com.gridu.microservice.taxes.model.TaxCategory;
+import com.gridu.microservice.taxes.model.TaxRule;
+import com.gridu.microservice.taxes.model.TaxesCalculationItemsModel;
+import com.gridu.microservice.taxes.model.TaxesCalculationItemsModel.TaxCalculationItemModel;
+import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel;
+import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel.StateRuleModel;
+import com.gridu.microservice.taxes.rest.transformer.StateRuleTransformer;
+import com.gridu.microservice.taxes.rest.transformer.ValidationResultTransformer;
 import com.gridu.microservice.taxes.service.StateRuleService;
 import com.gridu.microservice.taxes.service.StateService;
 import com.gridu.microservice.taxes.service.TaxCalculatorService;
 import com.gridu.microservice.taxes.service.TaxCategoryService;
-import com.gridu.microservice.taxes.validation.ValidationResult;
 import com.gridu.microservice.taxes.validation.ValidationService;
 import com.gridu.microservice.taxes.validation.group.StateCodeValidationGroup;
 import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
 import com.gridu.microservice.taxes.view.StateRuleViewModel;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,16 +30,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gridu.microservice.taxes.exception.CustomConstraintViolationException;
-import com.gridu.microservice.taxes.model.StateRule;
-import com.gridu.microservice.taxes.model.TaxCategory;
-import com.gridu.microservice.taxes.model.TaxRule;
-import com.gridu.microservice.taxes.model.TaxesCalculationItemsModel;
-import com.gridu.microservice.taxes.model.TaxesCalculationItemsModel.TaxCalculationItemModel;
-import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel;
-import com.gridu.microservice.taxes.rest.model.StateRulesRequestModel.StateRuleModel;
-import com.gridu.microservice.taxes.rest.transformer.StateRuleTransformer;
-import com.gridu.microservice.taxes.rest.transformer.ValidationResultTransformer;
+import javax.validation.groups.Default;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/taxes")
@@ -67,11 +65,11 @@ public class TaxesCalculationRestResourceV1 {
 			@RequestBody StateRulesRequestModel rules) {
 
 		StateRule stateRule = provideStateRule(stateCode, rules);
-		List<ValidationResult> validationResults = getValidationService().validate(stateRule, Default.class,
+		Set<ValidationResult> validationResults = getValidationService().validate(stateRule, Default.class,
 				StateCodeValidationGroup.class, TaxCategoryShouldExist.class);
 		if (!validationResults.isEmpty()) {
 			throw new CustomConstraintViolationException("Constraint violation.",
-					getValidationResultTransformer().provideValidationErrorResponse(validationResults),
+					getValidationResultTransformer().fromValidationResults(validationResults),
 					HttpStatus.BAD_REQUEST);
 		}
 		StateRule saveStateRule = getStateRuleService().saveStateRule(stateRule);
@@ -82,17 +80,17 @@ public class TaxesCalculationRestResourceV1 {
 	@PostMapping(value = "/calculation/v1", produces = "application/json")
 	public ResponseEntity<?> calculateTaxesPerItem(@RequestBody TaxesCalculationItemsModel order) {
 
-		List<ValidationResult> modelValidationResult = getValidationService().validate(order);
+		Set<ValidationResult> modelValidationResult = getValidationService().validate(order);
 		if (!modelValidationResult.isEmpty()) {
 			throw new CustomConstraintViolationException("Constraint violation on request model.",
-					getValidationResultTransformer().provideValidationErrorResponse(modelValidationResult),
+					getValidationResultTransformer().fromValidationResults(modelValidationResult),
 					HttpStatus.BAD_REQUEST);
 		}
 
-		List<ValidationResult> validationResults = validateTaxesCalculationData(order);
+		Set<ValidationResult> validationResults = validateTaxesCalculationData(order);
 		if (!validationResults.isEmpty()) {
 			throw new CustomConstraintViolationException("Constraint violation on data model.",
-					getValidationResultTransformer().provideValidationErrorResponse(validationResults),
+					getValidationResultTransformer().fromValidationResults(validationResults),
 					HttpStatus.BAD_REQUEST);
 		}
 
@@ -105,11 +103,11 @@ public class TaxesCalculationRestResourceV1 {
 	public ResponseEntity<?> getStateRule(@PathVariable(value = "stateCode") String stateCode) {
 
 		StateRule stateRule = getStateRuleService().getStateRule(stateCode);
-		List<ValidationResult> validationResults = getValidationService().validate(stateRule, Default.class,
+		Set<ValidationResult> validationResults = getValidationService().validate(stateRule, Default.class,
 				StateCodeValidationGroup.class);
 		if (!validationResults.isEmpty()) {
 			throw new CustomConstraintViolationException("Constraint violation.",
-					getValidationResultTransformer().provideValidationErrorResponse(validationResults),
+					getValidationResultTransformer().fromValidationResults(validationResults),
 					HttpStatus.BAD_REQUEST);
 		}
 		return ResponseEntity.ok(getStateRuleTransformer().toStateRuleViewModel(stateRule));
@@ -177,8 +175,8 @@ public class TaxesCalculationRestResourceV1 {
 		return stateRule;
 	}
 
-	private List<ValidationResult> validateTaxesCalculationData(TaxesCalculationItemsModel order) {
-		List<ValidationResult> validationResults = new ArrayList<ValidationResult>();
+	private Set<ValidationResult> validateTaxesCalculationData(TaxesCalculationItemsModel order) {
+		Set<ValidationResult> validationResults = new HashSet<ValidationResult>();
 		StateRule stateRule = getStateRuleService().getStateRule(order.getStateCode());
 		validationResults
 				.addAll(getValidationService().validate(stateRule, Default.class, StateCodeValidationGroup.class));

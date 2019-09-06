@@ -1,9 +1,13 @@
 package com.gridu.microservice.taxes.validation;
 
+import com.gridu.microservice.rest.validation.AbstractValidationService;
+import com.gridu.microservice.rest.validation.ValidationResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
+import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import java.util.List;
@@ -11,48 +15,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class ValidationService {
+public class ValidationService extends AbstractValidationService {
 
-	private ValidatorFactory factory;
+	@Autowired
+	private Validator validator;
 
 	public ValidationService() {
-		initialize();
+		super();
 	}
 
-	private void initialize() {
-		if (factory == null) {
-			synchronized (this) {
-				if (factory == null) {
-					factory = Validation.buildDefaultValidatorFactory();
-				}
-			}
-		}
-	}
-
-	/**
-	 * NOTE: probably this method could throw an ConstraintViolationException or our
-	 * custom validation exception List of ValidationResult is returned for the
-	 * example simplicity
-	 * 
-	 * @param obj              - an object to validate
-	 * @param validationGroups
-	 * @param <T>              NOTE: use of generics is not necessary here
-	 *                         currently, but it is used to comply with the
-	 *                         validate(T, Class...) method signature of Validator
-	 * @return
-	 */
-	public <T> List<ValidationResult> validate(T obj, Class<?>... validationGroups) {
-		List<ValidationResult> validationResults;
-		Set<ConstraintViolation<T>> constraintViolations = factory.getValidator().validate(obj, validationGroups);
-		validationResults = convertToValidationResult(constraintViolations);
-
-		return validationResults;
-	}
-
-	public static <T> List<ValidationResult> convertToValidationResult(Set<ConstraintViolation<T>> violations) {
-		return violations.stream().map(violation -> {
-			String errorCode = ValidationErrorType.ERROR + "." + violation.getMessage();
-			return new ValidationResult(errorCode, violation.getInvalidValue(), violation.getPropertyPath().toString());
-		}).collect(Collectors.toList());
+	@Override
+	public <T> Set<ValidationResult> validate(T obj, Class<?>... validationGroups) {
+		return validate(validator, obj, validationGroups);
 	}
 }

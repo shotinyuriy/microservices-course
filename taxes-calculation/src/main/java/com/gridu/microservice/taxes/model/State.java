@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.gridu.microservice.taxes.validation.ValidationErrorType;
+import com.gridu.microservice.rest.validation.ValidationErrorType;
 import com.gridu.microservice.taxes.validation.annotation.ValidStateCode;
 import com.gridu.microservice.taxes.validation.group.StateCodeValidationGroup;
 

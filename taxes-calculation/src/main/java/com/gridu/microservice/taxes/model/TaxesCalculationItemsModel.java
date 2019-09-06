@@ -1,12 +1,13 @@
 package com.gridu.microservice.taxes.model;
 
+import com.gridu.microservice.rest.validation.ValidationErrorType;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.gridu.microservice.taxes.validation.ValidationErrorType;
 
 public class TaxesCalculationItemsModel {
 

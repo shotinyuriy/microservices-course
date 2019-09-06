@@ -1,3 +1,6 @@
 **/bin
 **/classes
+**/*.iml
+**/.settings
+**/target
 .idea

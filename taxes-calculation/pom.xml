@@ -88,6 +88,12 @@
     </dependency>
     <!-- VALIDATION DEPENDENCIES END -->
 
+    <dependency>
+      <groupId>com.gridu.microservices</groupId>
+      <artifactId>rest-validation</artifactId>
+      <version>1.0</version>
+    </dependency>
+
     <!-- Java Persistence Dependencies START -->
     <dependency>
       <groupId>org.springframework</groupId>
