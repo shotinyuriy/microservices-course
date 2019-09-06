@@ -1,9 +1,11 @@
 package com.gridu.microservices.productcatalog.data.service;
 
+import com.gridu.microservices.productcatalog.data.model.ProductCategory;
 import com.gridu.microservices.productcatalog.data.model.TaxCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -32,20 +34,28 @@ public class ProductCategoryService {
 		return new ArrayList<String>(categories);
 	}
 
-	@Scheduled(initialDelay = 0, fixedDelay = 5000)
+	@Scheduled(initialDelay = 0, fixedDelay = 60000)
 	public void refreshCategories() {
-		LOGGER.info("START REFRESHING CATEGORIES categories = "+categories);
+		try {
+			LOGGER.info("START REFRESHING CATEGORIES categories = " + categories);
 
-		ResponseEntity<List<TaxCategory>> responseEntity = restTemplate.exchange(
-			"http://localhost:8090/taxes/categories/v1",
-			HttpMethod.GET,
-			null,
-			new ParameterizedTypeReference<List<TaxCategory>>(){});
+			ResponseEntity<List<TaxCategory>> responseEntity = restTemplate.exchange(
+				"http://taxes-calculation/taxes/categories/v1",
+				HttpMethod.GET,
+				null,
+				new ParameterizedTypeReference<List<TaxCategory>>() {
+				});
 
-		List<TaxCategory> taxCategories = responseEntity.getBody();
+			List<TaxCategory> taxCategories = responseEntity.getBody();
 
-		categories.clear();
-		taxCategories.forEach(taxCategory -> categories.add(taxCategory.getName()));
-		LOGGER.info("END REFRESHING CATEGORIES categories = "+categories);
+			categories.clear();
+			taxCategories.forEach(taxCategory -> categories.add(taxCategory.getName()));
+			LOGGER.info("END REFRESHING CATEGORIES categories = " + categories);
+		} catch (Exception e) {
+			categories.clear();
+			categories.add("books");
+			categories.add(ProductCategory.CLOTHING);
+			categories.add(ProductCategory.ELECTRONIC_DEVICES);
+		}
 	}
 }

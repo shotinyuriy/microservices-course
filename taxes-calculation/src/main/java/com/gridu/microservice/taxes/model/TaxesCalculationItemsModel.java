@@ -28,6 +28,10 @@ public class TaxesCalculationItemsModel {
 		public void setState(String state) {
 			this.state = state;
 		}
+
+		public String toString() {
+			return "{ state="+state+"}";
+		}
 	}
 
 	public static class TaxCalculationItemModel {
@@ -83,6 +87,13 @@ public class TaxesCalculationItemsModel {
 		public void setTaxes(TaxesModel taxes) {
 			this.taxes = taxes;
 		}
+
+		public String toString() {
+			return "{ id="+id+
+				", category="+category+
+				", price="+price+
+				"}";
+		}
 	}
 
 	public static class TaxesModel {
@@ -124,5 +135,14 @@ public class TaxesCalculationItemsModel {
 
 	public void setItems(List<TaxCalculationItemModel> items) {
 		this.items = items;
+	}
+
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("address=").append(address);
+		sb.append(", \nitems=").append(items);
+		sb.append("}");
+		return sb.toString();
 	}
 }

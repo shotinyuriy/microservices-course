@@ -17,6 +17,7 @@ import com.gridu.microservice.rest.validation.ErrorResponse;
 import com.gridu.microservice.rest.validation.ValidationErrorType;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;

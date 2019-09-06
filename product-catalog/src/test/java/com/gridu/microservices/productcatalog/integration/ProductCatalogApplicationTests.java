@@ -2,6 +2,7 @@ package com.gridu.microservices.productcatalog.integration;
 
 import com.gridu.microservices.productcatalog.data.model.Product;
 import com.gridu.microservices.productcatalog.data.model.ProductCategory;
+import com.gridu.microservices.productcatalog.data.model.Sku;
 import com.gridu.microservices.productcatalog.rest.ProductCatalogRestResourceV1;
 import com.gridu.microservices.productcatalog.rest.model.AddProductResponse;
 import com.gridu.microservices.productcatalog.rest.model.ProductRequest;
@@ -20,11 +21,61 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest()
 public class ProductCatalogApplicationTests {
 
 	@Autowired
 	private ProductCatalogRestResourceV1 productCatalogRestResourceV1;
+
+	@Test
+	public void testSearchProductBySkuId() {
+		// CREATE CLOTHING SKU
+		ProductRequest productRequest = new ProductRequest();
+		productRequest.setName("Superwoman T-Shirt");
+		productRequest.setPrice(24.99);
+		productRequest.setCategory(ProductCategory.CLOTHING);
+		productRequest.setChildSkus(new ArrayList<>());
+		SkuRequest skuRequest1 = new SkuRequest();
+		skuRequest1.setSize("XS");
+		SkuRequest skuRequest2 = new SkuRequest();
+		skuRequest2.setSize("S");
+		SkuRequest skuRequest3 = new SkuRequest();
+		skuRequest3.setSize("M");
+		productRequest.getChildSkus().add(skuRequest1);
+		productRequest.getChildSkus().add(skuRequest2);
+		productRequest.getChildSkus().add(skuRequest3);
+
+		ResponseEntity responseEntityAdd = productCatalogRestResourceV1.addProduct(productRequest);
+		Assert.assertEquals(HttpStatus.CREATED, responseEntityAdd.getStatusCode());
+		Assert.assertNotNull(responseEntityAdd);
+		Assert.assertNotNull(responseEntityAdd.getBody());
+		Assert.assertTrue(responseEntityAdd.getBody() instanceof AddProductResponse);
+		AddProductResponse productResponse = (AddProductResponse) responseEntityAdd.getBody();
+		Assert.assertNotNull(productResponse.getId());
+
+		// READ
+		ResponseEntity<?> responseEntityById = productCatalogRestResourceV1.getProductById(productResponse.getId());
+		Assert.assertNotNull(responseEntityById);
+		Assert.assertEquals(HttpStatus.OK, responseEntityById.getStatusCode());
+		Assert.assertNotNull(responseEntityById.getBody());
+		Product product = (Product) responseEntityById.getBody();
+		Assert.assertNotNull(product.getChildSkus());
+		Assert.assertEquals(3, product.getChildSkus().size());
+
+		Sku sku = product.getChildSkus().get(0);
+
+		Assert.assertNotNull("Sku from product should not be null", sku);
+
+		// SEARCH BY SKU ID
+		ResponseEntity<Product> responseEntity = productCatalogRestResourceV1.searchProductBySkuId(sku.getId());
+		Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		Assert.assertNotNull(responseEntity);
+		Assert.assertNotNull(responseEntity.getBody());
+		Assert.assertTrue(responseEntity.getBody() instanceof Product);
+
+		Product foundBySkuId = (Product) responseEntity.getBody();
+
+	}
 
 	@Test
 	public void testProductCrud() {

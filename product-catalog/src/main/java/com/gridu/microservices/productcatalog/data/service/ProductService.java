@@ -5,8 +5,6 @@ import com.gridu.microservices.productcatalog.data.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,5 +39,9 @@ public class ProductService {
 		product.setName(newProduct.getName());
 		product.setChildSkus(newProduct.getChildSkus());
 		save(product);
+	}
+
+	public Product findBySkuId(String skuId) {
+		return productRepository.findProductByChildSkus_Id(skuId);
 	}
 }
