@@ -10,12 +10,8 @@ import com.gridu.microservice.shoppingcart.rest.model.TaxesCalculationOrder;
 import com.gridu.microservice.shoppingcart.rest.model.TaxesCalculationRequest;
 import com.gridu.microservice.shoppingcart.rest.model.TaxesCalculationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
-import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -24,10 +20,10 @@ public class ShoppingCartService {
 	private static AtomicInteger commerceItemCount = new AtomicInteger(0);
 
 	@Autowired
-	private WebClient.Builder productCatalogWebClient;
+	private ProductCatalogService productCatalogService;
 
 	@Autowired
-	private WebClient.Builder taxesCalculationWebClient;
+	private TaxesCalculationService taxesCalculationService;
 
 	public String generateNextCommerceItemId() {
 		return "ci"+commerceItemCount.incrementAndGet();
@@ -35,15 +31,7 @@ public class ShoppingCartService {
 
 	public ShoppingCart addCommerceItem(ShoppingCart shoppingCart, CommerceItemRequest commerceItemRequest) {
 
-		ProductResponse product = productCatalogWebClient
-
-			.build()
-			.get()
-			.uri("/catalog/search/products?skuId={skuId}", commerceItemRequest.getSkuId())
-			.retrieve()
-			.bodyToMono(new ParameterizedTypeReference<ProductResponse>(){})
-			.block();
-
+		ProductResponse product = productCatalogService.findProductBySkuId(commerceItemRequest.getSkuId());
 
 		if (product != null) {
 			CommerceItem commerceItem = new CommerceItem();
@@ -113,16 +101,7 @@ public class ShoppingCartService {
 			taxesCalculationRequest.getItems().add(taxCalculationItem);
 		}
 
-		Mono<TaxesCalculationRequest> taxesCalculationRequestMono = Mono.just(taxesCalculationRequest);
-
-		TaxesCalculationResponse taxesCalculationResponse = taxesCalculationWebClient
-			.build()
-			.post()
-			.uri("/taxes/calculation/v2")
-			.body(taxesCalculationRequestMono, TaxesCalculationRequest.class)
-			.retrieve()
-			.bodyToMono(new ParameterizedTypeReference<TaxesCalculationResponse>(){})
-			.block();
+		TaxesCalculationResponse taxesCalculationResponse = taxesCalculationService.calculateTaxes(taxesCalculationRequest);
 
 		for(CommerceItem commerceItem : shoppingCart.getCommerceItems()) {
 			TaxesCalculationOrder.TaxCalculationItem taxCalculationItem = taxesCalculationResponse.getOrder().getItems().stream()

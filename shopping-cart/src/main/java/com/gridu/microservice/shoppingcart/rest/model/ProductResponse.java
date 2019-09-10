@@ -1,8 +1,12 @@
 package com.gridu.microservice.shoppingcart.rest.model;
 
+import org.springframework.data.redis.core.RedisHash;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class ProductResponse {
+@RedisHash("products")
+public class ProductResponse implements Serializable {
 
 	private String id;
 	private String name;

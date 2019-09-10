@@ -55,9 +55,9 @@ public class ShoppingCartRestResource {
 			return ResponseEntity.badRequest().body(errorResponses);
 		}
 		ShoppingCart shoppingCart = shoppingCartSessionContainer.getShoppingCart();
-//		synchronized (shoppingCart) {
+		synchronized (shoppingCart) {
 			shoppingCart = shoppingCartService.addCommerceItem(shoppingCart, commerceItemRequest);
-//		}
+		}
 		URI uri = null;
 		try {
 			uri = new URI("/carts/current/commerceItems");
@@ -71,14 +71,14 @@ public class ShoppingCartRestResource {
 	@DeleteMapping("/current/commerceItems/{commerceItemId}")
 	public ResponseEntity<Object> deleteCommerceItem(@PathVariable String commerceItemId) {
 		ShoppingCart shoppingCart = shoppingCartSessionContainer.getShoppingCart();
-//		synchronized (shoppingCart) {
+		synchronized (shoppingCart) {
 			CommerceItem commerceItem = shoppingCart.findCommerceItem(commerceItemId);
 			if (commerceItem == null) {
 				return ResponseEntity.notFound().build();
 			}
 			shoppingCart = shoppingCartService.deleteCommerceItem(shoppingCart, commerceItem);
 			return ResponseEntity.noContent().build();
-//		}
+		}
 	}
 
 
@@ -90,9 +90,9 @@ public class ShoppingCartRestResource {
 			return ResponseEntity.badRequest().body(errorResponses);
 		}
 		ShoppingCart shoppingCart = shoppingCartSessionContainer.getShoppingCart();
-//		synchronized (shoppingCart) {
+		synchronized (shoppingCart) {
 			shoppingCart = shoppingCartService.applyShippingAddress(shoppingCart, address);
-//		}
+		}
 		URI uri = null;
 		try {
 			uri = new URI("/carts/current/shippingAddress");

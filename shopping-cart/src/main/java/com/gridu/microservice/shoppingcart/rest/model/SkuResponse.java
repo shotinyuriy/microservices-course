@@ -1,6 +1,8 @@
 package com.gridu.microservice.shoppingcart.rest.model;
 
-public class SkuResponse {
+import java.io.Serializable;
+
+public class SkuResponse implements Serializable {
 
 	private String id;
 
