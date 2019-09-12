@@ -11,25 +11,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 @Table(name="state_rule")
 @Entity
 public class StateRule {
 
-	@Id
+	@Id @GeneratedValue
 	private Long id;
-
-	// annotation ensures that validators in State fields will be called on
-	// validating StateRule objects
-	// ie. provides cascading validation
+	
+	//provides cascading validation
 	@Valid
 	@NotNull
 	@OneToOne(fetch = FetchType.EAGER)
@@ -80,7 +82,7 @@ public class StateRule {
 		return tax;
 	}
 
-	public List<TaxRule> getTaxRules() {
+	public Collection<TaxRule> getTaxRules() {
 		return taxRules;
 	}
 

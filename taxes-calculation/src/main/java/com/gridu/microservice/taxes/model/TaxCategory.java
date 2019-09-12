@@ -20,7 +20,7 @@ import java.util.List;
 @Entity
 public class TaxCategory {
 
-	@Id
+	@Id @GeneratedValue
 	@NotNull(message = ValidationErrorType.MISSING, groups = {TaxCategoryShouldExist.class})
 	private Long id;
 

@@ -14,6 +14,7 @@ import com.gridu.microservice.taxes.model.State;
 
 @Profile("inmemory")
 @Repository
+@Profile("in-memory")
 public class InMemoryStateDao implements StateDao {
 
 	private AtomicLong id = new AtomicLong(0);

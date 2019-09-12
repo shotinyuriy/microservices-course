@@ -7,7 +7,7 @@
   "stateRules": [
     {
       "id": "0123456789",
-      "stateCode": "PA",
+      "state": "PA",
       "stateRules": [
         {
           "categoryName": "books",
@@ -25,7 +25,7 @@
     },
     {
       "id": "0123456788",
-      "stateCode": "CA",
+      "state": "CA",
       "taxRules": [
         {
           "categoryName": "books",
@@ -45,12 +45,12 @@
 }
 ```
 
-# GET /taxes/stateRules/v1/{stateCode}
+# GET /taxes/stateRules/v1/{state}
 + Response 200 Ok (application/json)
 ```json
 {
   "id": "0123456789",
-  "stateCode": "PA",
+  "state": "PA",
   "taxRules": [
     {
       "categoryName": "books",

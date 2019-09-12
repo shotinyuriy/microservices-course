@@ -2,6 +2,7 @@ package com.gridu.microservice.taxes.model;
 
 import javax.validation.constraints.NotNull;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -14,7 +15,7 @@ import com.gridu.microservice.taxes.validation.group.StateCodeValidationGroup;
 public class State {
 
 	@NotNull(message = "id."+ValidationErrorType.MISSING)
-	@Id
+	@Id @GeneratedValue
 	private Long id;
 	
 	@ValidStateCode(message = ValidationErrorType.NOT_FOUND, groups = {StateCodeValidationGroup.class})
