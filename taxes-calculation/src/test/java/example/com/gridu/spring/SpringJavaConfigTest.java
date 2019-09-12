@@ -19,7 +19,7 @@ import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 @Ignore
-@ActiveProfiles("inmemory")
+@ActiveProfiles("in-memory")
 @ContextConfiguration(classes = {TaxesRestResourceConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class SpringJavaConfigTest {

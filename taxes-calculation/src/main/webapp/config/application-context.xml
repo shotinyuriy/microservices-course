@@ -40,12 +40,11 @@
 		<!--<property name="prettyPrint" value="true"/>-->
 	<!--</bean>-->
 
-
-      <beans profile="in-memory">
-      	<bean id="inMemoryDataConfig" class="com.gridu.microservice.taxes.service.DataInitializerService"></bean>
-      </beans>
-		  <beans profile="entity-manager">
-				<import resource="em-persinstence-context.xml"/>
-      	<bean id="entityManagerDataConfig" class="com.gridu.microservice.taxes.service.EntityManagerDataService"></bean>
-      </beans>
+	<beans profile="in-memory">
+		<bean id="inMemoryDataConfig" class="com.gridu.microservice.taxes.service.DataInitializerService"></bean>
+	</beans>
+	<beans profile="entity-manager">
+		<import resource="em-persinstence-context.xml"/>
+		<bean id="entityManagerDataConfig" class="com.gridu.microservice.taxes.service.EntityManagerDataService"></bean>
+	</beans>
 </beans>

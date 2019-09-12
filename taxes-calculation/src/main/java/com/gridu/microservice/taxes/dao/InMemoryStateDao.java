@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import com.gridu.microservice.taxes.model.State;
 
-@Profile("inmemory")
 @Repository
 @Profile("in-memory")
 public class InMemoryStateDao implements StateDao {
