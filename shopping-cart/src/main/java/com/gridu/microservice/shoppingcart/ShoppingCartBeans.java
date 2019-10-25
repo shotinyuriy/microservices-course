@@ -8,13 +8,20 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class ShoppingCartBeans {
+
+	@Value("${shoppingCart.redis.connectionFactory}")
+	String redisConnectionFactory;
 
 	@Value("${integration.baseUrl.product-catalog}")
 	String productCatalogName;
@@ -47,12 +54,40 @@ public class ShoppingCartBeans {
 
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory() {
-		LettuceConnectionFactory connectionFactory = new LettuceConnectionFactory();
-		return connectionFactory;
+		if ("jedis".equalsIgnoreCase(redisConnectionFactory)) {
+			JedisConnectionFactory connectionFactory = new JedisConnectionFactory();
+			return connectionFactory;
+		} else {
+			LettuceConnectionFactory connectionFactory = new LettuceConnectionFactory();
+			return connectionFactory;
+		}
 	}
 
 	@Bean
-	public RedisTemplate<String, ProductResponse> redisTemplate() {
+	public StringRedisSerializer stringRedisSerializer() {
+		StringRedisSerializer redisSerializer = new StringRedisSerializer();
+		return redisSerializer;
+	}
+
+	@Bean
+	public RedisSerializer<ProductResponse> hashValueRedisSerializer() {
+		Jackson2JsonRedisSerializer redisSerializer = new Jackson2JsonRedisSerializer(ProductResponse.class);
+		return redisSerializer;
+	}
+
+	@Bean
+	public RedisTemplate<String, ProductResponse> productRedisTemplate() {
+		RedisTemplate<String, ProductResponse> redisTemplate = new RedisTemplate<>();
+		redisTemplate.setConnectionFactory(redisConnectionFactory());
+
+		redisTemplate.setKeySerializer(stringRedisSerializer());
+		redisTemplate.setHashKeySerializer(stringRedisSerializer());
+		redisTemplate.setHashValueSerializer(hashValueRedisSerializer());
+		return redisTemplate;
+	}
+
+	@Bean
+	public RedisTemplate<String, ProductResponse> redisTemplate1() {
 		RedisTemplate<String, ProductResponse> redisTemplate = new RedisTemplate<>();
 		redisTemplate.setConnectionFactory(redisConnectionFactory());
 		return redisTemplate;

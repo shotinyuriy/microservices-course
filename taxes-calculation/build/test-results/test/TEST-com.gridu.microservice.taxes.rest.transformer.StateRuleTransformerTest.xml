@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.gridu.microservice.taxes.rest.transformer.StateRuleTransformerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2019-09-20T07:38:58" hostname="gds000921-nb.carina.griddynamics.net" time="0.001">
+  <properties/>
+  <testcase name="testToStateRuleViewModelStateRule" classname="com.gridu.microservice.taxes.rest.transformer.StateRuleTransformerTest" time="0.0"/>
+  <testcase name="testToStateRuleViewModelListOfStateRule" classname="com.gridu.microservice.taxes.rest.transformer.StateRuleTransformerTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

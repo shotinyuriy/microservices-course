@@ -3,4 +3,7 @@
 **/*.iml
 **/.settings
 **/target
+**/.classpath
+**/.project
+**/.gradle
 .idea

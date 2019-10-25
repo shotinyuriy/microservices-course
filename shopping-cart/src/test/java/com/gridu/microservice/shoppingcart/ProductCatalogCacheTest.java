@@ -44,5 +44,10 @@ public class ProductCatalogCacheTest {
 
 		ProductResponse productResponseFound2 = productCatalogCache.findProductBySkuId(SKU_ID_2);
 		Assert.assertNull(productResponseFound2);
+
+//		productCatalogCache.evictProductBySkuId(SKU_ID_1);
+//
+//		productResponseFound = productCatalogCache.findProductBySkuId(SKU_ID_1);
+//		Assert.assertNull(productResponseFound);
 	}
 }

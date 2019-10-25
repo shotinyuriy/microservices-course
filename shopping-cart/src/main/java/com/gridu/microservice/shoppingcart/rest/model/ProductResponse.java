@@ -1,6 +1,8 @@
 package com.gridu.microservice.shoppingcart.rest.model;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 import java.io.Serializable;
 import java.util.List;
@@ -8,10 +10,11 @@ import java.util.List;
 @RedisHash("products")
 public class ProductResponse implements Serializable {
 
+	@Id
 	private String id;
-	private String name;
-	private String category;
-	private double price;
+	private @Indexed String name;
+	private @Indexed String category;
+	private @Indexed double price;
 	private List<SkuResponse> childSkus;
 
 	public String getId() {

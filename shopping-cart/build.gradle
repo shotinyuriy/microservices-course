@@ -18,14 +18,24 @@ ext {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation('org.springframework.boot:spring-boot-starter-data-redis') {
+		exclude group: 'io.lettuce', module: 'lettuce-core'
+	}
 	implementation 'org.apache.commons:commons-pool2'
+	implementation 'redis.clients:jedis'
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'org.projectreactor:reactor-spring:1.0.1.RELEASE'
 
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+//	implementation 'io.pivotal.spring.cloud:spring-cloud-services-starter-circuit-breaker'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix-dashboard'
+
 
 	implementation 'com.gridu.microservices:rest-validation:1.0'
 

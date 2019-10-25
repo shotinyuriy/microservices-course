@@ -29,7 +29,7 @@ public class TaxRule {
 
 	@Cascade(CascadeType.ALL)
 	@ManyToOne
-	@JoinColumn(name="state_rule_id")
+	@JoinColumn(name = "state_rule_id")
 	private StateRule stateRule;
 
 	private Double rule;

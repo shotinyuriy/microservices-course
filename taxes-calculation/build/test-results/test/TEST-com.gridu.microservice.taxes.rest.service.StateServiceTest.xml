@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.gridu.microservice.taxes.rest.service.StateServiceTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2019-09-20T07:38:58" hostname="gds000921-nb.carina.griddynamics.net" time="0.004">
+  <properties/>
+  <testcase name="testFindByCode_ExceptionThrow" classname="com.gridu.microservice.taxes.rest.service.StateServiceTest" time="0.001"/>
+  <testcase name="testFindByCode_FindExisting" classname="com.gridu.microservice.taxes.rest.service.StateServiceTest" time="0.001"/>
+  <testcase name="testFindByCode_FindByNull" classname="com.gridu.microservice.taxes.rest.service.StateServiceTest" time="0.001"/>
+  <testcase name="testFindByCode_FindNotExisting" classname="com.gridu.microservice.taxes.rest.service.StateServiceTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

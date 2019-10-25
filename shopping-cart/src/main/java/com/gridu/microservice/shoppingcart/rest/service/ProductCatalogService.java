@@ -1,6 +1,8 @@
 package com.gridu.microservice.shoppingcart.rest.service;
 
 import com.gridu.microservice.shoppingcart.rest.model.ProductResponse;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.ribbon.proxy.annotation.Hystrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +22,10 @@ public class ProductCatalogService {
 	@Autowired
 	private ProductCatalogCache productCatalogCache;
 
-	@Value("${shoppingCart.enableProductCatalogCache}")
+	@Value("${shoppingCart.productCatalog.cache.enabled}")
 	private boolean enableProductCatalogCache;
 
+	@HystrixCommand
 	public ProductResponse findProductBySkuId(String skuId) {
 
 		ProductResponse product = null;
@@ -50,5 +53,9 @@ public class ProductCatalogService {
 		}
 
 		return product;
+	}
+
+	public ProductResponse emptyProductResponse(String skuId) {
+		return null;
 	}
 }

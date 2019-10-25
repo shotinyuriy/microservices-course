@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 public class TaxesCalculationItemsModel {
 
 	public static class ShippingAddress {
+
 		private String state;
 
 		public ShippingAddress() {
@@ -30,7 +31,7 @@ public class TaxesCalculationItemsModel {
 		}
 
 		public String toString() {
-			return "{ state="+state+"}";
+			return "{ state=" + state + "}";
 		}
 	}
 
@@ -41,11 +42,12 @@ public class TaxesCalculationItemsModel {
 		private String id;
 		private Double price;
 		private TaxesModel taxes;
-		
+
 		public TaxCalculationItemModel() {
 		}
+
 		public TaxCalculationItemModel(String id, String category, Double price,
-				TaxesModel taxes) {
+		                               TaxesModel taxes) {
 			this.id = id;
 			this.category = category;
 			this.price = price;
@@ -71,7 +73,7 @@ public class TaxesCalculationItemsModel {
 		public String getTax() {
 			return taxes.getStateTax();
 		}
-		
+
 		public void setCategory(String category) {
 			this.category = category;
 		}
@@ -89,9 +91,9 @@ public class TaxesCalculationItemsModel {
 		}
 
 		public String toString() {
-			return "{ id="+id+
-				", category="+category+
-				", price="+price+
+			return "{ id=" + id +
+				", category=" + category +
+				", price=" + price +
 				"}";
 		}
 	}

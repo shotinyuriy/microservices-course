@@ -103,15 +103,19 @@ public class ShoppingCartService {
 
 		TaxesCalculationResponse taxesCalculationResponse = taxesCalculationService.calculateTaxes(taxesCalculationRequest);
 
-		for(CommerceItem commerceItem : shoppingCart.getCommerceItems()) {
-			TaxesCalculationOrder.TaxCalculationItem taxCalculationItem = taxesCalculationResponse.getOrder().getItems().stream()
-				.filter(item -> commerceItem.getId().equals(item.getId()))
-				.findFirst()
-				.orElseGet(() -> null);
+		if (taxesCalculationResponse != null && taxesCalculationResponse.getOrder() != null) {
+			for (CommerceItem commerceItem : shoppingCart.getCommerceItems()) {
+				TaxesCalculationOrder.TaxCalculationItem taxCalculationItem = taxesCalculationResponse.getOrder().getItems().stream()
+					.filter(item -> commerceItem.getId().equals(item.getId()))
+					.findFirst()
+					.orElseGet(() -> null);
 
-			commerceItem.getTaxes().setStateTax(taxCalculationItem.getTaxes().getStateTax());
+				if (taxCalculationItem != null) {
+					commerceItem.getTaxes().setStateTax(taxCalculationItem.getTaxes().getStateTax());
+				}
 
-			taxesTotal += commerceItem.getTaxes().getStateTax();
+				taxesTotal += commerceItem.getTaxes().getStateTax();
+			}
 		}
 
 		taxesTotal = Price.roundPrice(taxesTotal);

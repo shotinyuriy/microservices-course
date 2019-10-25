@@ -15,7 +15,7 @@ import com.gridu.microservice.taxes.validation.group.StateCodeValidationGroup;
 public class State {
 
 	@NotNull(message = "id."+ValidationErrorType.MISSING)
-	@Id @GeneratedValue
+	@Id
 	private Long id;
 	
 	@ValidStateCode(message = ValidationErrorType.NOT_FOUND, groups = {StateCodeValidationGroup.class})
