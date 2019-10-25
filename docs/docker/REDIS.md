@@ -18,7 +18,7 @@ Then to connect to redis client (redis-cli) you can use a command listed below. 
 ```bash
 docker run -it --network some-network --rm redis:5.0 redis-cli -h hostname
 ```
---network some-network , replace some-network with the network name
+--network some-network , REPLACE **some-network** with the network name
 to see the list of networks available use command
 ```bash
 docker network ls
