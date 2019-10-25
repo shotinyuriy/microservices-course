@@ -19,9 +19,11 @@ import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
 
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -30,6 +32,7 @@ import com.gridu.microservice.taxes.service.DataInitializerService;
 import com.gridu.microservice.taxes.service.StateRuleService;
 import com.gridu.microservice.taxes.service.StateService;
 import com.gridu.microservice.taxes.service.TaxCategoryService;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.validation.Path;
 import javax.validation.groups.Default;
@@ -41,9 +44,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@ActiveProfiles("inmemory")
-@ContextConfiguration("file:src/main/webapp/config/application-context.xml")
-@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
+@ActiveProfiles("entity-manager")
+@RunWith(SpringRunner.class)
 public class TaxesCalculationTest {
 
 	@Autowired

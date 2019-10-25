@@ -13,8 +13,8 @@ import org.springframework.stereotype.Repository;
 
 import com.gridu.microservice.taxes.model.TaxCategory;
 
-@Profile("inmemory")
 @Repository
+@Profile("in-memory")
 public class InMemoryTaxCategoryDao implements TaxCategoryDao {
 
 	private final Map<Long, TaxCategory> TAX_CATEGORIES = new ConcurrentHashMap<>();

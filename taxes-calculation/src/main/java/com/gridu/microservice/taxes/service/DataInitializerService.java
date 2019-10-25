@@ -53,22 +53,15 @@ public class DataInitializerService implements InitializingBean {
 		stateRuleAz.addTaxRule(new TaxRule(getTaxCategoryService().findById(1l), 0.12));
 		stateRuleAz.addTaxRule(new TaxRule(getTaxCategoryService().findById(2l), 0.22));
 		saveIfNotExists(stateRuleAz);
-		
+
+		TaxRule taxRule2 = new TaxRule(getTaxCategoryService().findById(2l), 0.22);
+		stateRuleAz.addTaxRule(taxRule2);
+		getStateRuleService().saveStateRule(stateRuleAz);
 		
 		StateRule stateRulePa = new StateRule(getStateService().findByCode("PA"));
 		stateRulePa.addTaxRule(new TaxRule(getTaxCategoryService().findById(2l), 0.08));
 		stateRulePa.addTaxRule(new TaxRule(getTaxCategoryService().findById(3l), 0.15));
 		saveIfNotExists(stateRulePa);
-
-
-		
-		//BEGIN OF @ExamplePurpose
-//		StateRule emptyStateRule = new StateRule();
-//		emptyStateRule.setId(5l);
-//		emptyStateRule.setState(new State());
-//		emptyStateRule.setTaxRules(new ArrayList<TaxRule>());
-//		getStateRuleService().saveStateRule(emptyStateRule);
-		//END OF @ExamplePurpose
 	}
 
 	protected void saveIfNotExists(TaxCategory taxCategory) {

@@ -9,21 +9,7 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractValidationService {
 
-	protected ValidatorFactory factory;
-
-	public AbstractValidationService() {
-		initialize();
-	}
-
-	protected void initialize() {
-		if (factory == null) {
-			synchronized (this) {
-				if (factory == null) {
-					factory = Validation.buildDefaultValidatorFactory();
-				}
-			}
-		}
-	}
+	public AbstractValidationService() {}
 
 	/**
 	 * NOTE: probably this method could throw an ConstraintViolationException or our

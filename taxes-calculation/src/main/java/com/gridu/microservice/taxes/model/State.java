@@ -2,6 +2,7 @@ package com.gridu.microservice.taxes.model;
 
 import javax.validation.constraints.NotNull;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 

@@ -2,6 +2,7 @@ package com.gridu.microservice.taxes.validation;
 
 import com.gridu.microservice.rest.validation.AbstractValidationService;
 import com.gridu.microservice.rest.validation.ValidationResult;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +16,27 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class ValidationService extends AbstractValidationService {
+public class ValidationService extends AbstractValidationService implements InitializingBean {
+
+	private Validator validator;
 
 	@Autowired
-	private Validator validator;
+	private ValidatorFactory validatorFactory;
+
+	public ValidatorFactory getValidatorFactory() {
+		return validatorFactory;
+	}
+
+	protected Validator getValidator() {
+		if (validator == null) {
+			validator = validatorFactory.getValidator();
+		}
+		return validator;
+	}
+
+	public void setValidatorFactory(ValidatorFactory validatorFactory) {
+		this.validatorFactory = validatorFactory;
+	}
 
 	public ValidationService() {
 		super();
@@ -26,6 +44,11 @@ public class ValidationService extends AbstractValidationService {
 
 	@Override
 	public <T> Set<ValidationResult> validate(T obj, Class<?>... validationGroups) {
-		return validate(validator, obj, validationGroups);
+		return validate(getValidator(), obj, validationGroups);
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		validator = validatorFactory.getValidator();
 	}
 }

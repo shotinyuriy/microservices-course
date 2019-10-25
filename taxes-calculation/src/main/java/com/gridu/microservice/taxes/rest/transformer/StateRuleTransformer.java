@@ -1,6 +1,7 @@
 package com.gridu.microservice.taxes.rest.transformer;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class StateRuleTransformer {
 		return viewModel;
 	}
 
-	public Map<String, Double> getTaxRules(List<TaxRule> taxRules) {
+	public Map<String, Double> getTaxRules(Collection<TaxRule> taxRules) {
 		Map<String, Double> viewModelRules = new HashMap<String, Double>();
 		for (TaxRule taxRule : taxRules) {
 			viewModelRules.put(taxRule.getTaxCategory().getName(), taxRule.getRule());

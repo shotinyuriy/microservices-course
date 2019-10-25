@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 public class TaxesCalculationItemsModel {
 
 	public static class ShippingAddress {
+
 		private String state;
 
 		public ShippingAddress() {
@@ -28,6 +29,10 @@ public class TaxesCalculationItemsModel {
 		public void setState(String state) {
 			this.state = state;
 		}
+
+		public String toString() {
+			return "{ state=" + state + "}";
+		}
 	}
 
 	public static class TaxCalculationItemModel {
@@ -37,11 +42,12 @@ public class TaxesCalculationItemsModel {
 		private String id;
 		private Double price;
 		private TaxesModel taxes;
-		
+
 		public TaxCalculationItemModel() {
 		}
+
 		public TaxCalculationItemModel(String id, String category, Double price,
-				TaxesModel taxes) {
+		                               TaxesModel taxes) {
 			this.id = id;
 			this.category = category;
 			this.price = price;
@@ -67,7 +73,7 @@ public class TaxesCalculationItemsModel {
 		public String getTax() {
 			return taxes.getStateTax();
 		}
-		
+
 		public void setCategory(String category) {
 			this.category = category;
 		}
@@ -82,6 +88,13 @@ public class TaxesCalculationItemsModel {
 
 		public void setTaxes(TaxesModel taxes) {
 			this.taxes = taxes;
+		}
+
+		public String toString() {
+			return "{ id=" + id +
+				", category=" + category +
+				", price=" + price +
+				"}";
 		}
 	}
 
@@ -124,5 +137,14 @@ public class TaxesCalculationItemsModel {
 
 	public void setItems(List<TaxCalculationItemModel> items) {
 		this.items = items;
+	}
+
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("address=").append(address);
+		sb.append(", \nitems=").append(items);
+		sb.append("}");
+		return sb.toString();
 	}
 }

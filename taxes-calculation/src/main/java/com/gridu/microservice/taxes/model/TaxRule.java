@@ -2,18 +2,14 @@ package com.gridu.microservice.taxes.model;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -33,7 +29,7 @@ public class TaxRule {
 
 	@Cascade(CascadeType.ALL)
 	@ManyToOne
-	@JoinColumn(name="state_rule_id")
+	@JoinColumn(name = "state_rule_id")
 	private StateRule stateRule;
 
 	private Double rule;
@@ -46,20 +42,26 @@ public class TaxRule {
 		this.rule = rule;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		TaxRule that = (TaxRule) o;
+
+		if (taxCategory != null ? !taxCategory.equals(that.taxCategory) : that.taxCategory != null)
+			return false;
+		return rule != null ? rule.equals(that.rule) : that.rule == null;
+	}
+
 	public Long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public Double getRule() {
 		return rule;
-	}
-
-	public void setRule(Double rule) {
-		this.rule = rule;
 	}
 
 	public TaxCategory getTaxCategory() {
@@ -78,23 +80,19 @@ public class TaxRule {
 		this.stateRule = stateRule;
 	}
 
-
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-
-		TaxRule that = (TaxRule) o;
-
-		if (taxCategory != null ? !taxCategory.equals(that.taxCategory) : that.taxCategory != null) return false;
-		return rule != null ? rule.equals(that.rule) : that.rule == null;
-	}
-
 	@Override
 	public int hashCode() {
 		int result = rule != null ? rule.hashCode() : 0;
 		result = 31 * result + (rule != null ? rule.hashCode() : 0);
 		return result;
 	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setRule(Double rule) {
+		this.rule = rule;
+	}
+
 }

@@ -71,7 +71,7 @@ FORMAT: 1A
   ]
 }
 
-# GET /taxes/stateRules/v1/{stateCode}
+# GET /taxes/stateRules/v1/{state}
 + Response 200 Ok (application/json)
 {
   [
@@ -155,7 +155,7 @@ FORMAT: 1A
 }
 
 # Formula to calculate taxes per item
-# items[i].taxes.stateTax = items[i].price * stateRules[stateCode].taxRules[taxCategory].rule
+# items[i].taxes.stateTax = items[i].price * stateRules[state].taxRules[taxCategory].rule
 + Response 200 (application/json)
 {
 
@@ -309,15 +309,22 @@ FORMAT: 1A
 
 # TODO: design API for the shopping cart service
 
-# GET /carts
+# GET /carts/current
 + Response 200
 {
-  "id": "0001",
-  "total": 1
+  "id": "003",
+  "commerceItems": [
+  ],
+  "priceInfo": {
+    "taxes": 0.0,
+    "total": 0.0
+  }
 }
 
 # POST /carts
 + Request
+{
+}
 
 + Response 200
 {

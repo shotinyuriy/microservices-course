@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.gridu.microservice.taxes.rest.controller.TaxesCalculationRestResourceV1Test" tests="7" skipped="0" failures="0" errors="0" timestamp="2019-09-20T07:38:58" hostname="gds000921-nb.carina.griddynamics.net" time="0.055">
+  <properties/>
+  <testcase name="calculateTaxesPerItem_invalidTaxCategory" classname="com.gridu.microservice.taxes.rest.controller.TaxesCalculationRestResourceV1Test" time="0.024"/>
+  <testcase name="calculateTaxesPerItem_missingItemIds" classname="com.gridu.microservice.taxes.rest.controller.TaxesCalculationRestResourceV1Test" time="0.001"/>
+  <testcase name="addNewRule_sucessfulAdding" classname="com.gridu.microservice.taxes.rest.controller.TaxesCalculationRestResourceV1Test" time="0.013"/>
+  <testcase name="addNewRule_unsucessfulAdding" classname="com.gridu.microservice.taxes.rest.controller.TaxesCalculationRestResourceV1Test" time="0.002"/>
+  <testcase name="getStateRule_byValidStateCode" classname="com.gridu.microservice.taxes.rest.controller.TaxesCalculationRestResourceV1Test" time="0.002"/>
+  <testcase name="getStateRule_byInvalidStateCode" classname="com.gridu.microservice.taxes.rest.controller.TaxesCalculationRestResourceV1Test" time="0.001"/>
+  <testcase name="calculateTaxesPerItem_validRequest" classname="com.gridu.microservice.taxes.rest.controller.TaxesCalculationRestResourceV1Test" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

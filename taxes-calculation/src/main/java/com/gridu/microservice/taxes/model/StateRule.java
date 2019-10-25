@@ -3,22 +3,18 @@ package com.gridu.microservice.taxes.model;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-import java.util.ArrayList;
-import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Table(name="state_rule")
 @Entity
@@ -26,10 +22,8 @@ public class StateRule {
 
 	@Id
 	private Long id;
-
-	// annotation ensures that validators in State fields will be called on
-	// validating StateRule objects
-	// ie. provides cascading validation
+	
+	//provides cascading validation
 	@Valid
 	@NotNull
 	@OneToOne(fetch = FetchType.EAGER)
@@ -80,7 +74,7 @@ public class StateRule {
 		return tax;
 	}
 
-	public List<TaxRule> getTaxRules() {
+	public Collection<TaxRule> getTaxRules() {
 		return taxRules;
 	}
 

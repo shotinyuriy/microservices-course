@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2019-09-20T07:38:57" hostname="gds000921-nb.carina.griddynamics.net" time="0.659">
+  <properties/>
+  <testcase name="testStateDaoCRUD" classname="com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest" time="0.227"/>
+  <testcase name="testTaxCategoryCRUD" classname="com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest" time="0.121"/>
+  <testcase name="testSateRuleCRUD" classname="com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest" time="0.308"/>
+  <system-out><![CDATA[03:38:49.339 [Test worker] DEBUG org.springframework.test.context.junit4.SpringJUnit4ClassRunner - SpringJUnit4ClassRunner constructor called with [class com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest]
+03:38:49.340 [Test worker] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating CacheAwareContextLoaderDelegate from class [org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate]
+03:38:49.340 [Test worker] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating BootstrapContext using constructor [public org.springframework.test.context.support.DefaultBootstrapContext(java.lang.Class,org.springframework.test.context.CacheAwareContextLoaderDelegate)]
+03:38:49.342 [Test worker] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating TestContextBootstrapper for test class [com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest] from class [org.springframework.boot.test.context.SpringBootTestContextBootstrapper]
+03:38:49.347 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Neither @ContextConfiguration nor @ContextHierarchy found for test class [com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest], using SpringBootContextLoader
+03:38:49.349 [Test worker] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest]: class path resource [com/gridu/microservice/taxes/integration/EntityManagerDaosIntegrationTest-context.xml] does not exist
+03:38:49.350 [Test worker] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest]: class path resource [com/gridu/microservice/taxes/integration/EntityManagerDaosIntegrationTestContext.groovy] does not exist
+03:38:49.350 [Test worker] INFO org.springframework.test.context.support.AbstractContextLoader - Could not detect default resource locations for test class [com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+03:38:49.351 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest]: EntityManagerDaosIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+03:38:49.428 [Test worker] DEBUG org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider - Identified candidate component class: file [/Users/yshotin/git/grid-dynamics/microservices-course/taxes-calculation/build/classes/java/main/com/gridu/microservice/taxes/TaxesCalculationApplication.class]
+03:38:49.430 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.gridu.microservice.taxes.TaxesCalculationApplication for test class com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest
+03:38:49.548 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper - @TestExecutionListeners is not present for class [com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest]: using defaults.
+03:38:49.549 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener]
+03:38:49.551 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@29bbaf13, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@75b6bf1, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@71556b9b, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@48f31c8c, org.springframework.test.context.support.DirtiesContextTestExecutionListener@3c44e1b6, org.springframework.test.context.transaction.TransactionalTestExecutionListener@601c012c, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@3acfb707, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@6a08cbae, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@715ade08, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@71cfa46e, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@367f42df, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@1a06aa05]
+03:38:49.551 [Test worker] DEBUG org.springframework.test.annotation.ProfileValueUtils - Retrieved @ProfileValueSourceConfiguration [null] for test class [com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest]
+03:38:49.551 [Test worker] DEBUG org.springframework.test.annotation.ProfileValueUtils - Retrieved ProfileValueSource type [class org.springframework.test.annotation.SystemProfileValueSource] for class [com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest]
+03:38:49.552 [Test worker] DEBUG org.springframework.test.annotation.ProfileValueUtils - Retrieved @ProfileValueSourceConfiguration [null] for test class [com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest]
+03:38:49.552 [Test worker] DEBUG org.springframework.test.annotation.ProfileValueUtils - Retrieved ProfileValueSource type [class org.springframework.test.annotation.SystemProfileValueSource] for class [com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest]
+03:38:49.554 [Test worker] DEBUG org.springframework.test.context.support.AbstractDirtiesContextTestExecutionListener - Before test class: context [DefaultTestContext@5adcf2a8 testClass = EntityManagerDaosIntegrationTest, testInstance = [null], testMethod = [null], testException = [null], mergedContextConfiguration = [WebMergedContextConfiguration@7daee5cb testClass = EntityManagerDaosIntegrationTest, locations = '{}', classes = '{class com.gridu.microservice.taxes.TaxesCalculationApplication}', contextInitializerClasses = '[]', activeProfiles = '{entity-manager}', propertySourceLocations = '{}', propertySourceProperties = '{org.springframework.boot.test.context.SpringBootTestContextBootstrapper=true}', contextCustomizers = set[org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizerFactory$Customizer@8c99b17, org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@16f91fe4, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@8f56ba3, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@0, org.springframework.boot.test.web.client.TestRestTemplateContextCustomizer@490c48d8], resourceBasePath = 'src/main/webapp', contextLoader = 'org.springframework.boot.test.context.SpringBootContextLoader', parent = [null]], attributes = map['org.springframework.test.context.web.ServletTestExecutionListener.activateListener' -> true]], class annotated with @DirtiesContext [false] with mode [null].
+03:38:49.555 [Test worker] DEBUG org.springframework.test.annotation.ProfileValueUtils - Retrieved @ProfileValueSourceConfiguration [null] for test class [com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest]
+03:38:49.555 [Test worker] DEBUG org.springframework.test.annotation.ProfileValueUtils - Retrieved ProfileValueSource type [class org.springframework.test.annotation.SystemProfileValueSource] for class [com.gridu.microservice.taxes.integration.EntityManagerDaosIntegrationTest]
+03:38:49.581 [Test worker] DEBUG org.springframework.test.context.support.TestPropertySourceUtils - Adding inlined properties to environment: {spring.jmx.enabled=false, org.springframework.boot.test.context.SpringBootTestContextBootstrapper=true, server.port=-1}
+2019-09-20 03:38:50.363  INFO 50575 --- [    Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$e4924b0f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.1.7.RELEASE)
+
+2019-09-20 03:38:50.596  INFO 50575 --- [    Test worker] g.m.t.i.EntityManagerDaosIntegrationTest : The following profiles are active: entity-manager
+2019-09-20 03:38:51.504  INFO 50575 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-09-20 03:38:51.538  INFO 50575 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 23ms. Found 0 repository interfaces.
+2019-09-20 03:38:51.926  INFO 50575 --- [    Test worker] o.s.cloud.context.scope.GenericScope     : BeanFactory id=7a88f9c0-dbfe-34a4-a2cb-cc452f0652e3
+2019-09-20 03:38:52.126  INFO 50575 --- [    Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$c8784812] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-09-20 03:38:52.170  INFO 50575 --- [    Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$e4924b0f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-09-20 03:38:52.296  INFO 50575 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2019-09-20 03:38:52.369  INFO 50575 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate Core {5.2.17.Final}
+2019-09-20 03:38:52.371  INFO 50575 --- [    Test worker] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2019-09-20 03:38:52.409  INFO 50575 --- [    Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2019-09-20 03:38:53.059  INFO 50575 --- [    Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+2019-09-20 03:38:53.851  INFO 50575 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2019-09-20 03:38:54.228  INFO 50575 --- [    Test worker] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+Hibernate: select taxcategor0_.id as id1_2_, taxcategor0_.name as name2_2_ from tax_category taxcategor0_ where taxcategor0_.name=?
+Hibernate: select taxcategor0_.id as id1_2_, taxcategor0_.name as name2_2_ from tax_category taxcategor0_ where taxcategor0_.name=?
+Hibernate: select taxcategor0_.id as id1_2_, taxcategor0_.name as name2_2_ from tax_category taxcategor0_ where taxcategor0_.name=?
+Hibernate: select state0_.id as id1_0_, state0_.code as code2_0_, state0_.name as name3_0_ from state state0_ where state0_.code=?
+Hibernate: select state0_.id as id1_0_, state0_.code as code2_0_, state0_.name as name3_0_ from state state0_ where state0_.code=?
+Hibernate: select state0_.id as id1_0_, state0_.code as code2_0_, state0_.name as name3_0_ from state state0_ where state0_.code=?
+Hibernate: select state0_.id as id1_0_, state0_.code as code2_0_, state0_.name as name3_0_ from state state0_ where state0_.code=?
+Hibernate: select state0_.id as id1_0_, state0_.code as code2_0_, state0_.name as name3_0_ from state state0_ where state0_.code=?
+Hibernate: select state0_.id as id1_0_, state0_.code as code2_0_, state0_.name as name3_0_ from state state0_
+Hibernate: select staterule0_.id as id1_1_, staterule0_.state_id as state_id2_1_ from state_rule staterule0_ cross join state state1_ where staterule0_.state_id=state1_.id and state1_.code=?
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: select taxrules0_.state_rule_id as state_ru3_3_0_, taxrules0_.id as id1_3_0_, taxrules0_.id as id1_3_1_, taxrules0_.rule as rule2_3_1_, taxrules0_.state_rule_id as state_ru3_3_1_, taxrules0_.tax_category_id as tax_cate4_3_1_, taxcategor1_.id as id1_2_2_, taxcategor1_.name as name2_2_2_ from tax_rule taxrules0_ inner join tax_category taxcategor1_ on taxrules0_.tax_category_id=taxcategor1_.id where taxrules0_.state_rule_id=?
+Hibernate: select staterule0_.id as id1_1_0_, staterule0_.state_id as state_id2_1_0_, state1_.id as id1_0_1_, state1_.code as code2_0_1_, state1_.name as name3_0_1_, taxrules2_.state_rule_id as state_ru3_3_2_, taxrules2_.id as id1_3_2_, taxrules2_.id as id1_3_3_, taxrules2_.rule as rule2_3_3_, taxrules2_.state_rule_id as state_ru3_3_3_, taxrules2_.tax_category_id as tax_cate4_3_3_, taxcategor3_.id as id1_2_4_, taxcategor3_.name as name2_2_4_ from state_rule staterule0_ inner join state state1_ on staterule0_.state_id=state1_.id left outer join tax_rule taxrules2_ on staterule0_.id=taxrules2_.state_rule_id left outer join tax_category taxcategor3_ on taxrules2_.tax_category_id=taxcategor3_.id where staterule0_.id=?
+Hibernate: delete from tax_rule where id=?
+Hibernate: delete from tax_rule where id=?
+Hibernate: delete from state_rule where id=?
+Hibernate: select staterule0_.id as id1_1_, staterule0_.state_id as state_id2_1_ from state_rule staterule0_ cross join state state1_ where staterule0_.state_id=state1_.id and state1_.code=?
+Hibernate: select staterule0_.id as id1_1_, staterule0_.state_id as state_id2_1_ from state_rule staterule0_ cross join state state1_ where staterule0_.state_id=state1_.id and state1_.code=?
+Hibernate: select staterule0_.id as id1_1_, staterule0_.state_id as state_id2_1_ from state_rule staterule0_ cross join state state1_ where staterule0_.state_id=state1_.id and state1_.code=?
+Hibernate: select staterule0_.id as id1_1_, staterule0_.state_id as state_id2_1_ from state_rule staterule0_ cross join state state1_ where staterule0_.state_id=state1_.id and state1_.code=?
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: select taxrules0_.state_rule_id as state_ru3_3_0_, taxrules0_.id as id1_3_0_, taxrules0_.id as id1_3_1_, taxrules0_.rule as rule2_3_1_, taxrules0_.state_rule_id as state_ru3_3_1_, taxrules0_.tax_category_id as tax_cate4_3_1_, taxcategor1_.id as id1_2_2_, taxcategor1_.name as name2_2_2_ from tax_rule taxrules0_ inner join tax_category taxcategor1_ on taxrules0_.tax_category_id=taxcategor1_.id where taxrules0_.state_rule_id=?
+Hibernate: select staterule0_.id as id1_1_0_, staterule0_.state_id as state_id2_1_0_, state1_.id as id1_0_1_, state1_.code as code2_0_1_, state1_.name as name3_0_1_, taxrules2_.state_rule_id as state_ru3_3_2_, taxrules2_.id as id1_3_2_, taxrules2_.id as id1_3_3_, taxrules2_.rule as rule2_3_3_, taxrules2_.state_rule_id as state_ru3_3_3_, taxrules2_.tax_category_id as tax_cate4_3_3_, taxcategor3_.id as id1_2_4_, taxcategor3_.name as name2_2_4_ from state_rule staterule0_ inner join state state1_ on staterule0_.state_id=state1_.id left outer join tax_rule taxrules2_ on staterule0_.id=taxrules2_.state_rule_id left outer join tax_category taxcategor3_ on taxrules2_.tax_category_id=taxcategor3_.id where staterule0_.id=?
+Hibernate: delete from tax_rule where id=?
+Hibernate: delete from tax_rule where id=?
+Hibernate: delete from state_rule where id=?
+Hibernate: select state0_.id as id1_0_, state0_.code as code2_0_, state0_.name as name3_0_ from state state0_ where state0_.code=?
+Hibernate: select taxcategor0_.id as id1_2_0_, taxcategor0_.name as name2_2_0_ from tax_category taxcategor0_ where taxcategor0_.id=?
+Hibernate: select taxcategor0_.id as id1_2_0_, taxcategor0_.name as name2_2_0_ from tax_category taxcategor0_ where taxcategor0_.id=?
+Hibernate: select staterule0_.id as id1_1_, staterule0_.state_id as state_id2_1_ from state_rule staterule0_ cross join state state1_ where staterule0_.state_id=state1_.id and state1_.code=?
+Hibernate: select staterule0_.id as id1_1_, staterule0_.state_id as state_id2_1_ from state_rule staterule0_ where staterule0_.id=(select max(staterule1_.id) from state_rule staterule1_)
+Hibernate: select state_.id, state_.code as code2_0_, state_.name as name3_0_ from state state_ where state_.id=?
+Hibernate: select next_val as id_val from hibernate_sequence for update
+Hibernate: update hibernate_sequence set next_val= ? where next_val=?
+Hibernate: select taxcategor_.id, taxcategor_.name as name2_2_ from tax_category taxcategor_ where taxcategor_.id=?
+Hibernate: select next_val as id_val from hibernate_sequence for update
+Hibernate: update hibernate_sequence set next_val= ? where next_val=?
+Hibernate: select taxcategor_.id, taxcategor_.name as name2_2_ from tax_category taxcategor_ where taxcategor_.id=?
+Hibernate: insert into state_rule (state_id, id) values (?, ?)
+Hibernate: insert into tax_rule (rule, state_rule_id, tax_category_id, id) values (?, ?, ?, ?)
+Hibernate: insert into tax_rule (rule, state_rule_id, tax_category_id, id) values (?, ?, ?, ?)
+Hibernate: select taxcategor0_.id as id1_2_0_, taxcategor0_.name as name2_2_0_ from tax_category taxcategor0_ where taxcategor0_.id=?
+Hibernate: select staterule0_.id as id1_1_0_, staterule0_.state_id as state_id2_1_0_, state1_.id as id1_0_1_, state1_.code as code2_0_1_, state1_.name as name3_0_1_, taxrules2_.state_rule_id as state_ru3_3_2_, taxrules2_.id as id1_3_2_, taxrules2_.id as id1_3_3_, taxrules2_.rule as rule2_3_3_, taxrules2_.state_rule_id as state_ru3_3_3_, taxrules2_.tax_category_id as tax_cate4_3_3_, taxcategor3_.id as id1_2_4_, taxcategor3_.name as name2_2_4_ from state_rule staterule0_ inner join state state1_ on staterule0_.state_id=state1_.id left outer join tax_rule taxrules2_ on staterule0_.id=taxrules2_.state_rule_id left outer join tax_category taxcategor3_ on taxrules2_.tax_category_id=taxcategor3_.id where staterule0_.id=?
+Hibernate: select state0_.id as id1_0_, state0_.code as code2_0_, state0_.name as name3_0_ from state state0_ where state0_.code=?
+Hibernate: select taxcategor0_.id as id1_2_0_, taxcategor0_.name as name2_2_0_ from tax_category taxcategor0_ where taxcategor0_.id=?
+Hibernate: select taxcategor0_.id as id1_2_0_, taxcategor0_.name as name2_2_0_ from tax_category taxcategor0_ where taxcategor0_.id=?
+Hibernate: select staterule0_.id as id1_1_, staterule0_.state_id as state_id2_1_ from state_rule staterule0_ cross join state state1_ where staterule0_.state_id=state1_.id and state1_.code=?
+Hibernate: select staterule0_.id as id1_1_, staterule0_.state_id as state_id2_1_ from state_rule staterule0_ where staterule0_.id=(select max(staterule1_.id) from state_rule staterule1_)
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: select taxrules0_.state_rule_id as state_ru3_3_0_, taxrules0_.id as id1_3_0_, taxrules0_.id as id1_3_1_, taxrules0_.rule as rule2_3_1_, taxrules0_.state_rule_id as state_ru3_3_1_, taxrules0_.tax_category_id as tax_cate4_3_1_, taxcategor1_.id as id1_2_2_, taxcategor1_.name as name2_2_2_ from tax_rule taxrules0_ inner join tax_category taxcategor1_ on taxrules0_.tax_category_id=taxcategor1_.id where taxrules0_.state_rule_id=?
+Hibernate: select state_.id, state_.code as code2_0_, state_.name as name3_0_ from state state_ where state_.id=?
+Hibernate: select next_val as id_val from hibernate_sequence for update
+Hibernate: update hibernate_sequence set next_val= ? where next_val=?
+Hibernate: select taxcategor_.id, taxcategor_.name as name2_2_ from tax_category taxcategor_ where taxcategor_.id=?
+Hibernate: select next_val as id_val from hibernate_sequence for update
+Hibernate: update hibernate_sequence set next_val= ? where next_val=?
+Hibernate: select taxcategor_.id, taxcategor_.name as name2_2_ from tax_category taxcategor_ where taxcategor_.id=?
+Hibernate: insert into state_rule (state_id, id) values (?, ?)
+Hibernate: insert into tax_rule (rule, state_rule_id, tax_category_id, id) values (?, ?, ?, ?)
+Hibernate: insert into tax_rule (rule, state_rule_id, tax_category_id, id) values (?, ?, ?, ?)
+entity-manager profile
+entity-manager profile
+2019-09-20 03:38:55.721  WARN 50575 --- [    Test worker] c.n.c.sources.URLConfigurationSource     : No URLs will be polled as dynamic configuration sources.
+2019-09-20 03:38:55.722  INFO 50575 --- [    Test worker] c.n.c.sources.URLConfigurationSource     : To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2019-09-20 03:38:55.730  WARN 50575 --- [    Test worker] c.n.c.sources.URLConfigurationSource     : No URLs will be polled as dynamic configuration sources.
+2019-09-20 03:38:55.730  INFO 50575 --- [    Test worker] c.n.c.sources.URLConfigurationSource     : To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2019-09-20 03:38:56.172  INFO 50575 --- [    Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-09-20 03:38:56.181  WARN 50575 --- [    Test worker] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2019-09-20 03:38:56.997  INFO 50575 --- [    Test worker] g.m.t.i.EntityManagerDaosIntegrationTest : Started EntityManagerDaosIntegrationTest in 7.408 seconds (JVM running for 8.44)
+Hibernate: select state0_.id as id1_0_, state0_.code as code2_0_, state0_.name as name3_0_ from state state0_ where state0_.code=?
+Hibernate: select state0_.id as id1_0_, state0_.code as code2_0_, state0_.name as name3_0_ from state state0_
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: insert into state (code, name, id) values (?, ?, ?)
+Hibernate: select state0_.id as id1_0_, state0_.code as code2_0_, state0_.name as name3_0_ from state state0_
+Hibernate: select state0_.id as id1_0_, state0_.code as code2_0_, state0_.name as name3_0_ from state state0_ where state0_.code=?
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: update state set code=?, name=? where id=?
+Hibernate: select state0_.id as id1_0_, state0_.code as code2_0_, state0_.name as name3_0_ from state state0_ where state0_.code=?
+Hibernate: select state0_.id as id1_0_, state0_.code as code2_0_, state0_.name as name3_0_ from state state0_
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: delete from state where id=?
+Hibernate: select state0_.id as id1_0_, state0_.code as code2_0_, state0_.name as name3_0_ from state state0_
+Hibernate: select taxcategor0_.id as id1_2_, taxcategor0_.name as name2_2_ from tax_category taxcategor0_ where taxcategor0_.name=?
+Hibernate: select taxcategor0_.id as id1_2_, taxcategor0_.name as name2_2_ from tax_category taxcategor0_ where taxcategor0_.name=?
+Hibernate: select taxcategor0_.id as id1_2_, taxcategor0_.name as name2_2_ from tax_category taxcategor0_
+Hibernate: select taxcategor0_.id as id1_2_, taxcategor0_.name as name2_2_ from tax_category taxcategor0_ where taxcategor0_.id=(select max(taxcategor1_.id) from tax_category taxcategor1_)
+Hibernate: insert into tax_category (name, id) values (?, ?)
+Hibernate: select taxcategor0_.id as id1_2_, taxcategor0_.name as name2_2_ from tax_category taxcategor0_
+Hibernate: select taxcategor0_.id as id1_2_, taxcategor0_.name as name2_2_ from tax_category taxcategor0_ where taxcategor0_.name=?
+Hibernate: select taxcategor0_.id as id1_2_0_, taxcategor0_.name as name2_2_0_ from tax_category taxcategor0_ where taxcategor0_.id=?
+Hibernate: update tax_category set name=? where id=?
+Hibernate: select taxcategor0_.id as id1_2_, taxcategor0_.name as name2_2_ from tax_category taxcategor0_ where taxcategor0_.name=?
+Hibernate: select taxcategor0_.id as id1_2_, taxcategor0_.name as name2_2_ from tax_category taxcategor0_
+Hibernate: select taxcategor0_.id as id1_2_0_, taxcategor0_.name as name2_2_0_ from tax_category taxcategor0_ where taxcategor0_.id=?
+Hibernate: delete from tax_category where id=?
+Hibernate: select taxcategor0_.id as id1_2_, taxcategor0_.name as name2_2_ from tax_category taxcategor0_
+Hibernate: select staterule0_.id as id1_1_, staterule0_.state_id as state_id2_1_ from state_rule staterule0_ cross join state state1_ where staterule0_.state_id=state1_.id and state1_.code=?
+Hibernate: select staterule0_.id as id1_1_, staterule0_.state_id as state_id2_1_ from state_rule staterule0_
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: select taxrules0_.state_rule_id as state_ru3_3_0_, taxrules0_.id as id1_3_0_, taxrules0_.id as id1_3_1_, taxrules0_.rule as rule2_3_1_, taxrules0_.state_rule_id as state_ru3_3_1_, taxrules0_.tax_category_id as tax_cate4_3_1_, taxcategor1_.id as id1_2_2_, taxcategor1_.name as name2_2_2_ from tax_rule taxrules0_ inner join tax_category taxcategor1_ on taxrules0_.tax_category_id=taxcategor1_.id where taxrules0_.state_rule_id=?
+Hibernate: select taxrules0_.state_rule_id as state_ru3_3_0_, taxrules0_.id as id1_3_0_, taxrules0_.id as id1_3_1_, taxrules0_.rule as rule2_3_1_, taxrules0_.state_rule_id as state_ru3_3_1_, taxrules0_.tax_category_id as tax_cate4_3_1_, taxcategor1_.id as id1_2_2_, taxcategor1_.name as name2_2_2_ from tax_rule taxrules0_ inner join tax_category taxcategor1_ on taxrules0_.tax_category_id=taxcategor1_.id where taxrules0_.state_rule_id=?
+Hibernate: select state0_.id as id1_0_, state0_.code as code2_0_, state0_.name as name3_0_ from state state0_ where state0_.code=?
+Hibernate: select taxcategor0_.id as id1_2_0_, taxcategor0_.name as name2_2_0_ from tax_category taxcategor0_ where taxcategor0_.id=?
+Hibernate: select staterule0_.id as id1_1_, staterule0_.state_id as state_id2_1_ from state_rule staterule0_ where staterule0_.id=(select max(staterule1_.id) from state_rule staterule1_)
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: select taxrules0_.state_rule_id as state_ru3_3_0_, taxrules0_.id as id1_3_0_, taxrules0_.id as id1_3_1_, taxrules0_.rule as rule2_3_1_, taxrules0_.state_rule_id as state_ru3_3_1_, taxrules0_.tax_category_id as tax_cate4_3_1_, taxcategor1_.id as id1_2_2_, taxcategor1_.name as name2_2_2_ from tax_rule taxrules0_ inner join tax_category taxcategor1_ on taxrules0_.tax_category_id=taxcategor1_.id where taxrules0_.state_rule_id=?
+Hibernate: select state_.id, state_.code as code2_0_, state_.name as name3_0_ from state state_ where state_.id=?
+Hibernate: select next_val as id_val from hibernate_sequence for update
+Hibernate: update hibernate_sequence set next_val= ? where next_val=?
+Hibernate: select taxcategor_.id, taxcategor_.name as name2_2_ from tax_category taxcategor_ where taxcategor_.id=?
+Hibernate: insert into state_rule (state_id, id) values (?, ?)
+Hibernate: insert into tax_rule (rule, state_rule_id, tax_category_id, id) values (?, ?, ?, ?)
+Hibernate: select staterule0_.id as id1_1_, staterule0_.state_id as state_id2_1_ from state_rule staterule0_
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: select taxrules0_.state_rule_id as state_ru3_3_0_, taxrules0_.id as id1_3_0_, taxrules0_.id as id1_3_1_, taxrules0_.rule as rule2_3_1_, taxrules0_.state_rule_id as state_ru3_3_1_, taxrules0_.tax_category_id as tax_cate4_3_1_, taxcategor1_.id as id1_2_2_, taxcategor1_.name as name2_2_2_ from tax_rule taxrules0_ inner join tax_category taxcategor1_ on taxrules0_.tax_category_id=taxcategor1_.id where taxrules0_.state_rule_id=?
+Hibernate: select taxrules0_.state_rule_id as state_ru3_3_0_, taxrules0_.id as id1_3_0_, taxrules0_.id as id1_3_1_, taxrules0_.rule as rule2_3_1_, taxrules0_.state_rule_id as state_ru3_3_1_, taxrules0_.tax_category_id as tax_cate4_3_1_, taxcategor1_.id as id1_2_2_, taxcategor1_.name as name2_2_2_ from tax_rule taxrules0_ inner join tax_category taxcategor1_ on taxrules0_.tax_category_id=taxcategor1_.id where taxrules0_.state_rule_id=?
+Hibernate: select taxrules0_.state_rule_id as state_ru3_3_0_, taxrules0_.id as id1_3_0_, taxrules0_.id as id1_3_1_, taxrules0_.rule as rule2_3_1_, taxrules0_.state_rule_id as state_ru3_3_1_, taxrules0_.tax_category_id as tax_cate4_3_1_, taxcategor1_.id as id1_2_2_, taxcategor1_.name as name2_2_2_ from tax_rule taxrules0_ inner join tax_category taxcategor1_ on taxrules0_.tax_category_id=taxcategor1_.id where taxrules0_.state_rule_id=?
+Hibernate: select staterule0_.id as id1_1_, staterule0_.state_id as state_id2_1_ from state_rule staterule0_ cross join state state1_ where staterule0_.state_id=state1_.id and state1_.code=?
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: select taxrules0_.state_rule_id as state_ru3_3_0_, taxrules0_.id as id1_3_0_, taxrules0_.id as id1_3_1_, taxrules0_.rule as rule2_3_1_, taxrules0_.state_rule_id as state_ru3_3_1_, taxrules0_.tax_category_id as tax_cate4_3_1_, taxcategor1_.id as id1_2_2_, taxcategor1_.name as name2_2_2_ from tax_rule taxrules0_ inner join tax_category taxcategor1_ on taxrules0_.tax_category_id=taxcategor1_.id where taxrules0_.state_rule_id=?
+Hibernate: select taxcategor0_.id as id1_2_0_, taxcategor0_.name as name2_2_0_ from tax_category taxcategor0_ where taxcategor0_.id=?
+Hibernate: select staterule0_.id as id1_1_0_, staterule0_.state_id as state_id2_1_0_, state1_.id as id1_0_1_, state1_.code as code2_0_1_, state1_.name as name3_0_1_, taxrules2_.state_rule_id as state_ru3_3_2_, taxrules2_.id as id1_3_2_, taxrules2_.id as id1_3_3_, taxrules2_.rule as rule2_3_3_, taxrules2_.state_rule_id as state_ru3_3_3_, taxrules2_.tax_category_id as tax_cate4_3_3_, taxcategor3_.id as id1_2_4_, taxcategor3_.name as name2_2_4_ from state_rule staterule0_ inner join state state1_ on staterule0_.state_id=state1_.id left outer join tax_rule taxrules2_ on staterule0_.id=taxrules2_.state_rule_id left outer join tax_category taxcategor3_ on taxrules2_.tax_category_id=taxcategor3_.id where staterule0_.id=?
+Hibernate: select staterule0_.id as id1_1_, staterule0_.state_id as state_id2_1_ from state_rule staterule0_
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: select taxrules0_.state_rule_id as state_ru3_3_0_, taxrules0_.id as id1_3_0_, taxrules0_.id as id1_3_1_, taxrules0_.rule as rule2_3_1_, taxrules0_.state_rule_id as state_ru3_3_1_, taxrules0_.tax_category_id as tax_cate4_3_1_, taxcategor1_.id as id1_2_2_, taxcategor1_.name as name2_2_2_ from tax_rule taxrules0_ inner join tax_category taxcategor1_ on taxrules0_.tax_category_id=taxcategor1_.id where taxrules0_.state_rule_id=?
+Hibernate: select taxrules0_.state_rule_id as state_ru3_3_0_, taxrules0_.id as id1_3_0_, taxrules0_.id as id1_3_1_, taxrules0_.rule as rule2_3_1_, taxrules0_.state_rule_id as state_ru3_3_1_, taxrules0_.tax_category_id as tax_cate4_3_1_, taxcategor1_.id as id1_2_2_, taxcategor1_.name as name2_2_2_ from tax_rule taxrules0_ inner join tax_category taxcategor1_ on taxrules0_.tax_category_id=taxcategor1_.id where taxrules0_.state_rule_id=?
+Hibernate: select taxrules0_.state_rule_id as state_ru3_3_0_, taxrules0_.id as id1_3_0_, taxrules0_.id as id1_3_1_, taxrules0_.rule as rule2_3_1_, taxrules0_.state_rule_id as state_ru3_3_1_, taxrules0_.tax_category_id as tax_cate4_3_1_, taxcategor1_.id as id1_2_2_, taxcategor1_.name as name2_2_2_ from tax_rule taxrules0_ inner join tax_category taxcategor1_ on taxrules0_.tax_category_id=taxcategor1_.id where taxrules0_.state_rule_id=?
+Hibernate: select staterule0_.id as id1_1_0_, staterule0_.state_id as state_id2_1_0_, state1_.id as id1_0_1_, state1_.code as code2_0_1_, state1_.name as name3_0_1_, taxrules2_.state_rule_id as state_ru3_3_2_, taxrules2_.id as id1_3_2_, taxrules2_.id as id1_3_3_, taxrules2_.rule as rule2_3_3_, taxrules2_.state_rule_id as state_ru3_3_3_, taxrules2_.tax_category_id as tax_cate4_3_3_, taxcategor3_.id as id1_2_4_, taxcategor3_.name as name2_2_4_ from state_rule staterule0_ inner join state state1_ on staterule0_.state_id=state1_.id left outer join tax_rule taxrules2_ on staterule0_.id=taxrules2_.state_rule_id left outer join tax_category taxcategor3_ on taxrules2_.tax_category_id=taxcategor3_.id where staterule0_.id=?
+Hibernate: delete from tax_rule where id=?
+Hibernate: delete from state_rule where id=?
+Hibernate: select staterule0_.id as id1_1_, staterule0_.state_id as state_id2_1_ from state_rule staterule0_
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: select state0_.id as id1_0_0_, state0_.code as code2_0_0_, state0_.name as name3_0_0_ from state state0_ where state0_.id=?
+Hibernate: select taxrules0_.state_rule_id as state_ru3_3_0_, taxrules0_.id as id1_3_0_, taxrules0_.id as id1_3_1_, taxrules0_.rule as rule2_3_1_, taxrules0_.state_rule_id as state_ru3_3_1_, taxrules0_.tax_category_id as tax_cate4_3_1_, taxcategor1_.id as id1_2_2_, taxcategor1_.name as name2_2_2_ from tax_rule taxrules0_ inner join tax_category taxcategor1_ on taxrules0_.tax_category_id=taxcategor1_.id where taxrules0_.state_rule_id=?
+Hibernate: select taxrules0_.state_rule_id as state_ru3_3_0_, taxrules0_.id as id1_3_0_, taxrules0_.id as id1_3_1_, taxrules0_.rule as rule2_3_1_, taxrules0_.state_rule_id as state_ru3_3_1_, taxrules0_.tax_category_id as tax_cate4_3_1_, taxcategor1_.id as id1_2_2_, taxcategor1_.name as name2_2_2_ from tax_rule taxrules0_ inner join tax_category taxcategor1_ on taxrules0_.tax_category_id=taxcategor1_.id where taxrules0_.state_rule_id=?
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -13,8 +13,8 @@ import org.springframework.stereotype.Repository;
 
 import com.gridu.microservice.taxes.model.StateRule;
 
-@Profile("inmemory")
 @Repository
+@Profile("in-memory")
 public class InMemoryStateRuleDao implements StateRuleDao {
 
 	private AtomicLong id = new AtomicLong(0);
