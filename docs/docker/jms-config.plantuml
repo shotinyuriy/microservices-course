@@ -1,0 +1,19 @@
+@startuml
+
+component MessageProducer as MP
+
+component messages.queue as MQ
+component messages.topic as MT
+component events.queue as EQ
+
+component MessageConsumer as MC
+
+MP -d-> MQ
+MP -d-> MT
+MP -d-> EQ
+
+MQ -d-> MC
+MT -d-> MC
+EQ -d-> MC
+
+@enduml

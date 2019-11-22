@@ -10,7 +10,6 @@ public class MessageConsumer {
 
 	private Logger LOGGER = LoggerFactory.getLogger(MessageConsumer.class);
 
-
 	@JmsListener(destination = "messages.queue")
 	public void consumeFromQueue(String message) {
 		LOGGER.info("Message Received from the QUEUE: "+message);

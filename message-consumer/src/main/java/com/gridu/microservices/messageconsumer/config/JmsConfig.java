@@ -22,6 +22,11 @@ public class JmsConfig {
 	}
 
 	@Bean
+	public Queue eventsQueue() {
+		return new ActiveMQQueue("events.queue");
+	}
+
+	@Bean
 	public ActiveMQConnectionFactory activeMQConnectionFactory() {
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
 		connectionFactory.setBrokerURL(brokerURL);

@@ -22,17 +22,20 @@ public class PublisherResource {
 	private JmsTemplate topicJmsTemplate;
 
 	@Autowired
-	private Queue queue;
+	private Queue messagesQueue;
 
 	@Autowired
-	private Topic topic;
+	private Topic messagesTopic;
+
+	@Autowired
+	private Queue eventsQueue;
 
 	@PostMapping("/messages/queue")
 	public String postMessage(@RequestBody String message) {
-		getQueueJmsTemplate().convertAndSend(getQueue(), message);
+		getQueueJmsTemplate().convertAndSend(getMessagesQueue(), message);
 		String queueName = null;
 		try {
-			queueName = getQueue().getQueueName();
+			queueName = getMessagesQueue().getQueueName();
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}
@@ -41,14 +44,26 @@ public class PublisherResource {
 
 	@PostMapping("/messages/topic")
 	public String postMessageToTopic(@RequestBody String message) {
-		getTopicJmsTemplate().convertAndSend(getTopic(), message);
+		getTopicJmsTemplate().convertAndSend(getMessagesTopic(), message);
 		String topicName = null;
 		try {
-			topicName = getTopic().getTopicName();
+			topicName = getMessagesTopic().getTopicName();
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}
 		return "Message Published Successfully to a TOPIC: "+topicName;
+	}
+
+	@PostMapping("/events/queue")
+	public String postEventQueue(@RequestBody String event) {
+		getQueueJmsTemplate().convertAndSend(getEventsQueue(), event);
+		String queueName = null;
+		try {
+			queueName = getEventsQueue().getQueueName();
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
+		return "Event Published Successfully to a QUEUE: "+queueName;
 	}
 
 	public JmsTemplate getQueueJmsTemplate() {
@@ -67,19 +82,27 @@ public class PublisherResource {
 		this.topicJmsTemplate = topicJmsTemplate;
 	}
 
-	public Queue getQueue() {
-		return queue;
+	public Queue getMessagesQueue() {
+		return messagesQueue;
 	}
 
-	public void setQueue(Queue queue) {
-		this.queue = queue;
+	public void setMessagesQueue(Queue queue) {
+		this.messagesQueue = queue;
 	}
 
-	public Topic getTopic() {
-		return topic;
+	public Topic getMessagesTopic() {
+		return messagesTopic;
 	}
 
-	public void setTopic(Topic topic) {
-		this.topic = topic;
+	public void setMessagesTopic(Topic topic) {
+		this.messagesTopic = topic;
+	}
+
+	public Queue getEventsQueue() {
+		return eventsQueue;
+	}
+
+	public void setEventsQueue(Queue eventsQueue) {
+		this.eventsQueue = eventsQueue;
 	}
 }

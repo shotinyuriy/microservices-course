@@ -18,13 +18,18 @@ public class JmsConfig {
 	private String brokerURL;
 
 	@Bean
-	public Queue activeMQQueue() {
+	public Queue messagesQueue() {
 		return new ActiveMQQueue("messages.queue");
 	}
 
 	@Bean
-	public Topic activeMQTopic() {
+	public Topic messagesTopic() {
 		return new ActiveMQTopic("messages.topic");
+	}
+
+	@Bean
+	public Queue eventsQueue() {
+		return new ActiveMQQueue("events.queue");
 	}
 
 	@Bean

@@ -8,6 +8,7 @@ No stats available to say the number of core in function of messages
 1GB is the standard memory size
 You can set the memory that you need :
 ```bash
+# --rm - flag is responsible 
 docker run --name='activemq' -it --rm \
     -e 'ACTIVEMQ_CONFIG_MINMEMORY=512' \
     -e 'ACTIVEMQ_CONFIG_MAXMEMORY=2048' \
@@ -26,6 +27,18 @@ docker run --name='activemq' -d --rm \
     -p 61613:61613 \
     -P webcenter/activemq:latest
 ```
+
+### Persistent docker image
+```bash
+docker run --name='activemq' -d \
+    -e 'ACTIVEMQ_CONFIG_MINMEMORY=512' \
+    -e 'ACTIVEMQ_CONFIG_MAXMEMORY=2048' \
+    -p 8161:8161 \
+    -p 61616:61616 \
+    -p 61613:61613 \
+    -P webcenter/activemq:latest
+```
+
 ### Storage
 The necessary hard drive space depends if you use persistent message or not and the type of appender. 
 Normally, no need to allocate space for ActiveMQ because the most data is contained directly in the memory. 
@@ -61,3 +74,6 @@ docker run --name='activemq' -d \
 -p 61613:61613 \
 webcenter/activemq:5.14.3
 ```
+
+### Web Interface
+http://localhost:8161
