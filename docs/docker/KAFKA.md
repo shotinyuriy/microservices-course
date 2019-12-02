@@ -16,6 +16,8 @@ cd ~/git/confluentinc/examples/
 ```
 ```bash
 cd cp-all-in-one/
+
+cd ~/git/confluentinc/examples/cp-all-in-one/
 ```
 
 ```bash
