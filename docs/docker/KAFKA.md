@@ -6,6 +6,7 @@ https://docs.confluent.io/current/quickstart/ce-docker-quickstart.html?utm_mediu
 
 ## Create and Start Docker with Kafka
 ```bash
+cd ~/git/
 git clone https://github.com/confluentinc/examples
 cd examples
 git checkout 5.3.1-post

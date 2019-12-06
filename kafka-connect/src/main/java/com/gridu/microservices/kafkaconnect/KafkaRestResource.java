@@ -19,14 +19,14 @@ import java.util.concurrent.TimeoutException;
 public class KafkaRestResource {
 
 	@Autowired
-	private KafkaTemplate<String, String> kafkatemplate;
+	private KafkaTemplate<String, String> kafkaTemplate;
 
 	@Value(value="${kafka.topics.gridu.name}")
 	private String griduTopicName;
 
 	@PostMapping("/gridu/messages")
 	public String postGriduMessages(@RequestBody String message) {
-		ListenableFuture<SendResult<String, String>> future = kafkatemplate.send(griduTopicName, message);
+		ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(griduTopicName, message);
 		try {
 			SendResult<String, String> sendResult = future.get(5000, TimeUnit.MILLISECONDS);
 			return "Message Posted Successfully. " + sendResult.toString();
