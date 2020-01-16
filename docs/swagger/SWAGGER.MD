@@ -75,3 +75,11 @@ Usually swagger has conflicts with Spring Boot application so we need to create 
 * DuplicateGroupsDetector
 * OverrideSwaggerClasses
 * TypeNameExtractorReplaced
+
+## 5
+URLs for Swagger
+
+### Swagger GET /v2/api-docs
+http://{current-service-url}/v2/api-docs
+### Swagger UI
+http://{current-service-url}/swagger-ui.html
