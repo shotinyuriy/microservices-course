@@ -17,6 +17,9 @@ configurations {
 
 repositories {
 	mavenCentral()
+	 ivy {
+        url "http://repo.spring.io/milestone"
+    }
 }
 
 ext {
@@ -28,10 +31,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.projectreactor:reactor-spring:1.0.1.RELEASE'
+	implementation 'org.springframework.boot:spring-boot-starter-tomcat'
 	implementation 'mysql:mysql-connector-java:8.0.13'
 	implementation 'org.springframework.boot:spring-boot-starter-logging'
-	implementation 'ch.qos.logback:logback-classic'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:2.1.2.RELEASE'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }

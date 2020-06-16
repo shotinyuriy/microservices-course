@@ -49,7 +49,7 @@ public class ValidationService {
 		return validationResults;
 	}
 
-	public static <T> List<ValidationResult> convertToValidationResult(Set<ConstraintViolation<T>> violations) {
+	public <T> List<ValidationResult> convertToValidationResult(Set<ConstraintViolation<T>> violations) {
 		return violations.stream().map(violation -> {
 			String errorCode = ValidationErrorType.ERROR + "." + violation.getMessage();
 			return new ValidationResult(errorCode, violation.getInvalidValue(), violation.getPropertyPath().toString());

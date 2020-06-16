@@ -27,9 +27,9 @@ public class EntityMngrTaxCategoryDao  implements TaxCategoryDao {
 	
 	@Override
 	public TaxCategory findByCategory(String category) {
-		TaxCategory taxCategory = (TaxCategory) getEntityManager().createQuery("from TaxCategory where name = ?")
-				.setParameter(0, category).getResultList().get(0);
-		return taxCategory;
+		List<TaxCategory> taxCategory = (List<TaxCategory>) getEntityManager().createNativeQuery("select * from tax_category where name = ?1", TaxCategory.class)
+				.setParameter(1, category).getResultList();
+		return taxCategory.size() > 0 ? taxCategory.get(0) : null;
 	}
 
 	@Override

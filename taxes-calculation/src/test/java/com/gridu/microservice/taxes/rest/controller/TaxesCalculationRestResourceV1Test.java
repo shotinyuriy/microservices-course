@@ -18,11 +18,11 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.gridu.microservice.taxes.dao.StateDao;
 import com.gridu.microservice.taxes.exception.CustomConstraintViolationException;
@@ -49,7 +49,7 @@ import com.gridu.microservice.taxes.validation.group.StateCodeValidationGroup;
 import com.gridu.microservice.taxes.validation.group.TaxCategoryShouldExist;
 import com.gridu.microservice.taxes.view.StateRuleViewModel;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 public class TaxesCalculationRestResourceV1Test {
 
 	private static String STATE_CODE_AZ = "az";

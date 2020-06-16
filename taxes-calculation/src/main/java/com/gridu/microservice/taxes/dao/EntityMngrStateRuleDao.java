@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.gridu.microservice.taxes.model.State;
 import com.gridu.microservice.taxes.model.StateRule;
+import com.gridu.microservice.taxes.model.TaxRule;
 
 @Repository
 @Profile("entity-manager")
@@ -29,11 +30,26 @@ public class EntityMngrStateRuleDao implements StateRuleDao {
 
 	@Override
 	public StateRule findByCode(String code) {
-		State state = (State) getEntityManager().createQuery("from State where code = ?").setParameter(0, code)
-				.getResultList().get(0);
-		List<StateRule> stateRule = getEntityManager().createQuery("from StateRule where state_id = ?")
-				.setParameter(0, state.getId()).getResultList();
-		return stateRule.isEmpty() ? null : stateRule.get(0);
+		List<State> stateList = (List<State>) getEntityManager()
+				.createNativeQuery("select * from state where code = ?1", State.class).setParameter(1, code)
+				.getResultList();
+		State state = null;
+		if (stateList.size() > 0) {
+			state = stateList.get(0);
+		}
+		StateRule stateRule = new StateRule();
+		if (state != null) {
+			List<StateRule> stateRuleList = getEntityManager()
+					.createNativeQuery("select * from state_rule where state_id = ?1", StateRule.class)
+					.setParameter(1, state.getId()).getResultList();
+			if (stateRuleList.size() > 0) {
+				stateRule = stateRuleList.get(0);
+				List<TaxRule> taxRules = (List<TaxRule>) getEntityManager().createNativeQuery("select * from tax_rule where state_rule_id = ?1", TaxRule.class).setParameter(1, stateRule.getId()).getResultList();
+				stateRule.setTaxRules(taxRules );
+			}
+
+		}
+		return stateRule;
 	}
 
 	@Override

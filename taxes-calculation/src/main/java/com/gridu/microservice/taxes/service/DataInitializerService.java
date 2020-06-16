@@ -33,7 +33,7 @@ public class DataInitializerService implements InitializingBean {
 	// executed after all beans created and dependencies are injected
 	@Override
 	public void afterPropertiesSet() throws Exception {
-
+		
 		getTaxCategoryService().saveTaxCategory(new TaxCategory("books"));
 		getTaxCategoryService().saveTaxCategory(new TaxCategory("clothing"));
 		getTaxCategoryService().saveTaxCategory(new TaxCategory("electronic devices"));
@@ -61,7 +61,7 @@ public class DataInitializerService implements InitializingBean {
 		stateRulePa.addTaxRule(taxRule4);
 		taxRule4.setStateRule(stateRulePa);
 		getStateRuleService().saveStateRule(stateRulePa);
-		
+	
 		//BEGIN OF @ExamplePurpose
 //		StateRule emptyStateRule = new StateRule();
 //		emptyStateRule.setId(5l);

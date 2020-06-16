@@ -28,9 +28,9 @@ public class EntityMngrStateDao implements StateDao {
 
 	@Override
 	public State findByCode(String code) {
-		State state = (State) getEntityManager().createQuery("from State where code = ?").setParameter(0, code)
-				.getResultList().get(0);
-		return state;
+		List<State> state = (List<State>) getEntityManager().createNativeQuery("select * from state where code = ?1", State.class).setParameter(1, code)
+				.getResultList();
+		return state.size() > 0 ? state.get(0) : null;
 	}
 
 	@Override
